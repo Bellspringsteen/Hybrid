@@ -1,4 +1,5 @@
 //#define DEBUG
+//#define TESt
 #include "HondaHybrid.h"
 #include "pid.h"
 /*
@@ -105,8 +106,8 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 struct PID_DATA pidData;
 #define TIME_INTERVAL 157 //TODO replace
 
-#define left_position 3900//4450
-#define right_position 6500
+#define left_position 2500//4450
+#define right_position 4600
 #define servo_difference  right_position-left_position
 #define servo_difference_div 5200
 #define ELEC_CONTROLLER_OFFSET 900
@@ -270,15 +271,15 @@ void heartbeatElectricControllerPower(){
 }
 
 void wiperServo(){
+    unsigned int32 wiperValue = 0;
+  current_servo_position = left_position;
     while (1){
-
-  unsigned int16 wiperValue = servo_difference;
-  current_servo_position =right_position-wiperValue;
-  wiperValue--;
-  if (wiperValue<0){
-    wiperValue = servo_difference;
+  printf("Servo Value %ld",current_servo_position);
+  if ((current_servo_position+10)>right_position){
+    current_servo_position = left_position;//servo_difference;
   }
-  delay_ms(10);
+  current_servo_position =current_servo_position+10;
+  //delay_ms(1);
     }
 }
 
@@ -325,15 +326,15 @@ void main()
         
         //Test Short Circuit from Pin 11 to pin 8 with 1 second heartbeat. This tests V+ Controller. Also pin 9 should be heartbeating between 0 and 12V
         //heartbeatElectricControllerPower();
-
+         //printf("test loop");
         //Test Wiper of Servo
-        //wiperServo();
-
+        wiperServo();
+        //current_servo_position = right_position;
        //printAnalogThrottleInput();
        
        //Test Electric Controller Out
-       output_high(Contactor_Switch);
-       output_high(Contactor_Switch2);
+       //output_high(Contactor_Switch);
+       //output_high(Contactor_Switch2);
 
    }
 
@@ -374,8 +375,8 @@ void main()
    output_low(brake_pin);
    pid_Init(K_P*SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
    delay_ms(3000);
-   current_servo_position =right_position-1800;
-   delay_ms(2000);
+   current_servo_position =right_position-1000;
+   delay_ms(3000);
    current_servo_position =right_position;
    //write_dac(1000);
    //delay_ms(10000);
