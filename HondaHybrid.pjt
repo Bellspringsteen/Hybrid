@@ -1,0 +1,48 @@
+[PROJECT]
+Target=C:\Documents and Settings\Enter\Desktop\Alex Bell\My Documents\MISC\Tilt accelerometer velocity\project\HondaHybrid.hex
+Development_Mode=
+Processor_Text=PIC16F873A
+ToolSuite=CCS
+Processor=0x873A
+[C:\Documents and Settings\Enter\Desktop\Alex Bell\My Documents\MISC\Tilt accelerometer velocity\project\HondaHybrid]
+Type=4
+Path=
+FileList=
+BuildTool=
+OptionString=
+AdditionalOptionString=
+[mru-list]
+1=C:\Documents and Settings\Enter\Desktop\Alex Bell\My Documents\MISC\Tilt accelerometer velocity\project\HondaHybrid.c
+[Windows]
+0=0000 %S 0 0 796 451 3 0
+[Opened Files]
+1=HondaHybrid.c
+2=HondaHybrid.h
+3=..\..\..\..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
+4=
+5=HondaHybrid.c
+6=
+[Target Data]
+OptionString=-p +FM
+FileList=HondaHybrid.c
+[debugperif]
+selected=Analog/Digital Conv
+[debugram]
+autoread=1
+[debugbreak]
+count=0
+f1=c:\documents and settings\enter\desktop\alex bell\my documents\misc\tilt accelerometer velocity\project\HondaHybrid.c
+l1=38
+a.1=161
+[pcwdebug]
+watchcol0=75
+[debugwatch]
+count=0
+[debugexpr]
+expr=
+sideeffects=0
+[debugsfr]
+autoread=1
+[Units]
+Count=1
+1=HondaHybrid.c (main)

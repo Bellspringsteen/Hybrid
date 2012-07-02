@@ -1,0 +1,464 @@
+CCS PCM C Compiler, Version 4.084, 46530               28-Jun-12 00:51
+
+               Filename: HondaHybrid.lst
+
+               ROM used: 229 words (6%)
+                         Largest free fragment is 1819
+               RAM used: 35 (20%) at main() level
+                         38 (21%) worst case
+               Stack:    2 worst case (1 in main + 1 for interrupts)
+
+*
+0000:  NOP
+0001:  MOVLW  00
+0002:  MOVWF  0A
+0003:  GOTO   075
+0004:  MOVWF  7F
+0005:  SWAPF  03,W
+0006:  CLRF   03
+0007:  MOVWF  26
+0008:  MOVF   7F,W
+0009:  MOVWF  25
+000A:  MOVF   0A,W
+000B:  MOVWF  2D
+000C:  CLRF   0A
+000D:  SWAPF  25,F
+000E:  MOVF   04,W
+000F:  MOVWF  27
+0010:  MOVF   20,W
+0011:  MOVWF  28
+0012:  MOVF   21,W
+0013:  MOVWF  29
+0014:  MOVF   22,W
+0015:  MOVWF  2A
+0016:  MOVF   23,W
+0017:  MOVWF  2B
+0018:  MOVF   24,W
+0019:  MOVWF  2C
+001A:  BCF    03.7
+001B:  BCF    03.5
+001C:  MOVLW  8C
+001D:  MOVWF  04
+001E:  BTFSS  00.0
+001F:  GOTO   022
+0020:  BTFSC  0C.0
+0021:  GOTO   035
+0022:  MOVF   27,W
+0023:  MOVWF  04
+0024:  MOVF   28,W
+0025:  MOVWF  20
+0026:  MOVF   29,W
+0027:  MOVWF  21
+0028:  MOVF   2A,W
+0029:  MOVWF  22
+002A:  MOVF   2B,W
+002B:  MOVWF  23
+002C:  MOVF   2C,W
+002D:  MOVWF  24
+002E:  MOVF   2D,W
+002F:  MOVWF  0A
+0030:  SWAPF  26,W
+0031:  MOVWF  03
+0032:  SWAPF  7F,F
+0033:  SWAPF  7F,W
+0034:  RETFIE
+0035:  BCF    0A.3
+0036:  GOTO   037
+.................... #include "C:\Documents and Settings\Enter\Desktop\Alex Bell\My Documents\MISC\Tilt accelerometer velocity\project\HondaHybrid.h" 
+.................... #include <16F873A.h> 
+.................... //////// Standard Header file for the PIC16F873A device //////////////// 
+.................... #device PIC16F873A 
+.................... #list 
+....................  
+....................  
+.................... //#include <16F737.h> 
+.................... #device ICD=TRUE 
+.................... #device adc=10 
+.................... //#device adc=8 
+.................... #use delay(clock=20000000) 
+*
+0061:  MOVLW  42
+0062:  MOVWF  04
+0063:  MOVF   00,W
+0064:  BTFSC  03.2
+0065:  GOTO   073
+0066:  MOVLW  06
+0067:  MOVWF  21
+0068:  CLRF   20
+0069:  DECFSZ 20,F
+006A:  GOTO   069
+006B:  DECFSZ 21,F
+006C:  GOTO   068
+006D:  MOVLW  7B
+006E:  MOVWF  20
+006F:  DECFSZ 20,F
+0070:  GOTO   06F
+0071:  DECFSZ 00,F
+0072:  GOTO   066
+0073:  BCF    0A.3
+0074:  GOTO   0E3 (RETURN)
+.................... #fuses HS,NOWDT 
+.................... #use rs232 (debugger,STREAM=MONITOR) 
+.................... #include <mcp4921.c> 
+.................... //////////////// Driver for MCP4921 D/A Converter /////////////////////// 
+.................... ////                                                                 //// 
+.................... ////  init_dac()    Call this before using a MCP4921 DAC             //// 
+.................... ////                                                                 //// 
+.................... ////  write_dac( long int )   Writes command and 12 bit resolution   //// 
+.................... ////                          to the MCP4921 which converts it to a  //// 
+.................... ////                          voltage                                //// 
+.................... ////                          0-4095 input represents 0-vref V out.  //// 
+.................... ////                                                                 //// 
+.................... ///////////////////////////////////////////////////////////////////////// 
+.................... ////        (C) Copyright 1996,2003 Custom Computer Services         //// 
+.................... //// This source code may only be used by licensed users of the CCS  //// 
+.................... //// C compiler.  This source code may only be distributed to other  //// 
+.................... //// licensed users of the CCS C compiler.  No other use,            //// 
+.................... //// reproduction or distribution is permitted without written       //// 
+.................... //// permission.  Derivative programs created using this software    //// 
+.................... //// in object code form are not restricted in any way.              //// 
+.................... ///////////////////////////////////////////////////////////////////////// 
+....................  
+.................... #ifndef EEPROM_SELECT 
+....................  
+.................... #define DAC_CS     PIN_C4 
+.................... #define DAC_CLK    PIN_C3 
+.................... #define DAC_DI     PIN_C5 
+.................... #define DAC_LDAC   PIN_B4 
+....................  
+.................... #endif 
+....................  
+.................... void init_dac() 
+.................... { 
+....................    output_high(DAC_CS); 
+....................    output_high(DAC_LDAC); 
+....................    output_high(DAC_CLK); 
+....................    output_high(DAC_DI); 
+.................... } 
+....................  
+.................... void write_dac(int16 data) { 
+....................    BYTE cmd[3]; 
+....................    BYTE i; 
+....................  
+....................    cmd[0]=data; 
+....................    cmd[1]=(data>>8); 
+....................    cmd[2]=0x03;                            
+....................     
+....................    output_high(DAC_LDAC); 
+....................    output_low(DAC_CLK); 
+....................    output_low(DAC_CS); 
+....................  
+....................    for(i=0; i<=23; ++i) 
+....................    { 
+....................       if(i<4 || (i>7 && i<12)) 
+....................          shift_left(cmd,3,0); 
+....................       else 
+....................       { 
+....................          output_bit(DAC_DI, shift_left(cmd,3,0)); 
+....................  
+....................          output_high(DAC_CLK); 
+....................          output_low(DAC_CLK); 
+....................       } 
+....................    } 
+....................    output_high(DAC_CS); 
+....................  
+....................    output_low(DAC_LDAC); 
+....................    delay_us(10); 
+....................     
+....................    output_HIGH(DAC_LDAC); 
+.................... } 
+....................  
+....................  
+....................  
+.................... unsigned int16 value1=0; 
+*
+0086:  CLRF   2F
+0087:  CLRF   30
+....................    unsigned int16 value2=0; 
+0088:  CLRF   31
+0089:  CLRF   32
+....................    signed int16 position=0; 
+008A:  CLRF   33
+008B:  CLRF   34
+....................    signed int16 change=0; 
+008C:  CLRF   35
+008D:  CLRF   36
+....................    int1 SWITCH_SERVO = 0; 
+008E:  BCF    37.0
+....................    long rise,fall,pulse_width; 
+....................  
+....................    unsigned int16 output = 0; 
+008F:  CLRF   3E
+0090:  CLRF   3F
+....................  
+.................... #define servo_pin PIN_B1 
+....................  
+.................... #define SHORT_TIME      0.0009      // Shortest pulse width high time  
+.................... #define CENTER_TIME     0.0015      // The high time for center  
+.................... #define LONG_TIME       0.0021      // Longest pulse width high time  
+.................... #define PULSE_TIME      0.0200      // The total time for the pulse  
+....................  
+.................... #ifndef TIMER_RATE  
+.................... #define TIMER_RATE      getenv("CLOCK") / 4 / T1_DIV_BY_2  
+.................... #endif  
+.................... #define SHORT_TICKS     (int16)((float)TIMER_RATE * SHORT_TIME)  
+.................... #define CENTER_TICKS    (int16)((float)TIMER_RATE * CENTER_TIME)  
+.................... #define LONG_TICKS      (int16)((float)TIMER_RATE * LONG_TIME)  
+.................... #define LOW_TICKS       (int16)(((float)TIMER_RATE * (PULSE_TIME - CENTER_TIME)) - 42)  
+.................... #define PULSE_CHANGE    (int16)(LONG_TICKS - CENTER_TICKS)  
+....................  
+.................... signed int16 left_adjust;  
+....................     
+....................     
+.................... #int_timer1 
+.................... void isr() 
+.................... { 
+....................    //static int1 SWITCH_SERVO = 0; 
+....................  
+....................    
+....................       if(SWITCH_SERVO)  
+*
+0037:  BTFSS  37.0
+0038:  GOTO   04C
+....................       {  
+....................           
+....................          output_high(servo_pin);         // Set the servo control pin to low  
+0039:  BSF    03.5
+003A:  BCF    06.1
+003B:  BCF    03.5
+003C:  BSF    06.1
+....................          //CCP_1 =500;   // Set CCP1 to interrupt for next high pulse  
+....................          SWITCH_SERVO = 0;  
+003D:  BCF    37.0
+....................          set_timer1(65356-position); 
+003E:  MOVF   33,W
+003F:  SUBLW  4C
+0040:  MOVWF  43
+0041:  MOVLW  FF
+0042:  MOVWF  44
+0043:  MOVF   34,W
+0044:  BTFSS  03.0
+0045:  INCFSZ 34,W
+0046:  SUBWF  44,F
+0047:  MOVF   44,W
+0048:  MOVWF  0F
+0049:  MOVF   43,W
+004A:  MOVWF  0E
+....................       }  
+....................       else  
+004B:  GOTO   05E
+....................       {  
+....................  
+....................          output_low(servo_pin);        // Set the servo control pin to high  
+004C:  BSF    03.5
+004D:  BCF    06.1
+004E:  BCF    03.5
+004F:  BCF    06.1
+....................          //CCP_1 =20000;// Set CCP1 to interrupt for next low pulse  
+....................          SWITCH_SERVO = 1;  
+0050:  BSF    37.0
+....................          set_timer1(13071+position); 
+0051:  MOVLW  0F
+0052:  ADDWF  33,W
+0053:  MOVWF  43
+0054:  MOVF   34,W
+0055:  MOVWF  44
+0056:  MOVLW  33
+0057:  BTFSC  03.0
+0058:  MOVLW  34
+0059:  ADDWF  44,F
+005A:  MOVF   44,W
+005B:  MOVWF  0F
+005C:  MOVF   43,W
+005D:  MOVWF  0E
+....................       }   
+....................        
+.................... } 
+....................  
+....................  
+....................  
+005E:  BCF    0C.0
+005F:  BCF    0A.3
+0060:  GOTO   022
+.................... void main() 
+.................... {   
+*
+0075:  CLRF   04
+0076:  MOVLW  1F
+0077:  ANDWF  03,F
+0078:  BSF    03.5
+0079:  BCF    06.3
+007A:  BCF    03.5
+007B:  BSF    06.3
+007C:  BSF    03.5
+007D:  BSF    1F.0
+007E:  BSF    1F.1
+007F:  BSF    1F.2
+0080:  BCF    1F.3
+0081:  MOVLW  07
+0082:  MOVWF  1C
+....................     
+....................    setup_adc_ports(NO_ANALOGS); 
+*
+0091:  BSF    03.5
+0092:  BSF    1F.0
+0093:  BSF    1F.1
+0094:  BSF    1F.2
+0095:  BCF    1F.3
+....................    setup_adc(ADC_OFF); 
+0096:  BCF    03.5
+0097:  BCF    1F.0
+....................    setup_spi(FALSE); 
+0098:  CLRF   14
+....................    setup_counters(RTCC_INTERNAL,RTCC_DIV_2); 
+0099:  BSF    03.5
+009A:  MOVF   01,W
+009B:  ANDLW  C0
+009C:  IORLW  00
+009D:  MOVWF  01
+009E:  CLRWDT
+....................    setup_timer_1(T1_DISABLED); 
+009F:  BCF    03.5
+00A0:  CLRF   10
+....................    setup_timer_2(T2_DISABLED,0,1); 
+00A1:  MOVLW  00
+00A2:  MOVWF  21
+00A3:  MOVWF  12
+00A4:  MOVLW  00
+00A5:  BSF    03.5
+00A6:  MOVWF  12
+....................    setup_port_a(ALL_ANALOG); 
+00A7:  BCF    1F.0
+00A8:  BCF    1F.1
+00A9:  BCF    1F.2
+00AA:  BCF    1F.3
+....................    setup_adc(ADC_CLOCK_INTERNAL); 
+00AB:  BCF    1F.6
+00AC:  BCF    03.5
+00AD:  BSF    1F.6
+00AE:  BSF    1F.7
+00AF:  BSF    03.5
+00B0:  BSF    1F.7
+00B1:  BCF    03.5
+00B2:  BSF    1F.0
+....................    //init_dac(); 
+....................   
+....................  
+....................     
+....................    //printf("\n\rHigh time (sampled every second):\n\r"); 
+....................    //setup_ccp1(CCP_COMPARE_INT);    // Configure CCP1 to capture rise 
+....................    //setup_ccp2(CCP_CAPTURE_FE);    // Configure CCP2 to capture fall 
+....................    setup_timer_1(T1_DIV_BY_2| T1_INTERNAL);  
+00B3:  MOVLW  95
+00B4:  MOVWF  10
+....................  
+....................    //setup_timer_2(T2_DIV_BY_16,255,1); 
+....................    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge 
+00B5:  BSF    03.5
+00B6:  BSF    0C.0
+....................    enable_interrupts(GLOBAL); 
+00B7:  MOVLW  C0
+00B8:  BCF    03.5
+00B9:  IORWF  0B,F
+....................    while(TRUE) { 
+....................    if (position<2617){ 
+00BA:  BTFSC  34.7
+00BB:  GOTO   0C6
+00BC:  MOVF   34,W
+00BD:  SUBLW  0A
+00BE:  BTFSS  03.0
+00BF:  GOTO   0CB
+00C0:  BTFSS  03.2
+00C1:  GOTO   0C6
+00C2:  MOVF   33,W
+00C3:  SUBLW  38
+00C4:  BTFSS  03.0
+00C5:  GOTO   0CB
+....................       position = 2617; 
+00C6:  MOVLW  0A
+00C7:  MOVWF  34
+00C8:  MOVLW  39
+00C9:  MOVWF  33
+....................    } 
+....................    else if (position > 5200){ 
+00CA:  GOTO   0E0
+00CB:  BTFSC  34.7
+00CC:  GOTO   0DD
+00CD:  MOVF   34,W
+00CE:  SUBLW  13
+00CF:  BTFSC  03.0
+00D0:  GOTO   0DD
+00D1:  XORLW  FF
+00D2:  BTFSS  03.2
+00D3:  GOTO   0D8
+00D4:  MOVF   33,W
+00D5:  SUBLW  50
+00D6:  BTFSC  03.0
+00D7:  GOTO   0DD
+....................       position = 2617; 
+00D8:  MOVLW  0A
+00D9:  MOVWF  34
+00DA:  MOVLW  39
+00DB:  MOVWF  33
+....................    } 
+....................    else { 
+00DC:  GOTO   0E0
+....................       position++; 
+00DD:  INCF   33,F
+00DE:  BTFSC  03.2
+00DF:  INCF   34,F
+....................    } 
+....................       //fprintf(MONITOR,"Hello"); 
+....................       //left_adjust++; 
+....................       //output_low(servo_pin); 
+....................       delay_ms(10); 
+00E0:  MOVLW  0A
+00E1:  MOVWF  42
+00E2:  GOTO   061
+....................       //left_adjust--; 
+....................       //delay_ms(1000); 
+....................       //output_high(servo_pin); 
+....................       //delay_ms(1000); 
+....................       //write_dac(output); 
+....................    } 
+00E3:  GOTO   0BA
+....................     
+....................    /* 
+....................    set_adc_channel(0); 
+....................    delay_us(20); 
+....................    value1=read_adc(); 
+....................    set_adc_channel(1); 
+....................    delay_us(20); 
+....................    value2=read_adc(); 
+....................     
+....................     
+....................    change = (value2-value1); 
+....................    //printf("start"); 
+....................    //printf("High %ld ",value1); 
+....................    //printf("High %ld ",value2); 
+....................    //printf("value1 %ld",change); 
+....................     
+....................    if ((change>10)|| (change <-10)){ 
+....................    position = position + change; 
+....................    if (position>2400){ 
+....................       position=2400; 
+....................    } 
+....................    else if (position<600){ 
+....................       position=600; 
+....................    } 
+....................    output_high(PIN_C1); 
+....................    delay_us(position); 
+....................    output_low(PIN_C1); 
+....................    delay_ms(1000); 
+....................    } 
+....................    } 
+....................     
+.................... */ 
+.................... } 
+....................  
+....................  
+....................  
+00E4:  GOTO   0E4
+
+Configuration Fuses:
+   Word  1: 373A   HS NOWDT NOPUT DEBUG NOPROTECT NOBROWNOUT NOLVP NOCPD NOWRT
