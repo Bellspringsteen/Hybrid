@@ -1,55 +1,42 @@
-#include "C:\Documents and Settings\Enter\Desktop\Alex Bell\My Documents\MISC\Tilt accelerometer velocity\project\HondaHybrid.h"
-unsigned int16 value1=0;
-   unsigned int16 value2=0;
-   signed int16 position=0;
-   signed int16 change=0;
-   int1 SWITCH_SERVO = 0;
-   long rise,fall,pulse_width;
+#include "C:\Documents and Settings\Enter\My Documents\Hybrid\Hybrid-v2\HondaHybrid.h"
 
-   unsigned int16 output = 0;
+#define servo_pin PIN_B1  //Setting servo out pin to be hardware pin b1
+/*
+Clock Interrupt Settings
 
-#define servo_pin PIN_B1
+Number of operations per second is CLOCK/4/Timer Divisions
+Number of operations per second is 20,000,000/4/2 = 2,500,000 
 
-#define SHORT_TIME      0.0009      // Shortest pulse width high time 
-#define CENTER_TIME     0.0015      // The high time for center 
-#define LONG_TIME       0.0021      // Longest pulse width high time 
-#define PULSE_TIME      0.0200      // The total time for the pulse 
+Each operation takes 1/2,500,000 = 400 nano seconds
 
-#ifndef TIMER_RATE 
-#define TIMER_RATE      getenv("CLOCK") / 4 / T1_DIV_BY_2 
-#endif 
-#define SHORT_TICKS     (int16)((float)TIMER_RATE * SHORT_TIME) 
-#define CENTER_TICKS    (int16)((float)TIMER_RATE * CENTER_TIME) 
-#define LONG_TICKS      (int16)((float)TIMER_RATE * LONG_TIME) 
-#define LOW_TICKS       (int16)(((float)TIMER_RATE * (PULSE_TIME - CENTER_TIME)) - 42) 
-#define PULSE_CHANGE    (int16)(LONG_TICKS - CENTER_TICKS) 
+The period for the servo is .020 seconds which is 50,000 operations
+The leftmost position of the server is .001 seconds which is 2,500
+The rightmost position of the server is .002 seconds which is 5,000
 
-signed int16 left_adjust; 
-   
-   
+*/
+static int16 left_position = 2500;
+static int16 right_position = 5000;
+static int16 servo_period   = 65356-50000;
+
+unsigned int16 current_servo_position=2500;
+int1 SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0;
+
 #int_timer1
 void isr()
 {
-   //static int1 SWITCH_SERVO = 0;
-
-  
-      if(SWITCH_SERVO) 
+   if(SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER)
       { 
-         
-         output_high(servo_pin);         // Set the servo control pin to low 
-         //CCP_1 =500;   // Set CCP1 to interrupt for next high pulse 
-         SWITCH_SERVO = 0; 
-         set_timer1(65356-position);
+         output_high(servo_pin);                     //Set the servo control pin to high 
+         SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0; 
+         set_timer1(65356-current_servo_position);                 //Set timer for the position high pulse
       } 
-      else 
+   else 
       { 
-
-         output_low(servo_pin);        // Set the servo control pin to high 
-         //CCP_1 =20000;// Set CCP1 to interrupt for next low pulse 
-         SWITCH_SERVO = 1; 
-         set_timer1(13071+position);
+         output_low(servo_pin);                      // Set the servo control pin to low  
+         SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 1; 
+         set_timer1(servo_period+current_servo_position);          //Set timer for the low position the length is the difference between 
+                                                     //the total int16 lenght - high pulse length
       }  
-      
 }
 
 
@@ -78,14 +65,14 @@ void main()
    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
    enable_interrupts(GLOBAL);
    while(TRUE) {
-   if (position<2617){
-      position = 2617;
+   if (current_servo_position<left_position){
+      current_servo_position = left_position;
    }
-   else if (position > 5200){
-      position = 2617;
+   else if (current_servo_position > right_position){
+      current_servo_position = left_position;
    }
    else {
-      position++;
+      current_servo_position++;
    }
       //fprintf(MONITOR,"Hello");
       //left_adjust++;
@@ -98,37 +85,7 @@ void main()
       //write_dac(output);
    }
    
-   /*
-   set_adc_channel(0);
-   delay_us(20);
-   value1=read_adc();
-   set_adc_channel(1);
-   delay_us(20);
-   value2=read_adc();
-   
-   
-   change = (value2-value1);
-   //printf("start");
-   //printf("High %ld ",value1);
-   //printf("High %ld ",value2);
-   //printf("value1 %ld",change);
-   
-   if ((change>10)|| (change <-10)){
-   position = position + change;
-   if (position>2400){
-      position=2400;
-   }
-   else if (position<600){
-      position=600;
-   }
-   output_high(PIN_C1);
-   delay_us(position);
-   output_low(PIN_C1);
-   delay_ms(1000);
-   }
-   }
-   
-*/
+
 }
 
 
