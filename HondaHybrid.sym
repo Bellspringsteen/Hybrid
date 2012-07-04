@@ -1,11 +1,11 @@
-004-005 @READ_PROGRAM_MEMORY8.P1
-004     @WRITE_PROGRAM_MEMORY8.P2
-015     CCP_1_HIGH
+004     @WRITE_PROGRAM_MEMORY8.P1
+004-005 @READ_PROGRAM_MEMORY8.P2
 015     CCP_1
+015     CCP_1_HIGH
 015     CCP_1_LOW
+01B     CCP_2_HIGH
 01B     CCP_2_LOW
 01B     CCP_2
-01B     CCP_2_HIGH
 020     @SCRATCH
 021     @SCRATCH
 021     _RETURN_
@@ -27,19 +27,30 @@
 033-034 servo_period
 035-036 current_servo_position
 037.0   SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER
-038     @delay_ms1.P1
-039     isr.@SCRATCH1
-03A     isr.@SCRATCH2
+037.1   test_switch
+038-039 test_counter
+03A     @delay_ms1.P1
+03A     MAIN.@SCRATCH1
+03B     MAIN.@SCRATCH2
+03C-03D write_dac.data
+03E-040 write_dac.cmd
+041     write_dac.i
+042     isr.@SCRATCH1
+043     isr.@SCRATCH2
 09C.6   C1OUT
 09C.7   C2OUT
 10D-10E @WRITE_PROGRAM_MEMORY8.P1
 10D-10E @READ_PROGRAM_MEMORY8.P2
 
 ROM Allocation:
-0061  @delay_ms1
-0037  isr
-0075  MAIN
-0075  @cinit
+00B3  @delay_ms1
+009B  init_dac
+00C7  write_dac
+0045  timer0_isr
+0061  isr
+008B  isr2
+0124  MAIN
+0124  @cinit
 
 
 User Memory space: 

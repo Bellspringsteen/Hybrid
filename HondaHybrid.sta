@@ -1,47 +1,51 @@
 
-ROM used: 230 (6%)
-          230 (6%) including unused fragments
+ROM used: 426 (11%)
+          426 (11%) including unused fragments
 
           1 Average locations per line
-          4 Average locations per statement
+          6 Average locations per statement
 
-RAM used: 25 (14%) at main() level
-          28 (16%) worst case
+RAM used: 29 (16%) at main() level
+          37 (21%) worst case
 
 Stack used: 2 worst case (out of 6 total available)
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-   93    31  58  HondaHybrid.c
+  131    52  70  HondaHybrid.c
    12     0   0  HondaHybrid.h
   274     0   0  16F873A.h
-   68    22  42  ..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
+   68    22  30  ..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
 ----- -----
-  447    53 Total
+  485    74 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
-0     20   9   1             @delay_ms1
-0     42  18   2   167  3.5  isr
-0    113  49   0   502  5.7  MAIN
+0     20   5   1             @delay_ms1
+0     24   6   0    67  1.2  init_dac
+0     93  22   6   733  7.7  write_dac
+0     28   7   0   170  3.5  timer0_isr
+0     42  10   2   167  3.5  isr
+0     16   4   0    98  2.5  isr2
+0    134  31   2   563  5.7  MAIN
 
 Program metrics:
-    Functions               2
-    Statements              53
-    Comments                124
-    Volume (V)              779
-    Difficilty (D)          9.1
-    Effort to implement (E) 7122
-    Time to implement (T)   7 minutes
-    Est Delivered Bugs (B)  0
-    Cyclomatic Complexity   3
-    Maintainability (MI)    69
+    Functions               6
+    Statements              74
+    Comments                123
+    Volume (V)              2546
+    Difficilty (D)          24.3
+    Effort to implement (E) 61875
+    Time to implement (T)   57 minutes
+    Est Delivered Bugs (B)  1
+    Cyclomatic Complexity   8
+    Maintainability (MI)    132
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00003     4  0  
-00004-00036    51  0  
-00037-007FF   175  1818  
+00004-00044    65  0  
+00045-007FF   357  1622  
 00800-00EFB     0  1788  
 
 

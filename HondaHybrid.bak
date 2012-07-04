@@ -20,23 +20,63 @@ static int16 servo_period   = 65356-50000;
 
 unsigned int16 current_servo_position=2500;
 int1 SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0;
+int1 test_switch = 0;
+unsigned int16 test_counter = 0;
+
+#int_timer0
+void timer0_isr(){
+
+test_counter++;
+if (test_counter>100){
+test_counter=0;
+if (test_switch){
+ output_high(PIN_B2); 
+ test_switch = 0;
+}
+else{
+ output_low(PIN_B2); 
+ test_switch = 1;
+}
+}
+}
+
 
 #int_timer1
 void isr()
 {
+
    if(SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER)
       { 
          output_high(servo_pin);                     //Set the servo control pin to high 
          SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0; 
-         set_timer1(65356-position);                 //Set timer for the position high pulse
+         set_timer1(65356-current_servo_position);                 //Set timer for the position high pulse
       } 
    else 
       { 
          output_low(servo_pin);                      // Set the servo control pin to low  
          SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 1; 
-         set_timer1(servo_period+position);          //Set timer for the low position the length is the difference between 
+         set_timer1(servo_period+current_servo_position);          //Set timer for the low position the length is the difference between 
                                                      //the total int16 lenght - high pulse length
       }  
+
+}
+
+
+
+#int_ccp2
+void isr2()
+{
+
+if (test_switch){
+ output_high(PIN_B2); 
+ test_switch = 0;
+}
+else{
+ output_low(PIN_B2); 
+ test_switch = 1;
+}
+   
+   
 }
 
 
@@ -47,42 +87,40 @@ void main()
    setup_adc_ports(NO_ANALOGS);
    setup_adc(ADC_OFF);
    setup_spi(FALSE);
-   setup_counters(RTCC_INTERNAL,RTCC_DIV_2);
-   setup_timer_1(T1_DISABLED);
-   setup_timer_2(T2_DISABLED,0,1);
+   
+   //setup_counters(RTCC_INTERNAL,RTCC_DIV_2);
+   //setup_timer_1(T1_DISABLED);
+   //setup_timer_2(T2_DISABLED,0,1);
    setup_port_a(ALL_ANALOG);
    setup_adc(ADC_CLOCK_INTERNAL);
-   //init_dac();
+   init_dac();
  
-
-   
-   //printf("\n\rHigh time (sampled every second):\n\r");
-   //setup_ccp1(CCP_COMPARE_INT);    // Configure CCP1 to capture rise
-   //setup_ccp2(CCP_CAPTURE_FE);    // Configure CCP2 to capture fall
    setup_timer_1(T1_DIV_BY_2| T1_INTERNAL); 
-
-   //setup_timer_2(T2_DIV_BY_16,255,1);
+   setup_timer_0(RTCC_INTERNAL|RTCC_DIV_128);
+   setup_ccp2(CCP_CAPTURE_RE);    // Configure CCP2 to capture fall
+   enable_interrupts(INT_CCP2);   // Setup interrupt on falling edge
    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
+   enable_interrupts(INT_TIMER0);
    enable_interrupts(GLOBAL);
    while(TRUE) {
-   if (position<left_position){
-      position = left_position;
+   if (current_servo_position<left_position){
+      current_servo_position = left_position;
    }
-   else if (position > right_position){
-      position = left_position;
+   else if (current_servo_position > right_position){
+      current_servo_position = left_position;
    }
    else {
-      position++;
+      current_servo_position++;
    }
       //fprintf(MONITOR,"Hello");
       //left_adjust++;
       //output_low(servo_pin);
-      delay_ms(10);
+      delay_ms(100);
       //left_adjust--;
       //delay_ms(1000);
       //output_high(servo_pin);
       //delay_ms(1000);
-      //write_dac(output);
+      write_dac(current_servo_position-1000);
    }
    
 
