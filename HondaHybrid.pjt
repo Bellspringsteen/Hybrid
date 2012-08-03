@@ -18,7 +18,7 @@ AdditionalOptionString=
 [Opened Files]
 1=HondaHybrid.c
 2=HondaHybrid.h
-3=..\..\..\..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
+3=..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
 4=..\..\..\Desktop\Alex Bell\My Documents\MISC\Tilt accelerometer velocity\project\HondaHybrid.h
 5=16F873A.h
 6=

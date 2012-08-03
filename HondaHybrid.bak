@@ -1,19 +1,81 @@
 #include "C:\Documents and Settings\Enter\My Documents\Hybrid\Hybrid-v2\HondaHybrid.h"
 
-#define servo_pin PIN_B1  //Setting servo out pin to be hardware pin b1
 /*
-Clock Interrupt Settings
+This is the main controller for the super capacitor hybrid scooter a.k.a RED
+
+CONTROL BOX INPUTS
+Athrottle - analog input representing the users input for speed, 10 bit
+Vspeed - a 16 bit representation of the speed of the vehicle
+Acaps-  analog input representing the current voltage of the supercapacitors, 10 bit
+
+CONTROL BOX OUTPUT
+ICEthrottle - a 16 bit number sent to the internal combustion engine(ICE) throttle 
+ELECthrottle - a 16 bit number sent as analog value representing the demanded electric power
+
+SPECIFICS OF I/O
+
+Athrottle - the electric throttle is a 3 wire unit with a 5 volt,ground, and analog out
+   representing how far throttle is turned. Pin AN0 is the input.
+   
+Vspeed - There is a encoder in the rear wheel/electric motor that is used by the electric
+   power controller. Tapping in to this this Main Controller receives a 5 Volt square wave
+   with 42 pulses. There are two options for measuring speed. The first is to measure the 
+   length of the pulses. The second is to measure the rate of pulses. This controller currently
+   uses the rate method. The int_ccp2 interupt is called on each falling edge and stores the 
+   Vspeed value as the max number of 16bit (65535-timer0_since_last_reset). 
+   
+   The RED scooter has a circumpherence of 16.3*2*pi = 102.4
+   X m/h * 63360 inch/mile * 1/3600 h/sec * 1/(102.4 inch/rev) = .171875* X
+   Examples 50 mph is 8.9 ms 1 overflow of timer0
+   Example 5 mph is 89 ms or 13 time overflow
+   
+   #int_timer0 increments the counter number_of_overflows each time it overflows
+   On int ccp2 we multiply number_of_overflows * 256 + timer0 to get timer0_since_last_reset
+   
+Acaps - the analog voltage which is the 5volt representation of the voltage in the caps which
+   have a value of between 0-48v. The voltages are factored so that the voltage on AN1 goes
+   from 0 - 4.8 volts (TODO check this factor, think its 1/11 not 1/10)
+   
+ICEthrottle -  #int_timer1 is set to make sure the period follows the required below
+   The period for the servo is .020 seconds which is 50,000 operations
+   The leftmost position of the server is .001 seconds which is 2,500
+   The rightmost position of the server is .002 seconds which is 5,000
+   
+   The output pin is pin_B1.->
+
+ELECthrottle
+   The electric power controller takes an analog voltage as input. The output voltage
+   is set by the DAC. The pins used are C3,C4,C5. if CHARGING_STATE is true then 
+   
+ALGORITHM
+   The algorithm is basically a PID controller. In broad terms we are trying to set the
+   ICEthrottle and ICEelectric to maximize the use of electric and accelerate to meet the
+   requirements set by the rider with the Athrottle signal. When the demanded power is 
+   less than the power output possible by the ICE and the caps are in the CHARGING_STATE 
+   then the ICE is turned up to the max and the ELECthrottle is set to regen to
+   charge the capacitors.If CHARGING_STATE is false then the caps are supplying the drivig power
+   and the ICE is set to "off", the caps supply the power. Unless the user requested supply
+   is enough to require both power sources.
+   
+   If CHARGING_STATE is true. Then pin_b2 is set as high which will close the brake number
+   for the electric power controller. 
+   
+   If CHARGING_STATE is false then the pin_b2 is set low which opens brake.
+   
+   
+
+
+The encoder has 42 on and offs per rotation
 
 Number of operations per second is CLOCK/4/Timer Divisions
-Number of operations per second is 20,000,000/4/2 = 2,500,000 
+Number of operations per second is 20,000,000/4/128 = 39062.5 
+Each operation takes 1/39062.5 = .256 micro (x10^-6) seconds
+Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 
-Each operation takes 1/2,500,000 = 400 nano seconds
 
-The period for the servo is .020 seconds which is 50,000 operations
-The leftmost position of the server is .001 seconds which is 2,500
-The rightmost position of the server is .002 seconds which is 5,000
 
 */
+#define servo_pin PIN_B1  //Setting servo out pin to be hardware pin b1
 static int16 left_position = 2500;
 static int16 right_position = 5000;
 static int16 servo_period   = 65356-50000;
@@ -73,7 +135,7 @@ if (test_switch){
 }
 else{
  output_low(PIN_B2); 
- test_switch = 1;
+ test_switch= 1;
 }
    
    
@@ -100,7 +162,7 @@ void main()
    setup_ccp2(CCP_CAPTURE_RE);    // Configure CCP2 to capture fall
    enable_interrupts(INT_CCP2);   // Setup interrupt on falling edge
    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
-   enable_interrupts(INT_TIMER0);
+   //enable_interrupts(INT_TIMER0);
    enable_interrupts(GLOBAL);
    while(TRUE) {
    if (current_servo_position<left_position){
@@ -115,7 +177,7 @@ void main()
       //fprintf(MONITOR,"Hello");
       //left_adjust++;
       //output_low(servo_pin);
-      delay_ms(100);
+      delay_ms(10);
       //left_adjust--;
       //delay_ms(1000);
       //output_high(servo_pin);

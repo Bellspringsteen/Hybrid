@@ -1,6 +1,6 @@
 
-ROM used: 426 (11%)
-          426 (11%) including unused fragments
+ROM used: 425 (11%)
+          425 (11%) including unused fragments
 
           1 Average locations per line
           6 Average locations per statement
@@ -12,12 +12,12 @@ Stack used: 2 worst case (out of 6 total available)
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-  131    52  70  HondaHybrid.c
+  131    51  70  HondaHybrid.c
    12     0   0  HondaHybrid.h
   274     0   0  16F873A.h
    68    22  30  ..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
 ----- -----
-  485    74 Total
+  485    73 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
@@ -27,25 +27,25 @@ Page ROM  %  RAM   Vol Diff  Functions:
 0     28   7   0   170  3.5  timer0_isr
 0     42  10   2   167  3.5  isr
 0     16   4   0    98  2.5  isr2
-0    134  31   2   563  5.7  MAIN
+0    133  31   2   535  5.7  MAIN
 
 Program metrics:
     Functions               6
-    Statements              74
-    Comments                123
-    Volume (V)              2546
+    Statements              73
+    Comments                124
+    Volume (V)              2510
     Difficilty (D)          24.3
-    Effort to implement (E) 61875
-    Time to implement (T)   57 minutes
+    Effort to implement (E) 60945
+    Time to implement (T)   56 minutes
     Est Delivered Bugs (B)  1
     Cyclomatic Complexity   8
-    Maintainability (MI)    132
+    Maintainability (MI)    133
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00003     4  0  
 00004-00044    65  0  
-00045-007FF   357  1622  
+00045-007FF   356  1623  
 00800-00EFB     0  1788  
 
 

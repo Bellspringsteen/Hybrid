@@ -1,8 +1,8 @@
-CCS PCM C Compiler, Version 4.084, 46530               04-Jul-12 17:24
+CCS PCM C Compiler, Version 4.084, 46530               21-Jul-12 14:33
 
                Filename: HondaHybrid.lst
 
-               ROM used: 426 words (11%)
+               ROM used: 425 words (11%)
                          Largest free fragment is 1788
                RAM used: 29 (16%) at main() level
                          37 (21%) worst case
@@ -110,7 +110,7 @@ CCS PCM C Compiler, Version 4.084, 46530               04-Jul-12 17:24
 00C3:  DECFSZ 00,F
 00C4:  GOTO   0B8
 00C5:  BCF    0A.3
-00C6:  GOTO   19A (RETURN)
+00C6:  GOTO   199 (RETURN)
 .................... #fuses HS,NOWDT 
 .................... #use rs232 (debugger,STREAM=MONITOR) 
 .................... #include <mcp4921.c> 
@@ -299,7 +299,7 @@ CCS PCM C Compiler, Version 4.084, 46530               04-Jul-12 17:24
 0121:  BSF    06.4
 .................... } 
 0122:  BCF    0A.3
-0123:  GOTO   1A8 (RETURN)
+0123:  GOTO   1A7 (RETURN)
 ....................  
 ....................  
 ....................  
@@ -481,7 +481,7 @@ CCS PCM C Compiler, Version 4.084, 46530               04-Jul-12 17:24
 0094:  BCF    06.2
 0095:  BCF    03.5
 0096:  BCF    06.2
-....................  test_switch = 1; 
+....................  test_switch= 1; 
 0097:  BSF    37.1
 .................... } 
 ....................     
@@ -569,90 +569,89 @@ CCS PCM C Compiler, Version 4.084, 46530               04-Jul-12 17:24
 0170:  BSF    0D.0
 ....................    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge 
 0171:  BSF    0C.0
-....................    enable_interrupts(INT_TIMER0); 
-0172:  BCF    03.5
-0173:  BSF    0B.5
+....................    //enable_interrupts(INT_TIMER0); 
 ....................    enable_interrupts(GLOBAL); 
-0174:  MOVLW  C0
-0175:  IORWF  0B,F
+0172:  MOVLW  C0
+0173:  BCF    03.5
+0174:  IORWF  0B,F
 ....................    while(TRUE) { 
 ....................    if (current_servo_position<left_position){ 
-0176:  MOVF   36,W
-0177:  SUBWF  30,W
-0178:  BTFSS  03.0
-0179:  GOTO   185
-017A:  BTFSS  03.2
-017B:  GOTO   180
-017C:  MOVF   2F,W
-017D:  SUBWF  35,W
-017E:  BTFSC  03.0
-017F:  GOTO   185
+0175:  MOVF   36,W
+0176:  SUBWF  30,W
+0177:  BTFSS  03.0
+0178:  GOTO   184
+0179:  BTFSS  03.2
+017A:  GOTO   17F
+017B:  MOVF   2F,W
+017C:  SUBWF  35,W
+017D:  BTFSC  03.0
+017E:  GOTO   184
 ....................       current_servo_position = left_position; 
-0180:  MOVF   30,W
-0181:  MOVWF  36
-0182:  MOVF   2F,W
-0183:  MOVWF  35
+017F:  MOVF   30,W
+0180:  MOVWF  36
+0181:  MOVF   2F,W
+0182:  MOVWF  35
 ....................    } 
 ....................    else if (current_servo_position > right_position){ 
-0184:  GOTO   197
-0185:  MOVF   32,W
-0186:  SUBWF  36,W
-0187:  BTFSS  03.0
-0188:  GOTO   194
-0189:  BTFSS  03.2
-018A:  GOTO   18F
-018B:  MOVF   35,W
-018C:  SUBWF  31,W
-018D:  BTFSC  03.0
-018E:  GOTO   194
+0183:  GOTO   196
+0184:  MOVF   32,W
+0185:  SUBWF  36,W
+0186:  BTFSS  03.0
+0187:  GOTO   193
+0188:  BTFSS  03.2
+0189:  GOTO   18E
+018A:  MOVF   35,W
+018B:  SUBWF  31,W
+018C:  BTFSC  03.0
+018D:  GOTO   193
 ....................       current_servo_position = left_position; 
-018F:  MOVF   30,W
-0190:  MOVWF  36
-0191:  MOVF   2F,W
-0192:  MOVWF  35
+018E:  MOVF   30,W
+018F:  MOVWF  36
+0190:  MOVF   2F,W
+0191:  MOVWF  35
 ....................    } 
 ....................    else { 
-0193:  GOTO   197
+0192:  GOTO   196
 ....................       current_servo_position++; 
-0194:  INCF   35,F
-0195:  BTFSC  03.2
-0196:  INCF   36,F
+0193:  INCF   35,F
+0194:  BTFSC  03.2
+0195:  INCF   36,F
 ....................    } 
 ....................       //fprintf(MONITOR,"Hello"); 
 ....................       //left_adjust++; 
 ....................       //output_low(servo_pin); 
 ....................       delay_ms(10); 
-0197:  MOVLW  0A
-0198:  MOVWF  3A
-0199:  GOTO   0B3
+0196:  MOVLW  0A
+0197:  MOVWF  3A
+0198:  GOTO   0B3
 ....................       //left_adjust--; 
 ....................       //delay_ms(1000); 
 ....................       //output_high(servo_pin); 
 ....................       //delay_ms(1000); 
 ....................       write_dac(current_servo_position-1000); 
-019A:  MOVLW  E8
-019B:  SUBWF  35,W
-019C:  MOVWF  3A
-019D:  MOVF   36,W
-019E:  MOVWF  3B
-019F:  MOVLW  03
-01A0:  BTFSS  03.0
-01A1:  MOVLW  04
-01A2:  SUBWF  3B,F
-01A3:  MOVF   3B,W
-01A4:  MOVWF  3D
-01A5:  MOVF   3A,W
-01A6:  MOVWF  3C
-01A7:  GOTO   0C7
+0199:  MOVLW  E8
+019A:  SUBWF  35,W
+019B:  MOVWF  3A
+019C:  MOVF   36,W
+019D:  MOVWF  3B
+019E:  MOVLW  03
+019F:  BTFSS  03.0
+01A0:  MOVLW  04
+01A1:  SUBWF  3B,F
+01A2:  MOVF   3B,W
+01A3:  MOVWF  3D
+01A4:  MOVF   3A,W
+01A5:  MOVWF  3C
+01A6:  GOTO   0C7
 ....................    } 
-01A8:  GOTO   176
+01A7:  GOTO   175
 ....................     
 ....................  
 .................... } 
 ....................  
 ....................  
 ....................  
-01A9:  GOTO   1A9
+01A8:  GOTO   1A8
 
 Configuration Fuses:
    Word  1: 373A   HS NOWDT NOPUT DEBUG NOPROTECT NOBROWNOUT NOLVP NOCPD NOWRT
