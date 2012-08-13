@@ -2,15 +2,15 @@
 
 /*
 This is the main controller for the super capacitor hybrid scooter a.k.a RED
-
+B2 close contactor
 CONTROL BOX INPUTS
-Athrottle - analog input representing the users input for speed, 10 bit
-Vspeed - a 16 bit representation of the speed of the vehicle
-Acaps-  analog input representing the current voltage of the supercapacitors, 10 bit
+Athrottle- A0 - analog input representing the users input for speed, 10 bit
+Vspeed - CCp2-a 16 bit representation of the speed of the vehicle
+Acaps- A1 - analog input representing the current voltage of the supercapacitors, 10 bit
 
 CONTROL BOX OUTPUT
-ICEthrottle - a 16 bit number sent to the internal combustion engine(ICE) throttle 
-ELECthrottle - a 16 bit number sent as analog value representing the demanded electric power
+ICEthrottle- B1 - a 16 bit number sent to the internal combustion engine(ICE) throttle 
+ELECthrottle-  - a 16 bit number sent as analog value representing the demanded electric power
 
 SPECIFICS OF I/O
 
@@ -76,42 +76,67 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 
 */
 #define servo_pin PIN_B1  //Setting servo out pin to be hardware pin b1
+#define ADC_DELAY delay_us(20)
+#define Acaps_pin PIN_A0
+#define Acaps_channel 0
+#define Athrottle_pin PIN_A1
+#define Athrottle_channel 1
+
 static int16 left_position = 2500;
 static int16 right_position = 5000;
 static int16 servo_period   = 65356-50000;
-
 unsigned int16 current_servo_position=2500;
 int1 SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0;
+
 int1 test_switch = 0;
 unsigned int16 test_counter = 0;
 
+unsigned int8 number_of_timer0_interupts_since_reset =0;
+unsigned int16 timer0_since_last_reset= 0;
+unsigned int16 vSpeed= 0;
+unsigned int16 ELECthrottle = 0;
+unsigned int16 ICEthrottle = 0;
+unsigned int16 Athrottle = 0;
+unsigned int16 Acaps = 0;
+int1 CURRENTLY_CHARGING = 0;\
+
+/*
+The #int_timer0 interupt is triggered on each timer0 8bit interupt
+the function simply increments a overflow counter to be used by the ccp2
+interupt to calculate speed
+NUMBER OF OPERATIONS = 
+*/
 #int_timer0
 void timer0_isr(){
-
-test_counter++;
-if (test_counter>100){
-test_counter=0;
-if (test_switch){
- output_high(PIN_B2); 
- test_switch = 0;
-}
-else{
- output_low(PIN_B2); 
- test_switch = 1;
-}
-}
+number_of_timer0_interupts_since_reset++;
 }
 
+/*
+#int_timer1 is used by the ICEservo throttle to regulate the timing pulses. The 
+timer is setup for a pulsetrain of 20ms period. This is done as follows,
 
+Period is 1/(CLOCK/4opsperclock)*(startingPostionOfClock) = 20 ms
+for this setup 1/(20000000/4)*(50000) = 20 ms
+
+The timer1 starts at 0 and counts up. So we set the beggining of the clock at
+servo_period which is 65356-50000 so that the total time is 20ms.
+*/
 #int_timer1
 void isr()
 {
+//Make sure that the position is within the left and right positions of the servo
+   if (current_servo_position<left_position){
+      current_servo_position = left_position;
+   }
+   else if (current_servo_position > right_position){
+      current_servo_position = left_position;
+   }
 
    if(SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER)
       { 
-         output_high(servo_pin);                     //Set the servo control pin to high 
+         output_high(servo_pin);        //Set the servo control pin to high 
          SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0; 
-         set_timer1(65356-current_servo_position);                 //Set timer for the position high pulse
+         set_timer1(65356-current_servo_position); //Set timer for the position high pulse
       } 
    else 
       { 
@@ -120,27 +145,20 @@ void isr()
          set_timer1(servo_period+current_servo_position);          //Set timer for the low position the length is the difference between 
                                                      //the total int16 lenght - high pulse length
       }  
-
 }
 
 
-
+/*
+#int_ccp2 is called on the falling edge of the encoder pulse. We calculate the time
+between pulses. 
+TODO will have to put some kind of smoothing mechanism
+*/
 #int_ccp2
 void isr2()
 {
-
-if (test_switch){
- output_high(PIN_B2); 
- test_switch = 0;
+timer0_since_last_reset = number_of_timer0_interupts_since_reset*256 + timer0;
+vSpeed = 65535-timer0_since_last_reset;
 }
-else{
- output_low(PIN_B2); 
- test_switch= 1;
-}
-   
-   
-}
-
 
 
 void main()
@@ -165,24 +183,26 @@ void main()
    //enable_interrupts(INT_TIMER0);
    enable_interrupts(GLOBAL);
    while(TRUE) {
-   if (current_servo_position<left_position){
-      current_servo_position = left_position;
-   }
-   else if (current_servo_position > right_position){
-      current_servo_position = left_position;
-   }
-   else {
-      current_servo_position++;
-   }
-      //fprintf(MONITOR,"Hello");
-      //left_adjust++;
-      //output_low(servo_pin);
-      delay_ms(10);
-      //left_adjust--;
-      //delay_ms(1000);
-      //output_high(servo_pin);
-      //delay_ms(1000);
-      write_dac(current_servo_position-1000);
+ 
+      //GET INPUTS
+      //Vspeed happens in interrupts
+      set_adc_channel(Acaps_channel);
+      ADC_DELAY;
+      Acaps = read_adc();
+      
+      set_adc_channel(Athrottle_channel);
+      ADC_DELAY;
+      Athrottle = read_adc();
+
+      //CONTROL BOX
+
+
+
+   
+      //SET OUTPUTS 
+      //The writing of the ICEThrottle happens in interupts and all that is
+      //required is updating ICEthrottle
+      write_dac(ELECthrottle);
    }
    
 

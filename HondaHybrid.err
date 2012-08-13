@@ -1,2 +1,2 @@
-      Memory usage:   ROM=11%      RAM=16% - 21%
-      0 Errors,  0 Warnings.
+*** Error 12 "HondaHybrid.c" Line 158(72,78): Undefined identifier   timer0
+      1 Errors,  0 Warnings.

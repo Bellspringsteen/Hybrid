@@ -1,0 +1,5 @@
+Athrottle, Acaps, Vspeed, ICE_Running, CURRENTLY_CHARGING,ICE_throttle,ELEC_Throttle
+Case 0 - Just Stopped
+0,50,0,1,1
+
+
