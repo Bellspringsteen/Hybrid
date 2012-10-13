@@ -1,11 +1,11 @@
-004-005 @READ_PROGRAM_MEMORY8.P1
-004     @WRITE_PROGRAM_MEMORY8.P2
+004     @WRITE_PROGRAM_MEMORY8.P1
+004-005 @READ_PROGRAM_MEMORY8.P2
 015     CCP_1_LOW
-015     CCP_1
 015     CCP_1_HIGH
+015     CCP_1
+01B     CCP_2_HIGH
 01B     CCP_2
 01B     CCP_2_LOW
-01B     CCP_2_HIGH
 020     @SCRATCH
 021     @SCRATCH
 021     _RETURN_
@@ -28,38 +28,77 @@
 035-036 current_servo_position
 037.0   SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER
 037.1   test_switch
+037.2   CURRENTLY_CHARGING
 038-039 test_counter
 03A     number_of_timer0_interupts_since_reset
 03B-03C timer0_since_last_reset
 03D-03E vSpeed
-03F     @delay_ms1.P1
-03F     MAIN.@SCRATCH1
-040     MAIN.@SCRATCH2
-041-042 write_dac.data
-043-045 write_dac.cmd
-046     write_dac.i
-047     isr.@SCRATCH1
-048     isr.@SCRATCH2
+03F-040 ELECthrottle
+041-042 ICEthrottle
+043-044 Athrottle
+045-046 Acaps
+047-04A @DIVFF.P1
+047     @delay_us1.P2
+047     MAIN.@SCRATCH1
+048     MAIN.@SCRATCH2
+049     MAIN.@SCRATCH3
+04A     MAIN.@SCRATCH4
+04B-04E @DIVFF.P1
+04B-04E @MULFF.P2
+04B     MAIN.@SCRATCH5
+04C     MAIN.@SCRATCH6
+04D     MAIN.@SCRATCH7
+04E     MAIN.@SCRATCH8
+04F-050 @ITOF.P1
+04F-052 @SFTOI.P2
+04F-052 @ADDFF.P3
+04F-052 @MULFF.P4
+04F     @DIVFF.@SCRATCH1
+050     @DIVFF.@SCRATCH2
+051     @DIVFF.@SCRATCH3
+052     @DIVFF.@SCRATCH4
+053-056 @ADDFF.P1
+053     @DIVFF.@SCRATCH5
+053     @MULFF.@SCRATCH1
+054     @DIVFF.@SCRATCH6
+054     @MULFF.@SCRATCH2
+055     @MULFF.@SCRATCH3
+056     @MULFF.@SCRATCH4
+057     @MULFF.@SCRATCH5
+057     @ADDFF.@SCRATCH1
+058     @ADDFF.@SCRATCH2
+059     @ADDFF.@SCRATCH3
+05A     @ADDFF.@SCRATCH4
+05B     @ADDFF.@SCRATCH5
+05C     @ADDFF.@SCRATCH6
+05D     @ADDFF.@SCRATCH7
+05E     @ADDFF.@SCRATCH8
+05F     isr.@SCRATCH1
+060     isr.@SCRATCH2
 09C.6   C1OUT
 09C.7   C2OUT
-10D-10E @WRITE_PROGRAM_MEMORY8.P1
-10D-10E @READ_PROGRAM_MEMORY8.P2
+10D-10E @READ_PROGRAM_MEMORY8.P1
+10D-10E @WRITE_PROGRAM_MEMORY8.P2
 
 ROM Allocation:
-00AF  @delay_ms1
-0097  init_dac
-00C3  write_dac
+00AB  @delay_us1
+0093  init_dac
 0045  timer0_isr
-0061  isr
-008B  isr2
-0120  MAIN
-0120  @cinit
+0049  isr
+0090  isr2
+0376  MAIN
+00B9  @ITOF
+00D6  @DIVFF
+01A1  @MULFF
+0217  @ADDFF
+0356  @SFTOI
+0376  @cinit
 
 
 User Memory space: 
 
 Project Directory:
-    C:\Documents and Settings\Enter\My Documents\Hybrid\Hybrid-v2\
+    c:\documents and settings\enter\my documents\hybrid\hybrid-v2\
 
 Project Files:
     HondaHybrid.c
@@ -80,7 +119,7 @@ Compiler Settings:
     ICD Provisions: Yes
 
 Output Files:
-    Errors:      HondaHybrid.err
+    Errors:      hondahybrid.err
     Ext Symbols: HondaHybrid.esym
     INHX8:       HondaHybrid.hex
     Symbols:     HondaHybrid.sym

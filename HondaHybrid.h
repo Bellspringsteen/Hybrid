@@ -5,7 +5,7 @@
 #device adc=10
 //#device adc=8
 #use delay(clock=20000000)
-#fuses HS,NOWDT
-#use rs232 (debugger,STREAM=MONITOR)
+#fuses HS,PUT,NOWDT
+#use rs232 (DEBUGGER)
 #include <mcp4921.c>
 

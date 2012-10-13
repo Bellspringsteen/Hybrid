@@ -17,10 +17,10 @@ AdditionalOptionString=
 0=0000 %S 0 0 796 451 3 0
 [Opened Files]
 1=HondaHybrid.c
-2=HondaHybrid.h
-3=..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
-4=..\..\..\Desktop\Alex Bell\My Documents\MISC\Tilt accelerometer velocity\project\HondaHybrid.h
-5=16F873A.h
+2=..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
+3=16F873A.h
+4=HondaHybrid.h
+5=
 6=
 [Target Data]
 OptionString=-p +FM

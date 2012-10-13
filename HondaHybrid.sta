@@ -1,51 +1,55 @@
 
-ROM used: 426 (11%)
-          426 (11%) including unused fragments
+ROM used: 1111 (29%)
+          1111 (29%) including unused fragments
 
-          1 Average locations per line
-          6 Average locations per statement
+          2 Average locations per line
+          18 Average locations per statement
 
-RAM used: 34 (19%) at main() level
-          42 (23%) worst case
+RAM used: 48 (27%) at main() level
+          66 (37%) worst case
 
 Stack used: 2 worst case (out of 7 total available)
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-  191    45  67  HondaHybrid.c
+  226    39  64  HondaHybrid.c
    12     0   0  HondaHybrid.h
   274     0   0  16F873A.h
-   68    22  33  ..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
+   68    22  36  ..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
 ----- -----
-  545    67 Total
+  580    61 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
-0     20   5   1             @delay_ms1
-0     24   6   0    67  1.2  init_dac
-0     93  22   6   733  7.7  write_dac
-0     28   7   0   170  3.5  timer0_isr
-0     42  10   2   167  3.5  isr
-0     12   3   0    27  1.5  isr2
-0    138  32   2   535  5.7  MAIN
+0     14   1   1             @delay_us1
+0     24   2   0    67  1.2  init_dac
+0      4   0   0    13  1.0  timer0_isr
+0     71   6   2   292  4.6  isr
+0      3   0   0     3  0.0  isr2
+0    225  20   8   637  4.7  MAIN
+0     29   3   2             @ITOF
+0    203  18  14             @DIVFF
+0    118  11  13             @MULFF
+0    319  29  16             @ADDFF
+0     32   3   4             @SFTOI
 
 Program metrics:
-    Functions               6
-    Statements              67
-    Comments                186
-    Volume (V)              2372
-    Difficilty (D)          23.7
-    Effort to implement (E) 56287
-    Time to implement (T)   52 minutes
+    Functions               5
+    Statements              61
+    Comments                216
+    Volume (V)              1317
+    Difficilty (D)          12.2
+    Effort to implement (E) 16107
+    Time to implement (T)   15 minutes
     Est Delivered Bugs (B)  0
-    Cyclomatic Complexity   7
-    Maintainability (MI)    136
+    Cyclomatic Complexity   3
+    Maintainability (MI)    67
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00003     4  0  
 00004-00044    65  0  
-00045-007FF   357  1622  
+00045-007FF  1042  937  
 00800-00EFB     0  1788  
 
 

@@ -1,2 +1,9 @@
-*** Error 12 "HondaHybrid.c" Line 158(72,78): Undefined identifier   timer0
-      1 Errors,  0 Warnings.
+>>> Warning 202 "HondaHybrid.c" Line 91(18,29): Variable never used:   test_switch
+>>> Warning 202 "HondaHybrid.c" Line 92(29,41): Variable never used:   test_counter
+>>> Warning 202 "HondaHybrid.c" Line 95(16,39): Variable never used:   timer0_since_last_reset
+>>> Warning 202 "HondaHybrid.c" Line 96(16,22): Variable never used:   vSpeed
+>>> Warning 202 "HondaHybrid.c" Line 97(29,41): Variable never used:   ELECthrottle
+>>> Warning 202 "HondaHybrid.c" Line 98(28,39): Variable never used:   ICEthrottle
+>>> Warning 202 "HondaHybrid.c" Line 101(25,43): Variable never used:   CURRENTLY_CHARGING
+      Memory usage:   ROM=29%      RAM=27% - 37%
+      0 Errors,  7 Warnings.

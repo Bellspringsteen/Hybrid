@@ -76,11 +76,11 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 
 */
 #define servo_pin PIN_B1  //Setting servo out pin to be hardware pin b1
-#define ADC_DELAY delay_us(20)
-#define Acaps_pin PIN_A0
-#define Acaps_channel 0
-#define Athrottle_pin PIN_A1
-#define Athrottle_channel 1
+#define ADC_DELAY delay_us(200)
+#define Acaps_pin PIN_A1
+#define Acaps_channel 1
+#define Athrottle_pin PIN_A0
+#define Athrottle_channel 0
 
 static int16 left_position = 2500;
 static int16 right_position = 5000;
@@ -98,7 +98,7 @@ unsigned int16 ELECthrottle = 0;
 unsigned int16 ICEthrottle = 0;
 unsigned int16 Athrottle = 0;
 unsigned int16 Acaps = 0;
-int1 CURRENTLY_CHARGING = 0;\
+int1 CURRENTLY_CHARGING = 0;
 
 /*
 The #int_timer0 interupt is triggered on each timer0 8bit interupt
@@ -124,6 +124,7 @@ servo_period which is 65356-50000 so that the total time is 20ms.
 #int_timer1
 void isr()
 {
+
 //Make sure that the position is within the left and right positions of the servo
    if (current_servo_position<left_position){
       current_servo_position = left_position;
@@ -156,8 +157,8 @@ TODO will have to put some kind of smoothing mechanism
 #int_ccp2
 void isr2()
 {
-timer0_since_last_reset = number_of_timer0_interupts_since_reset*256 + timer0;
-vSpeed = 65535-timer0_since_last_reset;
+//timer0_since_last_reset = number_of_timer0_interupts_since_reset*256 + timer0;
+//vSpeed = 65535-timer0_since_last_reset;
 }
 
 
@@ -169,10 +170,11 @@ void main()
    setup_spi(FALSE);
    
    //setup_counters(RTCC_INTERNAL,RTCC_DIV_2);
-   //setup_timer_1(T1_DISABLED);
-   //setup_timer_2(T2_DISABLED,0,1);
+   setup_timer_1(T1_DISABLED);
+   setup_timer_2(T2_DISABLED,0,1);
    setup_port_a(ALL_ANALOG);
    setup_adc(ADC_CLOCK_INTERNAL);
+   
    init_dac();
  
    setup_timer_1(T1_DIV_BY_2| T1_INTERNAL); 
@@ -180,8 +182,8 @@ void main()
    setup_ccp2(CCP_CAPTURE_RE);    // Configure CCP2 to capture fall
    enable_interrupts(INT_CCP2);   // Setup interrupt on falling edge
    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
-   //enable_interrupts(INT_TIMER0);
    enable_interrupts(GLOBAL);
+   
    while(TRUE) {
  
       //GET INPUTS
@@ -196,13 +198,24 @@ void main()
 
       //CONTROL BOX
 
-
-
+      //output_low(PIN_B1);
+      //delay_ms(1000);
+      //output_high(PIN_B1);
+      //delay_ms(1000);
+      
+      //delay_ms(Athrottle);
+      //output_high(PIN_B1);
+      //delay_ms(Athrottle);
+      //output_low(PIN_B1);
+      
+      current_servo_position=left_position+(Athrottle/1024.0)*(2500);
+      //printf("Analog Cap %d Analog Throttle %d\n",(int) Acaps, (int) Athrottle);
+      
    
       //SET OUTPUTS 
       //The writing of the ICEThrottle happens in interupts and all that is
       //required is updating ICEthrottle
-      write_dac(ELECthrottle);
+      //write_dac(ELECthrottle);
    }
    
 
