@@ -1,8 +1,8 @@
-CCS PCM C Compiler, Version 4.084, 46530               20-Oct-12 13:49
+CCS PCM C Compiler, Version 4.084, 46530               20-Oct-12 13:58
 
                Filename: HondaHybrid.lst
 
-               ROM used: 1080 words (28%)
+               ROM used: 1118 words (29%)
                          Largest free fragment is 1788
                RAM used: 48 (27%) at main() level
                          66 (37%) worst case
@@ -599,15 +599,53 @@ CCS PCM C Compiler, Version 4.084, 46530               20-Oct-12 13:49
 ....................   
 ....................       //GET INPUTS 
 ....................       //Vspeed happens in interrupts 
-....................       /* 
+....................        
 ....................       set_adc_channel(Acaps_channel); 
+03E0:  MOVLW  08
+03E1:  MOVWF  21
+03E2:  MOVF   1F,W
+03E3:  ANDLW  C7
+03E4:  IORWF  21,W
+03E5:  MOVWF  1F
 ....................       ADC_DELAY; 
+03E6:  MOVLW  21
+03E7:  MOVWF  20
+03E8:  DECFSZ 20,F
+03E9:  GOTO   3E8
 ....................       Acaps = read_adc(); 
+03EA:  BSF    1F.2
+03EB:  BTFSC  1F.2
+03EC:  GOTO   3EB
+03ED:  BSF    03.5
+03EE:  MOVF   1E,W
+03EF:  BCF    03.5
+03F0:  MOVWF  45
+03F1:  MOVF   1E,W
+03F2:  MOVWF  46
 ....................        
 ....................       set_adc_channel(Athrottle_channel); 
+03F3:  MOVLW  00
+03F4:  MOVWF  21
+03F5:  MOVF   1F,W
+03F6:  ANDLW  C7
+03F7:  IORWF  21,W
+03F8:  MOVWF  1F
 ....................       ADC_DELAY; 
+03F9:  MOVLW  21
+03FA:  MOVWF  20
+03FB:  DECFSZ 20,F
+03FC:  GOTO   3FB
 ....................       Athrottle = read_adc(); 
-.................... */ 
+03FD:  BSF    1F.2
+03FE:  BTFSC  1F.2
+03FF:  GOTO   3FE
+0400:  BSF    03.5
+0401:  MOVF   1E,W
+0402:  BCF    03.5
+0403:  MOVWF  43
+0404:  MOVF   1E,W
+0405:  MOVWF  44
+....................  
 ....................       //CONTROL BOX 
 ....................  
 ....................       //output_low(PIN_B1); 
@@ -621,92 +659,92 @@ CCS PCM C Compiler, Version 4.084, 46530               20-Oct-12 13:49
 ....................       //output_low(PIN_B1); 
 ....................        
 ....................       current_servo_position=left_position+(Vspeed/256.0)*2500;//(vSpeed/65536.0)*(2500); 
-03E0:  MOVF   3E,W
-03E1:  MOVWF  50
-03E2:  MOVF   3D,W
-03E3:  MOVWF  4F
-03E4:  CALL   0BA
-03E5:  MOVF   23,W
-03E6:  MOVWF  4A
-03E7:  MOVF   22,W
-03E8:  MOVWF  49
-03E9:  MOVF   21,W
-03EA:  MOVWF  48
-03EB:  MOVF   20,W
-03EC:  MOVWF  47
-03ED:  CLRF   4E
-03EE:  CLRF   4D
-03EF:  CLRF   4C
-03F0:  MOVLW  87
-03F1:  MOVWF  4B
-03F2:  GOTO   0D7
-03F3:  MOVF   20,W
-03F4:  MOVWF  47
-03F5:  MOVF   21,W
-03F6:  MOVWF  48
-03F7:  MOVF   22,W
-03F8:  MOVWF  49
-03F9:  MOVF   23,W
-03FA:  MOVWF  4A
-03FB:  MOVWF  4E
-03FC:  MOVF   22,W
-03FD:  MOVWF  4D
-03FE:  MOVF   21,W
-03FF:  MOVWF  4C
-0400:  MOVF   20,W
-0401:  MOVWF  4B
-0402:  CLRF   52
-0403:  MOVLW  40
-0404:  MOVWF  51
-0405:  MOVLW  1C
-0406:  MOVWF  50
-0407:  MOVLW  8A
-0408:  MOVWF  4F
-0409:  GOTO   1A2
-040A:  MOVF   20,W
-040B:  MOVWF  4B
-040C:  MOVF   21,W
-040D:  MOVWF  4C
-040E:  MOVF   22,W
-040F:  MOVWF  4D
-0410:  MOVF   23,W
-0411:  MOVWF  4E
-0412:  MOVF   30,W
-0413:  MOVWF  50
-0414:  MOVF   2F,W
-0415:  MOVWF  4F
-0416:  CALL   0BA
-0417:  BCF    03.1
-0418:  MOVF   23,W
-0419:  MOVWF  52
-041A:  MOVF   22,W
-041B:  MOVWF  51
-041C:  MOVF   21,W
-041D:  MOVWF  50
-041E:  MOVF   20,W
-041F:  MOVWF  4F
-0420:  MOVF   4E,W
-0421:  MOVWF  56
-0422:  MOVF   4D,W
-0423:  MOVWF  55
-0424:  MOVF   4C,W
-0425:  MOVWF  54
-0426:  MOVF   4B,W
-0427:  MOVWF  53
-0428:  GOTO   218
-0429:  MOVF   23,W
-042A:  MOVWF  52
-042B:  MOVF   22,W
-042C:  MOVWF  51
-042D:  MOVF   21,W
-042E:  MOVWF  50
-042F:  MOVF   20,W
-0430:  MOVWF  4F
-0431:  GOTO   357
-0432:  MOVF   22,W
-0433:  MOVWF  36
-0434:  MOVF   21,W
-0435:  MOVWF  35
+0406:  MOVF   3E,W
+0407:  MOVWF  50
+0408:  MOVF   3D,W
+0409:  MOVWF  4F
+040A:  CALL   0BA
+040B:  MOVF   23,W
+040C:  MOVWF  4A
+040D:  MOVF   22,W
+040E:  MOVWF  49
+040F:  MOVF   21,W
+0410:  MOVWF  48
+0411:  MOVF   20,W
+0412:  MOVWF  47
+0413:  CLRF   4E
+0414:  CLRF   4D
+0415:  CLRF   4C
+0416:  MOVLW  87
+0417:  MOVWF  4B
+0418:  GOTO   0D7
+0419:  MOVF   20,W
+041A:  MOVWF  47
+041B:  MOVF   21,W
+041C:  MOVWF  48
+041D:  MOVF   22,W
+041E:  MOVWF  49
+041F:  MOVF   23,W
+0420:  MOVWF  4A
+0421:  MOVWF  4E
+0422:  MOVF   22,W
+0423:  MOVWF  4D
+0424:  MOVF   21,W
+0425:  MOVWF  4C
+0426:  MOVF   20,W
+0427:  MOVWF  4B
+0428:  CLRF   52
+0429:  MOVLW  40
+042A:  MOVWF  51
+042B:  MOVLW  1C
+042C:  MOVWF  50
+042D:  MOVLW  8A
+042E:  MOVWF  4F
+042F:  GOTO   1A2
+0430:  MOVF   20,W
+0431:  MOVWF  4B
+0432:  MOVF   21,W
+0433:  MOVWF  4C
+0434:  MOVF   22,W
+0435:  MOVWF  4D
+0436:  MOVF   23,W
+0437:  MOVWF  4E
+0438:  MOVF   30,W
+0439:  MOVWF  50
+043A:  MOVF   2F,W
+043B:  MOVWF  4F
+043C:  CALL   0BA
+043D:  BCF    03.1
+043E:  MOVF   23,W
+043F:  MOVWF  52
+0440:  MOVF   22,W
+0441:  MOVWF  51
+0442:  MOVF   21,W
+0443:  MOVWF  50
+0444:  MOVF   20,W
+0445:  MOVWF  4F
+0446:  MOVF   4E,W
+0447:  MOVWF  56
+0448:  MOVF   4D,W
+0449:  MOVWF  55
+044A:  MOVF   4C,W
+044B:  MOVWF  54
+044C:  MOVF   4B,W
+044D:  MOVWF  53
+044E:  GOTO   218
+044F:  MOVF   23,W
+0450:  MOVWF  52
+0451:  MOVF   22,W
+0452:  MOVWF  51
+0453:  MOVF   21,W
+0454:  MOVWF  50
+0455:  MOVF   20,W
+0456:  MOVWF  4F
+0457:  GOTO   357
+0458:  MOVF   22,W
+0459:  MOVWF  36
+045A:  MOVF   21,W
+045B:  MOVWF  35
 ....................       //printf("Analog Cap %d Analog Throttle %d\n",(int) Acaps, (int) Athrottle); 
 ....................        
 ....................     
@@ -715,14 +753,14 @@ CCS PCM C Compiler, Version 4.084, 46530               20-Oct-12 13:49
 ....................       //required is updating ICEthrottle 
 ....................       //write_dac(ELECthrottle); 
 ....................    } 
-0436:  GOTO   3E0
+045C:  GOTO   3E0
 ....................     
 ....................  
 .................... } 
 ....................  
 ....................  
 ....................  
-0437:  GOTO   437
+045D:  GOTO   45D
 
 Configuration Fuses:
    Word  1: 373A   HS NOWDT NOPUT DEBUG NOPROTECT NOBROWNOUT NOLVP NOCPD NOWRT

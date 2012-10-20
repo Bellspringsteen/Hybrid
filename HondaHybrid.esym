@@ -2,7 +2,7 @@ C L "MAIN" 0 3 6 "FUNCTION"
 D G "__PCM__" 0 251 ""4.084""
 D G "__DEVICE__" 0 251 "873"
 D G "__DATE__" 0 251 ""20-Oct-12""
-D G "__TIME__" 0 251 ""13:49:30"" "Standard Header file for the PIC16F873A device ////////////////"
+D G "__TIME__" 0 251 ""13:58:01"" "Standard Header file for the PIC16F873A device ////////////////"
 d G "PIN_A0" 2 19 "40"
 d G "PIN_A1" 2 20 "41"
 d G "PIN_A2" 2 21 "42"
@@ -210,7 +210,8 @@ C L "MAIN" 0 3 1 "FUNCTION"
 C L "MAIN" 0 3 1 "FUNCTION"
 C L "MAIN" 0 3 1 "FUNCTION"
 C L "MAIN" 0 3 1 "FUNCTION"
-C L "MAIN" 0 3 17 "FUNCTION"
+C L "MAIN" 0 3 2 "FUNCTION"
+C L "MAIN" 0 3 9 "FUNCTION"
 F B "reset_cpu" 0 0
 F B "abs" 1 0
 F B "sleep" 0 0

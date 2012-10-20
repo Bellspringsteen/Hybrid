@@ -173,7 +173,7 @@ void isr2()
 //!   output_low(PIN_B1);
 //!}
 
-if (number_of_timer0_interupts_since_reset>50){
+if (number_of_timer0_interupts_since_reset>20){
 
 //timer0_since_last_reset = number_of_timer0_interupts_since_reset*256;// + GET_TIMER0();
 //SET_TIMER0(0);

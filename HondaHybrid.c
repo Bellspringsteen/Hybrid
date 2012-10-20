@@ -211,7 +211,7 @@ void main()
  
       //GET INPUTS
       //Vspeed happens in interrupts
-      /*
+      
       set_adc_channel(Acaps_channel);
       ADC_DELAY;
       Acaps = read_adc();
@@ -219,7 +219,7 @@ void main()
       set_adc_channel(Athrottle_channel);
       ADC_DELAY;
       Athrottle = read_adc();
-*/
+
       //CONTROL BOX
 
       //output_low(PIN_B1);
