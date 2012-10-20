@@ -1,9 +1,9 @@
 
-ROM used: 1111 (29%)
-          1111 (29%) including unused fragments
+ROM used: 1080 (28%)
+          1080 (28%) including unused fragments
 
           2 Average locations per line
-          18 Average locations per statement
+          17 Average locations per statement
 
 RAM used: 48 (27%) at main() level
           66 (37%) worst case
@@ -12,44 +12,43 @@ Stack used: 2 worst case (out of 7 total available)
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-  226    39  64  HondaHybrid.c
+  250    42  66  HondaHybrid.c
    12     0   0  HondaHybrid.h
   274     0   0  16F873A.h
-   68    22  36  ..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
+   68    22  34  ..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
 ----- -----
-  580    61 Total
+  604    64 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
-0     14   1   1             @delay_us1
 0     24   2   0    67  1.2  init_dac
-0      4   0   0    13  1.0  timer0_isr
-0     71   6   2   292  4.6  isr
-0      3   0   0     3  0.0  isr2
-0    225  20   8   637  4.7  MAIN
+0     11   1   0    66  2.9  timer0_isr
+0     71   7   2   292  4.6  isr
+0     11   1   0    61  2.3  isr2
+0    193  18   8   479  4.6  MAIN
 0     29   3   2             @ITOF
-0    203  18  14             @DIVFF
+0    203  19  14             @DIVFF
 0    118  11  13             @MULFF
-0    319  29  16             @ADDFF
+0    319  30  16             @ADDFF
 0     32   3   4             @SFTOI
 
 Program metrics:
     Functions               5
-    Statements              61
-    Comments                216
-    Volume (V)              1317
-    Difficilty (D)          12.2
-    Effort to implement (E) 16107
-    Time to implement (T)   15 minutes
+    Statements              64
+    Comments                236
+    Volume (V)              1357
+    Difficilty (D)          15.4
+    Effort to implement (E) 20959
+    Time to implement (T)   19 minutes
     Est Delivered Bugs (B)  0
-    Cyclomatic Complexity   3
-    Maintainability (MI)    67
+    Cyclomatic Complexity   5
+    Maintainability (MI)    53
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00003     4  0  
 00004-00044    65  0  
-00045-007FF  1042  937  
+00045-007FF  1011  968  
 00800-00EFB     0  1788  
 
 

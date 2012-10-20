@@ -27,8 +27,9 @@
 033-034 servo_period
 035-036 current_servo_position
 037.0   SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER
-037.1   test_switch
-037.2   CURRENTLY_CHARGING
+037.1   test_boolean
+037.2   test_switch
+037.3   CURRENTLY_CHARGING
 038-039 test_counter
 03A     number_of_timer0_interupts_since_reset
 03B-03C timer0_since_last_reset
@@ -38,7 +39,6 @@
 043-044 Athrottle
 045-046 Acaps
 047-04A @DIVFF.P1
-047     @delay_us1.P2
 047     MAIN.@SCRATCH1
 048     MAIN.@SCRATCH2
 049     MAIN.@SCRATCH3
@@ -49,10 +49,10 @@
 04C     MAIN.@SCRATCH6
 04D     MAIN.@SCRATCH7
 04E     MAIN.@SCRATCH8
-04F-050 @ITOF.P1
+04F-052 @MULFF.P1
 04F-052 @SFTOI.P2
 04F-052 @ADDFF.P3
-04F-052 @MULFF.P4
+04F-050 @ITOF.P4
 04F     @DIVFF.@SCRATCH1
 050     @DIVFF.@SCRATCH2
 051     @DIVFF.@SCRATCH3
@@ -81,18 +81,17 @@
 10D-10E @WRITE_PROGRAM_MEMORY8.P2
 
 ROM Allocation:
-00AB  @delay_us1
-0093  init_dac
+00A2  init_dac
 0045  timer0_isr
-0049  isr
-0090  isr2
-0376  MAIN
-00B9  @ITOF
-00D6  @DIVFF
-01A1  @MULFF
-0217  @ADDFF
-0356  @SFTOI
-0376  @cinit
+0050  isr
+0097  isr2
+0377  MAIN
+00BA  @ITOF
+00D7  @DIVFF
+01A2  @MULFF
+0218  @ADDFF
+0357  @SFTOI
+0377  @cinit
 
 
 User Memory space: 

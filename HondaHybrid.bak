@@ -76,7 +76,7 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 
 */
 #define servo_pin PIN_B1  //Setting servo out pin to be hardware pin b1
-#define ADC_DELAY delay_us(200)
+#define ADC_DELAY delay_us(20)
 #define Acaps_pin PIN_A1
 #define Acaps_channel 1
 #define Athrottle_pin PIN_A0
@@ -87,6 +87,7 @@ static int16 right_position = 5000;
 static int16 servo_period   = 65356-50000;
 unsigned int16 current_servo_position=2500;
 int1 SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0;
+int1 test_boolean = 0;
 
 int1 test_switch = 0;
 unsigned int16 test_counter = 0;
@@ -108,7 +109,13 @@ NUMBER OF OPERATIONS =
 */
 #int_timer0
 void timer0_isr(){
-number_of_timer0_interupts_since_reset++;
+   if (number_of_timer0_interupts_since_reset!=255){
+      number_of_timer0_interupts_since_reset++;
+   }
+   else {
+      //number_of_timer0_interupts_since_reset = 0;
+      vSpeed = 255;
+   }
 }
 
 /*
@@ -157,8 +164,23 @@ TODO will have to put some kind of smoothing mechanism
 #int_ccp2
 void isr2()
 {
-//timer0_since_last_reset = number_of_timer0_interupts_since_reset*256 + timer0;
+//!if (test_boolean==0){
+//!   test_boolean=1;
+//!   output_high(PIN_B1);
+//!}
+//!else {
+//!   test_boolean=0;
+//!   output_low(PIN_B1);
+//!}
+
+if (number_of_timer0_interupts_since_reset>50){
+
+//timer0_since_last_reset = number_of_timer0_interupts_since_reset*256;// + GET_TIMER0();
+//SET_TIMER0(0);
+vSpeed  = number_of_timer0_interupts_since_reset;
+number_of_timer0_interupts_since_reset = 0;
 //vSpeed = 65535-timer0_since_last_reset;
+}
 }
 
 
@@ -181,6 +203,7 @@ void main()
    setup_timer_0(RTCC_INTERNAL|RTCC_DIV_128);
    setup_ccp2(CCP_CAPTURE_RE);    // Configure CCP2 to capture fall
    enable_interrupts(INT_CCP2);   // Setup interrupt on falling edge
+   enable_interrupts(INT_TIMER0);
    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
    enable_interrupts(GLOBAL);
    
@@ -188,6 +211,7 @@ void main()
  
       //GET INPUTS
       //Vspeed happens in interrupts
+      /*
       set_adc_channel(Acaps_channel);
       ADC_DELAY;
       Acaps = read_adc();
@@ -195,7 +219,7 @@ void main()
       set_adc_channel(Athrottle_channel);
       ADC_DELAY;
       Athrottle = read_adc();
-
+*/
       //CONTROL BOX
 
       //output_low(PIN_B1);
@@ -208,7 +232,7 @@ void main()
       //delay_ms(Athrottle);
       //output_low(PIN_B1);
       
-      current_servo_position=left_position+(Athrottle/1024)*(2500);
+      current_servo_position=left_position+(Vspeed/256.0)*2500;//(vSpeed/65536.0)*(2500);
       //printf("Analog Cap %d Analog Throttle %d\n",(int) Acaps, (int) Athrottle);
       
    
