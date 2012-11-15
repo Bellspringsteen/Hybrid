@@ -1,8 +1,8 @@
-CCS PCM C Compiler, Version 4.084, 46530               20-Oct-12 13:58
+CCS PCM C Compiler, Version 4.084, 46530               15-Nov-12 00:53
 
                Filename: HondaHybrid.lst
 
-               ROM used: 1118 words (29%)
+               ROM used: 1230 words (32%)
                          Largest free fragment is 1788
                RAM used: 48 (27%) at main() level
                          66 (37%) worst case
@@ -12,7 +12,7 @@ CCS PCM C Compiler, Version 4.084, 46530               20-Oct-12 13:58
 0000:  NOP
 0001:  MOVLW  00
 0002:  MOVWF  0A
-0003:  GOTO   377
+0003:  GOTO   3D5
 0004:  MOVWF  7F
 0005:  SWAPF  03,W
 0006:  CLRF   03
@@ -73,9 +73,9 @@ CCS PCM C Compiler, Version 4.084, 46530               20-Oct-12 13:58
 003D:  SWAPF  7F,W
 003E:  RETFIE
 003F:  BCF    0A.3
-0040:  GOTO   050
+0040:  GOTO   051
 0041:  BCF    0A.3
-0042:  GOTO   097
+0042:  GOTO   098
 0043:  BCF    0A.3
 0044:  GOTO   045
 .................... #include "C:\Documents and Settings\Enter\My Documents\Hybrid\Hybrid-v2\HondaHybrid.h" 
@@ -125,66 +125,160 @@ CCS PCM C Compiler, Version 4.084, 46530               20-Oct-12 13:58
 .................... { 
 ....................    output_high(DAC_CS); 
 *
-00A2:  BCF    2E.4
-00A3:  MOVF   2E,W
-00A4:  BSF    03.5
-00A5:  MOVWF  07
-00A6:  BCF    03.5
-00A7:  BSF    07.4
+00A3:  BCF    2E.4
+00A4:  MOVF   2E,W
+00A5:  BSF    03.5
+00A6:  MOVWF  07
+00A7:  BCF    03.5
+00A8:  BSF    07.4
 ....................    output_high(DAC_LDAC); 
-00A8:  BSF    03.5
-00A9:  BCF    06.4
-00AA:  BCF    03.5
-00AB:  BSF    06.4
+00A9:  BSF    03.5
+00AA:  BCF    06.4
+00AB:  BCF    03.5
+00AC:  BSF    06.4
 ....................    output_high(DAC_CLK); 
-00AC:  BCF    2E.3
-00AD:  MOVF   2E,W
-00AE:  BSF    03.5
-00AF:  MOVWF  07
-00B0:  BCF    03.5
-00B1:  BSF    07.3
+00AD:  BCF    2E.3
+00AE:  MOVF   2E,W
+00AF:  BSF    03.5
+00B0:  MOVWF  07
+00B1:  BCF    03.5
+00B2:  BSF    07.3
 ....................    output_high(DAC_DI); 
-00B2:  BCF    2E.5
-00B3:  MOVF   2E,W
-00B4:  BSF    03.5
-00B5:  MOVWF  07
-00B6:  BCF    03.5
-00B7:  BSF    07.5
+00B3:  BCF    2E.5
+00B4:  MOVF   2E,W
+00B5:  BSF    03.5
+00B6:  MOVWF  07
+00B7:  BCF    03.5
+00B8:  BSF    07.5
 .................... } 
-00B8:  BCF    0A.3
-00B9:  GOTO   3C7 (RETURN)
+00B9:  BCF    0A.3
+00BA:  GOTO   426 (RETURN)
 ....................  
 .................... void write_dac(int16 data) { 
 ....................    BYTE cmd[3]; 
 ....................    BYTE i; 
 ....................  
 ....................    cmd[0]=data; 
+*
+0378:  MOVF   49,W
+0379:  MOVWF  4B
 ....................    cmd[1]=(data>>8); 
+037A:  MOVF   4A,W
+037B:  MOVWF  4C
 ....................    cmd[2]=0x03;                            
+037C:  MOVLW  03
+037D:  MOVWF  4D
 ....................     
 ....................    output_high(DAC_LDAC); 
+037E:  BSF    03.5
+037F:  BCF    06.4
+0380:  BCF    03.5
+0381:  BSF    06.4
 ....................    output_low(DAC_CLK); 
+0382:  BCF    2E.3
+0383:  MOVF   2E,W
+0384:  BSF    03.5
+0385:  MOVWF  07
+0386:  BCF    03.5
+0387:  BCF    07.3
 ....................    output_low(DAC_CS); 
+0388:  BCF    2E.4
+0389:  MOVF   2E,W
+038A:  BSF    03.5
+038B:  MOVWF  07
+038C:  BCF    03.5
+038D:  BCF    07.4
 ....................  
 ....................    for(i=0; i<=23; ++i) 
+038E:  CLRF   4E
+038F:  MOVF   4E,W
+0390:  SUBLW  17
+0391:  BTFSS  03.0
+0392:  GOTO   3C0
 ....................    { 
 ....................       if(i<4 || (i>7 && i<12)) 
+0393:  MOVF   4E,W
+0394:  SUBLW  03
+0395:  BTFSC  03.0
+0396:  GOTO   39F
+0397:  MOVF   4E,W
+0398:  SUBLW  07
+0399:  BTFSC  03.0
+039A:  GOTO   3A4
+039B:  MOVF   4E,W
+039C:  SUBLW  0B
+039D:  BTFSS  03.0
+039E:  GOTO   3A4
 ....................          shift_left(cmd,3,0); 
+039F:  BCF    03.0
+03A0:  RLF    4B,F
+03A1:  RLF    4C,F
+03A2:  RLF    4D,F
 ....................       else 
+03A3:  GOTO   3BE
 ....................       { 
 ....................          output_bit(DAC_DI, shift_left(cmd,3,0)); 
+03A4:  BCF    03.0
+03A5:  RLF    4B,F
+03A6:  RLF    4C,F
+03A7:  RLF    4D,F
+03A8:  BTFSC  03.0
+03A9:  GOTO   3AC
+03AA:  BCF    07.5
+03AB:  GOTO   3AD
+03AC:  BSF    07.5
+03AD:  BCF    2E.5
+03AE:  MOVF   2E,W
+03AF:  BSF    03.5
+03B0:  MOVWF  07
 ....................  
 ....................          output_high(DAC_CLK); 
+03B1:  BCF    03.5
+03B2:  BCF    2E.3
+03B3:  MOVF   2E,W
+03B4:  BSF    03.5
+03B5:  MOVWF  07
+03B6:  BCF    03.5
+03B7:  BSF    07.3
 ....................          output_low(DAC_CLK); 
+03B8:  BCF    2E.3
+03B9:  MOVF   2E,W
+03BA:  BSF    03.5
+03BB:  MOVWF  07
+03BC:  BCF    03.5
+03BD:  BCF    07.3
 ....................       } 
 ....................    } 
+03BE:  INCF   4E,F
+03BF:  GOTO   38F
 ....................    output_high(DAC_CS); 
+03C0:  BCF    2E.4
+03C1:  MOVF   2E,W
+03C2:  BSF    03.5
+03C3:  MOVWF  07
+03C4:  BCF    03.5
+03C5:  BSF    07.4
 ....................  
 ....................    output_low(DAC_LDAC); 
+03C6:  BSF    03.5
+03C7:  BCF    06.4
+03C8:  BCF    03.5
+03C9:  BCF    06.4
 ....................    delay_us(10); 
+03CA:  MOVLW  10
+03CB:  MOVWF  20
+03CC:  DECFSZ 20,F
+03CD:  GOTO   3CC
+03CE:  NOP
 ....................     
 ....................    output_HIGH(DAC_LDAC); 
+03CF:  BSF    03.5
+03D0:  BCF    06.4
+03D1:  BCF    03.5
+03D2:  BSF    06.4
 .................... } 
+03D3:  BCF    0A.3
+03D4:  GOTO   4CC (RETURN)
 ....................  
 ....................  
 ....................  
@@ -270,61 +364,63 @@ CCS PCM C Compiler, Version 4.084, 46530               20-Oct-12 13:58
 .................... #define Acaps_channel 1 
 .................... #define Athrottle_pin PIN_A0 
 .................... #define Athrottle_channel 0 
+.................... #define Electric_Controller_Switch PIN_B0 
 ....................  
 .................... static int16 left_position = 2500; 
 *
-0388:  MOVLW  C4
-0389:  MOVWF  2F
-038A:  MOVLW  09
-038B:  MOVWF  30
+03E6:  MOVLW  C4
+03E7:  MOVWF  2F
+03E8:  MOVLW  09
+03E9:  MOVWF  30
 .................... static int16 right_position = 5000; 
-038C:  MOVLW  88
-038D:  MOVWF  31
-038E:  MOVLW  13
-038F:  MOVWF  32
+03EA:  MOVLW  88
+03EB:  MOVWF  31
+03EC:  MOVLW  13
+03ED:  MOVWF  32
 .................... static int16 servo_period   = 65356-50000; 
-0390:  MOVLW  FC
-0391:  MOVWF  33
-0392:  MOVLW  3B
-0393:  MOVWF  34
+03EE:  MOVLW  FC
+03EF:  MOVWF  33
+03F0:  MOVLW  3B
+03F1:  MOVWF  34
 .................... unsigned int16 current_servo_position=2500; 
-0394:  MOVLW  C4
-0395:  MOVWF  35
-0396:  MOVLW  09
-0397:  MOVWF  36
+03F2:  MOVLW  C4
+03F3:  MOVWF  35
+03F4:  MOVLW  09
+03F5:  MOVWF  36
 .................... int1 SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0; 
-0398:  BCF    37.0
+03F6:  BCF    37.0
 .................... int1 test_boolean = 0; 
-0399:  BCF    37.1
+03F7:  BCF    37.1
 ....................  
 .................... int1 test_switch = 0; 
-039A:  BCF    37.2
+03F8:  BCF    37.2
 .................... unsigned int16 test_counter = 0; 
-039B:  CLRF   38
-039C:  CLRF   39
+03F9:  CLRF   38
+03FA:  CLRF   39
 ....................  
 .................... unsigned int8 number_of_timer0_interupts_since_reset =0; 
-039D:  CLRF   3A
+03FB:  CLRF   3A
 .................... unsigned int16 timer0_since_last_reset= 0; 
-039E:  CLRF   3B
-039F:  CLRF   3C
-.................... unsigned int16 vSpeed= 0; 
-03A0:  CLRF   3D
-03A1:  CLRF   3E
+03FC:  CLRF   3B
+03FD:  CLRF   3C
+.................... unsigned int16 vSpeed= 255; 
+03FE:  MOVLW  FF
+03FF:  MOVWF  3D
+0400:  CLRF   3E
 .................... unsigned int16 ELECthrottle = 0; 
-03A2:  CLRF   3F
-03A3:  CLRF   40
+0401:  CLRF   3F
+0402:  CLRF   40
 .................... unsigned int16 ICEthrottle = 0; 
-03A4:  CLRF   41
-03A5:  CLRF   42
+0403:  CLRF   41
+0404:  CLRF   42
 .................... unsigned int16 Athrottle = 0; 
-03A6:  CLRF   43
-03A7:  CLRF   44
+0405:  CLRF   43
+0406:  CLRF   44
 .................... unsigned int16 Acaps = 0; 
-03A8:  CLRF   45
-03A9:  CLRF   46
+0407:  CLRF   45
+0408:  CLRF   46
 .................... int1 CURRENTLY_CHARGING = 0; 
-03AA:  BCF    37.3
+0409:  BCF    37.3
 ....................  
 .................... /* 
 .................... The #int_timer0 interupt is triggered on each timer0 8bit interupt 
@@ -343,12 +439,13 @@ CCS PCM C Compiler, Version 4.084, 46530               20-Oct-12 13:58
 0048:  INCF   3A,F
 ....................    } 
 ....................    else { 
-0049:  GOTO   04D
-....................       //number_of_timer0_interupts_since_reset = 0; 
+0049:  GOTO   04E
 ....................       vSpeed = 255; 
 004A:  CLRF   3E
 004B:  MOVLW  FF
 004C:  MOVWF  3D
+....................       number_of_timer0_interupts_since_reset=0; 
+004D:  CLRF   3A
 ....................    } 
 .................... } 
 ....................  
@@ -362,100 +459,100 @@ CCS PCM C Compiler, Version 4.084, 46530               20-Oct-12 13:58
 .................... The timer1 starts at 0 and counts up. So we set the beggining of the clock at 
 .................... servo_period which is 65356-50000 so that the total time is 20ms. 
 .................... */ 
-004D:  BCF    0B.2
-004E:  BCF    0A.3
-004F:  GOTO   02C
+004E:  BCF    0B.2
+004F:  BCF    0A.3
+0050:  GOTO   02C
 .................... #int_timer1 
 .................... void isr() 
 .................... { 
 ....................  
 .................... //Make sure that the position is within the left and right positions of the servo 
 ....................    if (current_servo_position<left_position){ 
-0050:  MOVF   36,W
-0051:  SUBWF  30,W
-0052:  BTFSS  03.0
-0053:  GOTO   05F
-0054:  BTFSS  03.2
-0055:  GOTO   05A
-0056:  MOVF   2F,W
-0057:  SUBWF  35,W
-0058:  BTFSC  03.0
-0059:  GOTO   05F
+0051:  MOVF   36,W
+0052:  SUBWF  30,W
+0053:  BTFSS  03.0
+0054:  GOTO   060
+0055:  BTFSS  03.2
+0056:  GOTO   05B
+0057:  MOVF   2F,W
+0058:  SUBWF  35,W
+0059:  BTFSC  03.0
+005A:  GOTO   060
 ....................       current_servo_position = left_position; 
-005A:  MOVF   30,W
-005B:  MOVWF  36
-005C:  MOVF   2F,W
-005D:  MOVWF  35
+005B:  MOVF   30,W
+005C:  MOVWF  36
+005D:  MOVF   2F,W
+005E:  MOVWF  35
 ....................    } 
 ....................    else if (current_servo_position > right_position){ 
-005E:  GOTO   06D
-005F:  MOVF   32,W
-0060:  SUBWF  36,W
-0061:  BTFSS  03.0
-0062:  GOTO   06D
-0063:  BTFSS  03.2
-0064:  GOTO   069
-0065:  MOVF   35,W
-0066:  SUBWF  31,W
-0067:  BTFSC  03.0
-0068:  GOTO   06D
+005F:  GOTO   06E
+0060:  MOVF   32,W
+0061:  SUBWF  36,W
+0062:  BTFSS  03.0
+0063:  GOTO   06E
+0064:  BTFSS  03.2
+0065:  GOTO   06A
+0066:  MOVF   35,W
+0067:  SUBWF  31,W
+0068:  BTFSC  03.0
+0069:  GOTO   06E
 ....................       current_servo_position = left_position; 
-0069:  MOVF   30,W
-006A:  MOVWF  36
-006B:  MOVF   2F,W
-006C:  MOVWF  35
+006A:  MOVF   30,W
+006B:  MOVWF  36
+006C:  MOVF   2F,W
+006D:  MOVWF  35
 ....................    } 
 ....................  
 ....................    if(SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER) 
-006D:  BTFSS  37.0
-006E:  GOTO   082
+006E:  BTFSS  37.0
+006F:  GOTO   083
 ....................       {  
 ....................          output_high(servo_pin);        //Set the servo control pin to high  
-006F:  BSF    03.5
-0070:  BCF    06.1
-0071:  BCF    03.5
-0072:  BSF    06.1
+0070:  BSF    03.5
+0071:  BCF    06.1
+0072:  BCF    03.5
+0073:  BSF    06.1
 ....................          SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0;  
-0073:  BCF    37.0
+0074:  BCF    37.0
 ....................          set_timer1(65356-current_servo_position); //Set timer for the position high pulse 
-0074:  MOVF   35,W
-0075:  SUBLW  4C
-0076:  MOVWF  5F
-0077:  MOVLW  FF
-0078:  MOVWF  60
-0079:  MOVF   36,W
-007A:  BTFSS  03.0
-007B:  INCFSZ 36,W
-007C:  SUBWF  60,F
-007D:  MOVF   60,W
-007E:  MOVWF  0F
-007F:  MOVF   5F,W
-0080:  MOVWF  0E
+0075:  MOVF   35,W
+0076:  SUBLW  4C
+0077:  MOVWF  5F
+0078:  MOVLW  FF
+0079:  MOVWF  60
+007A:  MOVF   36,W
+007B:  BTFSS  03.0
+007C:  INCFSZ 36,W
+007D:  SUBWF  60,F
+007E:  MOVF   60,W
+007F:  MOVWF  0F
+0080:  MOVF   5F,W
+0081:  MOVWF  0E
 ....................       }  
 ....................    else  
-0081:  GOTO   094
+0082:  GOTO   095
 ....................       {  
 ....................          output_low(servo_pin);                      // Set the servo control pin to low   
-0082:  BSF    03.5
-0083:  BCF    06.1
-0084:  BCF    03.5
-0085:  BCF    06.1
+0083:  BSF    03.5
+0084:  BCF    06.1
+0085:  BCF    03.5
+0086:  BCF    06.1
 ....................          SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 1;  
-0086:  BSF    37.0
+0087:  BSF    37.0
 ....................          set_timer1(servo_period+current_servo_position);          //Set timer for the low position the length is the difference between  
-0087:  MOVF   35,W
-0088:  ADDWF  33,W
-0089:  MOVWF  5F
-008A:  MOVF   34,W
-008B:  MOVWF  60
-008C:  MOVF   36,W
-008D:  BTFSC  03.0
-008E:  INCFSZ 36,W
-008F:  ADDWF  60,F
-0090:  MOVF   60,W
-0091:  MOVWF  0F
-0092:  MOVF   5F,W
-0093:  MOVWF  0E
+0088:  MOVF   35,W
+0089:  ADDWF  33,W
+008A:  MOVWF  5F
+008B:  MOVF   34,W
+008C:  MOVWF  60
+008D:  MOVF   36,W
+008E:  BTFSC  03.0
+008F:  INCFSZ 36,W
+0090:  ADDWF  60,F
+0091:  MOVF   60,W
+0092:  MOVWF  0F
+0093:  MOVF   5F,W
+0094:  MOVWF  0E
 ....................                                                      //the total int16 lenght - high pulse length 
 ....................       }   
 .................... } 
@@ -466,301 +563,297 @@ CCS PCM C Compiler, Version 4.084, 46530               20-Oct-12 13:58
 .................... between pulses.  
 .................... TODO will have to put some kind of smoothing mechanism 
 .................... */ 
-0094:  BCF    0C.0
-0095:  BCF    0A.3
-0096:  GOTO   02C
+0095:  BCF    0C.0
+0096:  BCF    0A.3
+0097:  GOTO   02C
 .................... #int_ccp2 
 .................... void isr2() 
 .................... { 
-.................... //!if (test_boolean==0){ 
-.................... //!   test_boolean=1; 
-.................... //!   output_high(PIN_B1); 
-.................... //!} 
-.................... //!else { 
-.................... //!   test_boolean=0; 
-.................... //!   output_low(PIN_B1); 
-.................... //!} 
-....................  
 .................... if (number_of_timer0_interupts_since_reset>20){ 
-0097:  MOVF   3A,W
-0098:  SUBLW  14
-0099:  BTFSC  03.0
-009A:  GOTO   09F
-....................  
-.................... //timer0_since_last_reset = number_of_timer0_interupts_since_reset*256;// + GET_TIMER0(); 
-.................... //SET_TIMER0(0); 
+0098:  MOVF   3A,W
+0099:  SUBLW  14
+009A:  BTFSC  03.0
+009B:  GOTO   0A0
 .................... vSpeed  = number_of_timer0_interupts_since_reset; 
-009B:  CLRF   3E
-009C:  MOVF   3A,W
-009D:  MOVWF  3D
+009C:  CLRF   3E
+009D:  MOVF   3A,W
+009E:  MOVWF  3D
 .................... number_of_timer0_interupts_since_reset = 0; 
-009E:  CLRF   3A
-.................... //vSpeed = 65535-timer0_since_last_reset; 
+009F:  CLRF   3A
 .................... } 
 .................... } 
 ....................  
 ....................  
-009F:  BCF    0D.0
-00A0:  BCF    0A.3
-00A1:  GOTO   02C
+00A0:  BCF    0D.0
+00A1:  BCF    0A.3
+00A2:  GOTO   02C
 .................... void main() 
 .................... {   
 *
-0377:  CLRF   04
-0378:  MOVLW  1F
-0379:  ANDWF  03,F
-037A:  BSF    03.5
-037B:  BCF    06.3
-037C:  BCF    03.5
-037D:  BSF    06.3
-037E:  BSF    03.5
-037F:  BSF    1F.0
-0380:  BSF    1F.1
-0381:  BSF    1F.2
-0382:  BCF    1F.3
-0383:  MOVLW  07
-0384:  MOVWF  1C
+03D5:  CLRF   04
+03D6:  MOVLW  1F
+03D7:  ANDWF  03,F
+03D8:  BSF    03.5
+03D9:  BCF    06.3
+03DA:  BCF    03.5
+03DB:  BSF    06.3
+03DC:  BSF    03.5
+03DD:  BSF    1F.0
+03DE:  BSF    1F.1
+03DF:  BSF    1F.2
+03E0:  BCF    1F.3
+03E1:  MOVLW  07
+03E2:  MOVWF  1C
 ....................     
 ....................    setup_adc_ports(NO_ANALOGS); 
 *
-03AB:  BSF    03.5
-03AC:  BSF    1F.0
-03AD:  BSF    1F.1
-03AE:  BSF    1F.2
-03AF:  BCF    1F.3
+040A:  BSF    03.5
+040B:  BSF    1F.0
+040C:  BSF    1F.1
+040D:  BSF    1F.2
+040E:  BCF    1F.3
 ....................    setup_adc(ADC_OFF); 
-03B0:  BCF    03.5
-03B1:  BCF    1F.0
+040F:  BCF    03.5
+0410:  BCF    1F.0
 ....................    setup_spi(FALSE); 
-03B2:  CLRF   14
+0411:  CLRF   14
 ....................     
 ....................    //setup_counters(RTCC_INTERNAL,RTCC_DIV_2); 
 ....................    setup_timer_1(T1_DISABLED); 
-03B3:  CLRF   10
+0412:  CLRF   10
 ....................    setup_timer_2(T2_DISABLED,0,1); 
-03B4:  MOVLW  00
-03B5:  MOVWF  21
-03B6:  MOVWF  12
-03B7:  MOVLW  00
-03B8:  BSF    03.5
-03B9:  MOVWF  12
+0413:  MOVLW  00
+0414:  MOVWF  21
+0415:  MOVWF  12
+0416:  MOVLW  00
+0417:  BSF    03.5
+0418:  MOVWF  12
 ....................    setup_port_a(ALL_ANALOG); 
-03BA:  BCF    1F.0
-03BB:  BCF    1F.1
-03BC:  BCF    1F.2
-03BD:  BCF    1F.3
+0419:  BCF    1F.0
+041A:  BCF    1F.1
+041B:  BCF    1F.2
+041C:  BCF    1F.3
 ....................    setup_adc(ADC_CLOCK_INTERNAL); 
-03BE:  BCF    1F.6
-03BF:  BCF    03.5
-03C0:  BSF    1F.6
-03C1:  BSF    1F.7
-03C2:  BSF    03.5
-03C3:  BSF    1F.7
-03C4:  BCF    03.5
-03C5:  BSF    1F.0
+041D:  BCF    1F.6
+041E:  BCF    03.5
+041F:  BSF    1F.6
+0420:  BSF    1F.7
+0421:  BSF    03.5
+0422:  BSF    1F.7
+0423:  BCF    03.5
+0424:  BSF    1F.0
 ....................     
 ....................    init_dac(); 
-03C6:  GOTO   0A2
+0425:  GOTO   0A3
 ....................   
 ....................    setup_timer_1(T1_DIV_BY_2| T1_INTERNAL);  
-03C7:  MOVLW  95
-03C8:  MOVWF  10
+0426:  MOVLW  95
+0427:  MOVWF  10
 ....................    setup_timer_0(RTCC_INTERNAL|RTCC_DIV_128); 
-03C9:  BSF    03.5
-03CA:  MOVF   01,W
-03CB:  ANDLW  C0
-03CC:  IORLW  06
-03CD:  MOVWF  01
+0428:  BSF    03.5
+0429:  MOVF   01,W
+042A:  ANDLW  C0
+042B:  IORLW  06
+042C:  MOVWF  01
 ....................    setup_ccp2(CCP_CAPTURE_RE);    // Configure CCP2 to capture fall 
-03CE:  BCF    03.5
-03CF:  BSF    2E.1
-03D0:  MOVF   2E,W
-03D1:  BSF    03.5
-03D2:  MOVWF  07
-03D3:  BCF    03.5
-03D4:  CLRF   1D
-03D5:  MOVLW  05
-03D6:  MOVWF  1D
+042D:  BCF    03.5
+042E:  BSF    2E.1
+042F:  MOVF   2E,W
+0430:  BSF    03.5
+0431:  MOVWF  07
+0432:  BCF    03.5
+0433:  CLRF   1D
+0434:  MOVLW  05
+0435:  MOVWF  1D
 ....................    enable_interrupts(INT_CCP2);   // Setup interrupt on falling edge 
-03D7:  BSF    03.5
-03D8:  BSF    0D.0
+0436:  BSF    03.5
+0437:  BSF    0D.0
 ....................    enable_interrupts(INT_TIMER0); 
-03D9:  BCF    03.5
-03DA:  BSF    0B.5
+0438:  BCF    03.5
+0439:  BSF    0B.5
 ....................    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge 
-03DB:  BSF    03.5
-03DC:  BSF    0C.0
+043A:  BSF    03.5
+043B:  BSF    0C.0
 ....................    enable_interrupts(GLOBAL); 
-03DD:  MOVLW  C0
-03DE:  BCF    03.5
-03DF:  IORWF  0B,F
-....................     
+043C:  MOVLW  C0
+043D:  BCF    03.5
+043E:  IORWF  0B,F
+....................    output_low(Electric_Controller_Switch); 
+043F:  BSF    03.5
+0440:  BCF    06.0
+0441:  BCF    03.5
+0442:  BCF    06.0
 ....................    while(TRUE) { 
-....................   
+....................        
 ....................       //GET INPUTS 
 ....................       //Vspeed happens in interrupts 
 ....................        
 ....................       set_adc_channel(Acaps_channel); 
-03E0:  MOVLW  08
-03E1:  MOVWF  21
-03E2:  MOVF   1F,W
-03E3:  ANDLW  C7
-03E4:  IORWF  21,W
-03E5:  MOVWF  1F
+0443:  MOVLW  08
+0444:  MOVWF  21
+0445:  MOVF   1F,W
+0446:  ANDLW  C7
+0447:  IORWF  21,W
+0448:  MOVWF  1F
 ....................       ADC_DELAY; 
-03E6:  MOVLW  21
-03E7:  MOVWF  20
-03E8:  DECFSZ 20,F
-03E9:  GOTO   3E8
+0449:  MOVLW  21
+044A:  MOVWF  20
+044B:  DECFSZ 20,F
+044C:  GOTO   44B
 ....................       Acaps = read_adc(); 
-03EA:  BSF    1F.2
-03EB:  BTFSC  1F.2
-03EC:  GOTO   3EB
-03ED:  BSF    03.5
-03EE:  MOVF   1E,W
-03EF:  BCF    03.5
-03F0:  MOVWF  45
-03F1:  MOVF   1E,W
-03F2:  MOVWF  46
+044D:  BSF    1F.2
+044E:  BTFSC  1F.2
+044F:  GOTO   44E
+0450:  BSF    03.5
+0451:  MOVF   1E,W
+0452:  BCF    03.5
+0453:  MOVWF  45
+0454:  MOVF   1E,W
+0455:  MOVWF  46
 ....................        
 ....................       set_adc_channel(Athrottle_channel); 
-03F3:  MOVLW  00
-03F4:  MOVWF  21
-03F5:  MOVF   1F,W
-03F6:  ANDLW  C7
-03F7:  IORWF  21,W
-03F8:  MOVWF  1F
+0456:  MOVLW  00
+0457:  MOVWF  21
+0458:  MOVF   1F,W
+0459:  ANDLW  C7
+045A:  IORWF  21,W
+045B:  MOVWF  1F
 ....................       ADC_DELAY; 
-03F9:  MOVLW  21
-03FA:  MOVWF  20
-03FB:  DECFSZ 20,F
-03FC:  GOTO   3FB
+045C:  MOVLW  21
+045D:  MOVWF  20
+045E:  DECFSZ 20,F
+045F:  GOTO   45E
 ....................       Athrottle = read_adc(); 
-03FD:  BSF    1F.2
-03FE:  BTFSC  1F.2
-03FF:  GOTO   3FE
-0400:  BSF    03.5
-0401:  MOVF   1E,W
-0402:  BCF    03.5
-0403:  MOVWF  43
-0404:  MOVF   1E,W
-0405:  MOVWF  44
+0460:  BSF    1F.2
+0461:  BTFSC  1F.2
+0462:  GOTO   461
+0463:  BSF    03.5
+0464:  MOVF   1E,W
+0465:  BCF    03.5
+0466:  MOVWF  43
+0467:  MOVF   1E,W
+0468:  MOVWF  44
 ....................  
 ....................       //CONTROL BOX 
 ....................  
-....................       //output_low(PIN_B1); 
-....................       //delay_ms(1000); 
-....................       //output_high(PIN_B1); 
-....................       //delay_ms(1000); 
 ....................        
-....................       //delay_ms(Athrottle); 
-....................       //output_high(PIN_B1); 
-....................       //delay_ms(Athrottle); 
-....................       //output_low(PIN_B1); 
-....................        
-....................       current_servo_position=left_position+(Vspeed/256.0)*2500;//(vSpeed/65536.0)*(2500); 
-0406:  MOVF   3E,W
-0407:  MOVWF  50
-0408:  MOVF   3D,W
-0409:  MOVWF  4F
-040A:  CALL   0BA
-040B:  MOVF   23,W
-040C:  MOVWF  4A
-040D:  MOVF   22,W
-040E:  MOVWF  49
-040F:  MOVF   21,W
-0410:  MOVWF  48
-0411:  MOVF   20,W
-0412:  MOVWF  47
-0413:  CLRF   4E
-0414:  CLRF   4D
-0415:  CLRF   4C
-0416:  MOVLW  87
-0417:  MOVWF  4B
-0418:  GOTO   0D7
-0419:  MOVF   20,W
-041A:  MOVWF  47
-041B:  MOVF   21,W
-041C:  MOVWF  48
-041D:  MOVF   22,W
-041E:  MOVWF  49
-041F:  MOVF   23,W
-0420:  MOVWF  4A
-0421:  MOVWF  4E
-0422:  MOVF   22,W
-0423:  MOVWF  4D
-0424:  MOVF   21,W
-0425:  MOVWF  4C
-0426:  MOVF   20,W
-0427:  MOVWF  4B
-0428:  CLRF   52
-0429:  MOVLW  40
-042A:  MOVWF  51
-042B:  MOVLW  1C
-042C:  MOVWF  50
-042D:  MOVLW  8A
-042E:  MOVWF  4F
-042F:  GOTO   1A2
-0430:  MOVF   20,W
-0431:  MOVWF  4B
-0432:  MOVF   21,W
-0433:  MOVWF  4C
-0434:  MOVF   22,W
-0435:  MOVWF  4D
-0436:  MOVF   23,W
-0437:  MOVWF  4E
-0438:  MOVF   30,W
-0439:  MOVWF  50
-043A:  MOVF   2F,W
-043B:  MOVWF  4F
-043C:  CALL   0BA
-043D:  BCF    03.1
-043E:  MOVF   23,W
-043F:  MOVWF  52
-0440:  MOVF   22,W
-0441:  MOVWF  51
-0442:  MOVF   21,W
-0443:  MOVWF  50
-0444:  MOVF   20,W
-0445:  MOVWF  4F
-0446:  MOVF   4E,W
-0447:  MOVWF  56
-0448:  MOVF   4D,W
-0449:  MOVWF  55
-044A:  MOVF   4C,W
-044B:  MOVWF  54
-044C:  MOVF   4B,W
-044D:  MOVWF  53
-044E:  GOTO   218
-044F:  MOVF   23,W
-0450:  MOVWF  52
-0451:  MOVF   22,W
-0452:  MOVWF  51
-0453:  MOVF   21,W
-0454:  MOVWF  50
-0455:  MOVF   20,W
-0456:  MOVWF  4F
-0457:  GOTO   357
-0458:  MOVF   22,W
-0459:  MOVWF  36
-045A:  MOVF   21,W
-045B:  MOVWF  35
+....................       current_servo_position=left_position+(Athrottle/1024.0)*2500;//(vSpeed/65536.0)*(2500); 
+0469:  MOVF   44,W
+046A:  MOVWF  50
+046B:  MOVF   43,W
+046C:  MOVWF  4F
+046D:  CALL   0BB
+046E:  MOVF   23,W
+046F:  MOVWF  4A
+0470:  MOVF   22,W
+0471:  MOVWF  49
+0472:  MOVF   21,W
+0473:  MOVWF  48
+0474:  MOVF   20,W
+0475:  MOVWF  47
+0476:  CLRF   4E
+0477:  CLRF   4D
+0478:  CLRF   4C
+0479:  MOVLW  89
+047A:  MOVWF  4B
+047B:  GOTO   0D8
+047C:  MOVF   20,W
+047D:  MOVWF  47
+047E:  MOVF   21,W
+047F:  MOVWF  48
+0480:  MOVF   22,W
+0481:  MOVWF  49
+0482:  MOVF   23,W
+0483:  MOVWF  4A
+0484:  MOVWF  4E
+0485:  MOVF   22,W
+0486:  MOVWF  4D
+0487:  MOVF   21,W
+0488:  MOVWF  4C
+0489:  MOVF   20,W
+048A:  MOVWF  4B
+048B:  CLRF   52
+048C:  MOVLW  40
+048D:  MOVWF  51
+048E:  MOVLW  1C
+048F:  MOVWF  50
+0490:  MOVLW  8A
+0491:  MOVWF  4F
+0492:  GOTO   1A3
+0493:  MOVF   20,W
+0494:  MOVWF  4B
+0495:  MOVF   21,W
+0496:  MOVWF  4C
+0497:  MOVF   22,W
+0498:  MOVWF  4D
+0499:  MOVF   23,W
+049A:  MOVWF  4E
+049B:  MOVF   30,W
+049C:  MOVWF  50
+049D:  MOVF   2F,W
+049E:  MOVWF  4F
+049F:  CALL   0BB
+04A0:  BCF    03.1
+04A1:  MOVF   23,W
+04A2:  MOVWF  52
+04A3:  MOVF   22,W
+04A4:  MOVWF  51
+04A5:  MOVF   21,W
+04A6:  MOVWF  50
+04A7:  MOVF   20,W
+04A8:  MOVWF  4F
+04A9:  MOVF   4E,W
+04AA:  MOVWF  56
+04AB:  MOVF   4D,W
+04AC:  MOVWF  55
+04AD:  MOVF   4C,W
+04AE:  MOVWF  54
+04AF:  MOVF   4B,W
+04B0:  MOVWF  53
+04B1:  GOTO   219
+04B2:  MOVF   23,W
+04B3:  MOVWF  52
+04B4:  MOVF   22,W
+04B5:  MOVWF  51
+04B6:  MOVF   21,W
+04B7:  MOVWF  50
+04B8:  MOVF   20,W
+04B9:  MOVWF  4F
+04BA:  GOTO   358
+04BB:  MOVF   22,W
+04BC:  MOVWF  36
+04BD:  MOVF   21,W
+04BE:  MOVWF  35
 ....................       //printf("Analog Cap %d Analog Throttle %d\n",(int) Acaps, (int) Athrottle); 
 ....................        
 ....................     
 ....................       //SET OUTPUTS  
 ....................       //The writing of the ICEThrottle happens in interupts and all that is 
 ....................       //required is updating ICEthrottle 
-....................       //write_dac(ELECthrottle); 
+....................       write_dac(Athrottle*4); 
+04BF:  RLF    43,W
+04C0:  MOVWF  47
+04C1:  RLF    44,W
+04C2:  MOVWF  48
+04C3:  RLF    47,F
+04C4:  RLF    48,F
+04C5:  MOVLW  FC
+04C6:  ANDWF  47,F
+04C7:  MOVF   48,W
+04C8:  MOVWF  4A
+04C9:  MOVF   47,W
+04CA:  MOVWF  49
+04CB:  GOTO   378
 ....................    } 
-045C:  GOTO   3E0
+04CC:  GOTO   443
 ....................     
 ....................  
 .................... } 
 ....................  
 ....................  
 ....................  
-045D:  GOTO   45D
+....................  
+04CD:  GOTO   4CD
 
 Configuration Fuses:
    Word  1: 373A   HS NOWDT NOPUT DEBUG NOPROTECT NOBROWNOUT NOLVP NOCPD NOWRT

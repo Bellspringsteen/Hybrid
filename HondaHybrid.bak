@@ -81,6 +81,7 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define Acaps_channel 1
 #define Athrottle_pin PIN_A0
 #define Athrottle_channel 0
+#define Electric_Controller_Switch PIN_B0
 
 static int16 left_position = 2500;
 static int16 right_position = 5000;
@@ -94,7 +95,7 @@ unsigned int16 test_counter = 0;
 
 unsigned int8 number_of_timer0_interupts_since_reset =0;
 unsigned int16 timer0_since_last_reset= 0;
-unsigned int16 vSpeed= 0;
+unsigned int16 vSpeed= 255;
 unsigned int16 ELECthrottle = 0;
 unsigned int16 ICEthrottle = 0;
 unsigned int16 Athrottle = 0;
@@ -113,8 +114,8 @@ void timer0_isr(){
       number_of_timer0_interupts_since_reset++;
    }
    else {
-      //number_of_timer0_interupts_since_reset = 0;
       vSpeed = 255;
+      number_of_timer0_interupts_since_reset=0;
    }
 }
 
@@ -164,22 +165,9 @@ TODO will have to put some kind of smoothing mechanism
 #int_ccp2
 void isr2()
 {
-//!if (test_boolean==0){
-//!   test_boolean=1;
-//!   output_high(PIN_B1);
-//!}
-//!else {
-//!   test_boolean=0;
-//!   output_low(PIN_B1);
-//!}
-
 if (number_of_timer0_interupts_since_reset>20){
-
-//timer0_since_last_reset = number_of_timer0_interupts_since_reset*256;// + GET_TIMER0();
-//SET_TIMER0(0);
 vSpeed  = number_of_timer0_interupts_since_reset;
 number_of_timer0_interupts_since_reset = 0;
-//vSpeed = 65535-timer0_since_last_reset;
 }
 }
 
@@ -206,12 +194,12 @@ void main()
    enable_interrupts(INT_TIMER0);
    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
    enable_interrupts(GLOBAL);
-   
+   output_low(Electric_Controller_Switch);
    while(TRUE) {
- 
+      
       //GET INPUTS
       //Vspeed happens in interrupts
-      /*
+      
       set_adc_channel(Acaps_channel);
       ADC_DELAY;
       Acaps = read_adc();
@@ -219,31 +207,23 @@ void main()
       set_adc_channel(Athrottle_channel);
       ADC_DELAY;
       Athrottle = read_adc();
-*/
+
       //CONTROL BOX
 
-      //output_low(PIN_B1);
-      //delay_ms(1000);
-      //output_high(PIN_B1);
-      //delay_ms(1000);
       
-      //delay_ms(Athrottle);
-      //output_high(PIN_B1);
-      //delay_ms(Athrottle);
-      //output_low(PIN_B1);
-      
-      current_servo_position=left_position+(Vspeed/256.0)*2500;//(vSpeed/65536.0)*(2500);
+      current_servo_position=left_position+(Athrottle/1024.0)*2500;//(vSpeed/65536.0)*(2500);
       //printf("Analog Cap %d Analog Throttle %d\n",(int) Acaps, (int) Athrottle);
       
    
       //SET OUTPUTS 
       //The writing of the ICEThrottle happens in interupts and all that is
       //required is updating ICEthrottle
-      //write_dac(ELECthrottle);
+      //write_dac(Athrottle*4);
    }
    
 
 }
+
 
 
 
