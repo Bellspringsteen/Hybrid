@@ -217,16 +217,15 @@ void main()
       //CONTROL BOX
 
       
-      //current_servo_position=left_position+(Athrottle/1024.0)*2500;//(vSpeed/65536.0)*(2500);
+      current_servo_position=left_position+(Athrottle/1024.0)*2500;//(vSpeed/65536.0)*(2500);
       //printf("Analog Cap %d Analog Throttle %d\n",(int) Acaps, (int) Athrottle);
       
    
       //SET OUTPUTS 
       //The writing of the ICEThrottle happens in interupts and all that is
       //required is updating ICEthrottle
-      //write_dac(Athrottle*4);
       
-      write_dac(3000);
+      //write_dac(current_servo_position*4);
    }
    
 

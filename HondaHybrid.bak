@@ -199,7 +199,7 @@ void main()
    enable_interrupts(INT_TIMER0);
    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
    enable_interrupts(GLOBAL);
-   output_low(Electric_Controller_Switch);
+   output_high(Electric_Controller_Switch);
    output_low(Contactor_Switch);
    while(TRUE) {
       
@@ -224,9 +224,8 @@ void main()
       //SET OUTPUTS 
       //The writing of the ICEThrottle happens in interupts and all that is
       //required is updating ICEthrottle
-      //write_dac(Athrottle*4);
       
-      write_dac(3000);
+      write_dac(current_servo_position*4);
    }
    
 
