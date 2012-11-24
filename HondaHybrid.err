@@ -1,9 +1,9 @@
->>> Warning 202 "HondaHybrid.c" Line 91(19,31): Variable never used:   test_boolean
->>> Warning 202 "HondaHybrid.c" Line 93(18,29): Variable never used:   test_switch
->>> Warning 202 "HondaHybrid.c" Line 94(29,41): Variable never used:   test_counter
->>> Warning 202 "HondaHybrid.c" Line 97(16,39): Variable never used:   timer0_since_last_reset
->>> Warning 202 "HondaHybrid.c" Line 99(29,41): Variable never used:   ELECthrottle
->>> Warning 202 "HondaHybrid.c" Line 100(28,39): Variable never used:   ICEthrottle
->>> Warning 202 "HondaHybrid.c" Line 103(25,43): Variable never used:   CURRENTLY_CHARGING
-      Memory usage:   ROM=32%      RAM=27% - 37%
+>>> Warning 202 "HondaHybrid.c" Line 92(19,31): Variable never used:   test_boolean
+>>> Warning 202 "HondaHybrid.c" Line 94(18,29): Variable never used:   test_switch
+>>> Warning 202 "HondaHybrid.c" Line 95(29,41): Variable never used:   test_counter
+>>> Warning 202 "HondaHybrid.c" Line 98(16,39): Variable never used:   timer0_since_last_reset
+>>> Warning 202 "HondaHybrid.c" Line 100(29,41): Variable never used:   ELECthrottle
+>>> Warning 202 "HondaHybrid.c" Line 101(28,39): Variable never used:   ICEthrottle
+>>> Warning 202 "HondaHybrid.c" Line 104(25,43): Variable never used:   CURRENTLY_CHARGING
+      Memory usage:   ROM=12%      RAM=22% - 27%
       0 Errors,  7 Warnings.

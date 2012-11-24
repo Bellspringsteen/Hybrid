@@ -1,46 +1,41 @@
 
-ROM used: 1230 (32%)
-          1230 (32%) including unused fragments
+ROM used: 450 (12%)
+          450 (12%) including unused fragments
 
-          2 Average locations per line
-          17 Average locations per statement
+          1 Average locations per line
+          6 Average locations per statement
 
-RAM used: 48 (27%) at main() level
-          66 (37%) worst case
+RAM used: 40 (22%) at main() level
+          48 (27%) worst case
 
 Stack used: 2 worst case (out of 7 total available)
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-  230    51  70  HondaHybrid.c
+  238    53  71  HondaHybrid.c
    12     0   0  HondaHybrid.h
   274     0   0  16F873A.h
-   68    22  30  ..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
+   68    22  29  mcp4921.c
 ----- -----
-  584    73 Total
+  592    75 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
-0     24   2   0    67  1.2  init_dac
-0     93   8   6   746  7.0  write_dac
-0     12   1   0    86  3.1  timer0_isr
-0     71   6   2   292  4.6  isr
-0     11   1   0    61  2.3  isr2
-0    249  20   8   733  4.7  MAIN
-0     29   2   2             @ITOF
-0    203  17  14             @DIVFF
-0    118  10  13             @MULFF
-0    319  26  16             @ADDFF
-0     32   3   4             @SFTOI
+0     24   5   0    67  1.2  init_dac
+0     93  21   6   748  6.9  write_dac
+0     16   4   0   119  3.8  timer0_isr
+0     71  16   2   292  4.6  isr
+0     11   2   0    61  2.3  isr2
+0    166  37   0   702  3.4  MAIN
 
 Program metrics:
     Functions               6
-    Statements              73
+    Statements              75
     Comments                206
-    Volume (V)              2752
-    Difficilty (D)          23.0
-    Effort to implement (E) 63215
-    Time to implement (T)   59 minutes
+    Volume (V)              2765
+    Difficilty (D)          22.8
+    Effort to implement (E) 62939
+    Time to implement (T)   58 minutes
     Est Delivered Bugs (B)  1
     Cyclomatic Complexity   7
     Maintainability (MI)    115
@@ -49,7 +44,7 @@ Program metrics:
 -----------  ----  ----
 00000-00003     4  0  
 00004-00044    65  0  
-00045-007FF  1161  818  
+00045-007FF   381  1598  
 00800-00EFB     0  1788  
 
 

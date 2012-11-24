@@ -17,9 +17,9 @@ AdditionalOptionString=
 0=0000 %S 0 0 796 451 3 0
 [Opened Files]
 1=HondaHybrid.c
-2=..\..\..\..\..\Program Files\PICC\drivers\mcp4921.c
+2=HondaHybrid.h
 3=16F873A.h
-4=HondaHybrid.h
+4=mcp4921.c
 5=
 6=
 [Target Data]
