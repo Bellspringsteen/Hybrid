@@ -1,9 +1,14 @@
->>> Warning 202 "HondaHybrid.c" Line 92(19,31): Variable never used:   test_boolean
->>> Warning 202 "HondaHybrid.c" Line 94(18,29): Variable never used:   test_switch
->>> Warning 202 "HondaHybrid.c" Line 95(29,41): Variable never used:   test_counter
->>> Warning 202 "HondaHybrid.c" Line 98(16,39): Variable never used:   timer0_since_last_reset
->>> Warning 202 "HondaHybrid.c" Line 100(29,41): Variable never used:   ELECthrottle
->>> Warning 202 "HondaHybrid.c" Line 101(28,39): Variable never used:   ICEthrottle
->>> Warning 202 "HondaHybrid.c" Line 104(25,43): Variable never used:   CURRENTLY_CHARGING
-      Memory usage:   ROM=12%      RAM=22% - 27%
-      0 Errors,  7 Warnings.
+>>> Warning 225 "C:\Users\alex\Documents\GitHub\Hybrid-v2\pid.h" Line 59(14,26): Duplicate #define
+>>> Warning 225 "C:\Users\alex\Documents\GitHub\Hybrid-v2\pid.h" Line 60(13,26): Duplicate #define
+>>> Warning 205 "HondaHybrid.c" Line 324(1,1): Unsigned variable is never less than zero
+>>> Warning 204 "HondaHybrid.c" Line 324(1,1): Condition always FALSE
+>>> Warning 202 "HondaHybrid.c" Line 92(16,25): Variable never used:   pid_Timer
+>>> Warning 202 "HondaHybrid.c" Line 101(19,31): Variable never used:   test_boolean
+>>> Warning 202 "HondaHybrid.c" Line 103(18,29): Variable never used:   test_switch
+>>> Warning 202 "HondaHybrid.c" Line 104(29,41): Variable never used:   test_counter
+>>> Warning 202 "HondaHybrid.c" Line 107(16,39): Variable never used:   timer0_since_last_reset
+>>> Warning 202 "HondaHybrid.c" Line 109(29,41): Variable never used:   ELECthrottle
+>>> Warning 202 "HondaHybrid.c" Line 110(28,39): Variable never used:   ICEthrottle
+>>> Warning 202 "HondaHybrid.c" Line 113(25,43): Variable never used:   CURRENTLY_CHARGING
+      Memory usage:   ROM=18%      RAM=34% - 48%
+      0 Errors,  12 Warnings.
