@@ -1,54 +1,54 @@
 
-ROM used: 708 (18%)
-          708 (18%) including unused fragments
+ROM used: 669 (17%)
+          669 (17%) including unused fragments
 
           1 Average locations per line
           6 Average locations per statement
 
-RAM used: 60 (34%) at main() level
-          86 (48%) worst case
+RAM used: 58 (32%) at main() level
+          80 (45%) worst case
 
-Stack used: 2 worst case (out of 7 total available)
+Stack used: 3 worst case (out of 7 total available)
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-  343    93  81  HondaHybrid.c
+  347    92  81  HondaHybrid.c
    12     0   0  HondaHybrid.h
   274     0   0  16F873A.h
-   68    22  19  mcp4921.c
+   68    22  19  C:\Program Files\PICC\drivers\mcp4921.c
    67     0   0  pid.h
 ----- -----
-  764   115 Total
+  768   114 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
-0     24   3   0    67  1.2  init_dac
-0     93  13   6   739  7.3  write_dac
-0     16   2   0   119  3.8  timer0_isr
-0     71  10   2   292  4.6  isr
+0     24   4   0    67  1.2  init_dac
+0     12   2   0    86  3.1  timer0_isr
+0     72  11   2   305  4.6  isr
 0     11   2   0    61  2.3  isr2
-0    185  26   2   850  4.3  MAIN
-0    239  34  15   409  4.5  pid_Init
- Inline        5  1361  7.6  @DIV1616
- Inline       13             @DIV3232
+0    218  33   6   946  5.8  MAIN
+0     37   6   5   409  4.5  @DIV1616
+0     22   3   5   409  4.5  @MUL1616
+0    204  30  15   409  4.5  pid_Init
+ Inline       13  1361  7.6  @DIV3232
 
 Program metrics:
-    Functions               8
-    Statements              115
-    Comments                270
-    Volume (V)              5583
-    Difficilty (D)          36.5
-    Effort to implement (E) 203767
-    Time to implement (T)   3 hours, 9 minutes
+    Functions               9
+    Statements              114
+    Comments                272
+    Volume (V)              5957
+    Difficilty (D)          39.2
+    Effort to implement (E) 233783
+    Time to implement (T)   3 hours, 36 minutes
     Est Delivered Bugs (B)  1
-    Cyclomatic Complexity   13
-    Maintainability (MI)    114
+    Cyclomatic Complexity   11
+    Maintainability (MI)    135
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00003     4  0  
 00004-00044    65  0  
-00045-007FF   639  1340  
+00045-007FF   600  1379  
 00800-00EFB     0  1788  
 
 

@@ -44,14 +44,12 @@ expr=
 sideeffects=0
 [debugsfr]
 autoread=1
-[Units]
-Count=1
-1=HondaHybrid.c (main)
-2=pid.c
-Link=0
 [Documentation]
 Count=1
 1=C:\Users\alex\Documents\GitHub\Hybrid-v2\pid.c
 1T=pid.c
 1E=
 1W=0
+[Units]
+Count=1
+1=HondaHybrid.c (main)
