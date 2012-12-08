@@ -1,14 +1,15 @@
 >>> Warning 225 "e:\hybrid-v2\pid.h" Line 59(161,173): Duplicate #define
 >>> Warning 225 "e:\hybrid-v2\pid.h" Line 60(185,198): Duplicate #define
->>> Warning 205 "HondaHybrid.c" Line 328(1,1): Unsigned variable is never less than zero
->>> Warning 204 "HondaHybrid.c" Line 328(1,1): Condition always FALSE
+>>> Warning 205 "HondaHybrid.c" Line 338(1,1): Unsigned variable is never less than zero
+>>> Warning 204 "HondaHybrid.c" Line 338(1,1): Condition always FALSE
 >>> Warning 202 "HondaHybrid.c" Line 95(16,25): Variable never used:   pid_Timer
->>> Warning 202 "HondaHybrid.c" Line 105(19,31): Variable never used:   test_boolean
->>> Warning 202 "HondaHybrid.c" Line 107(18,29): Variable never used:   test_switch
->>> Warning 202 "HondaHybrid.c" Line 108(29,41): Variable never used:   test_counter
->>> Warning 202 "HondaHybrid.c" Line 111(16,39): Variable never used:   timer0_since_last_reset
->>> Warning 202 "HondaHybrid.c" Line 113(29,41): Variable never used:   ELECthrottle
->>> Warning 202 "HondaHybrid.c" Line 114(28,39): Variable never used:   ICEthrottle
->>> Warning 202 "HondaHybrid.c" Line 117(25,43): Variable never used:   CURRENTLY_CHARGING
-      Memory usage:   ROM=17%      RAM=32% - 45%
-      0 Errors,  12 Warnings.
+>>> Warning 202 "HondaHybrid.c" Line 105(45,83): Variable never used:   SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER
+>>> Warning 202 "HondaHybrid.c" Line 106(19,31): Variable never used:   test_boolean
+>>> Warning 202 "HondaHybrid.c" Line 108(18,29): Variable never used:   test_switch
+>>> Warning 202 "HondaHybrid.c" Line 109(29,41): Variable never used:   test_counter
+>>> Warning 202 "HondaHybrid.c" Line 112(16,39): Variable never used:   timer0_since_last_reset
+>>> Warning 202 "HondaHybrid.c" Line 114(29,41): Variable never used:   ELECthrottle
+>>> Warning 202 "HondaHybrid.c" Line 115(28,39): Variable never used:   ICEthrottle
+>>> Warning 202 "HondaHybrid.c" Line 118(25,43): Variable never used:   CURRENTLY_CHARGING
+      Memory usage:   ROM=33%      RAM=31% - 44%
+      0 Errors,  13 Warnings.

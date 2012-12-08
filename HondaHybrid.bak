@@ -99,8 +99,9 @@ struct PID_DATA pidData;
 #define left_position 3950
 #define right_position 4800
 #define servo_difference  right_position-left_position
+const float Athrottle_servo_factor = ((float) servo_difference)/((float) Athrottle_FULL);
 #define servo_period   65356-50000
-unsigned int16 current_servo_position=2500;
+unsigned int16 current_servo_position=right_position;
 int1 SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0;
 int1 test_boolean = 0;
 
@@ -152,26 +153,26 @@ void isr()
 {
 
 //Make sure that the position is within the left and right positions of the servo
-   if (current_servo_position<left_position){
-      current_servo_position = left_position;
-   }
-   else if (current_servo_position > right_position){
-      current_servo_position = left_position;
-   }
-
-   if(SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER)
-      { 
-         output_high(servo_pin);        //Set the servo control pin to high 
-         SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0; 
-         set_timer1(65356-current_servo_position); //Set timer for the position high pulse
-      } 
-   else 
-      { 
-         output_low(servo_pin);                      // Set the servo control pin to low  
-         SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 1; 
-         set_timer1(servo_period+current_servo_position);          //Set timer for the low position the length is the difference between 
-                                                     //the total int16 lenght - high pulse length
-      }  
+//!   if (current_servo_position<left_position){
+//!      current_servo_position = left_position;
+//!   }
+//!   else if (current_servo_position > right_position){
+//!      current_servo_position = right_position;
+//!   }
+//!
+//!   if(SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER)
+//!      { 
+//!         output_high(servo_pin);        //Set the servo control pin to high 
+//!         SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0; 
+//!         set_timer1(65356-current_servo_position); //Set timer for the position high pulse
+//!      } 
+//!   else 
+//!      { 
+//!         output_low(servo_pin);                      // Set the servo control pin to low  
+//!         SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 1; 
+//!         set_timer1(servo_period+current_servo_position);          //Set timer for the low position the length is the difference between 
+//!                                                     //the total int16 lenght - high pulse length
+//!      }  
 }
 
 
@@ -214,12 +215,17 @@ void main()
    enable_interrupts(INT_TIMER0);
    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
    enable_interrupts(GLOBAL);
-   output_high(Electric_Controller_Switch);
-   output_low(Contactor_Switch);
+   output_low(Electric_Controller_Switch);
+   write_dac(0);
+   output_high(Contactor_Switch);
    
    pid_Init(K_P * SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
    
-
+   delay_ms(10);
+   write_dac(1000);
+   delay_ms(10000);
+   //output_high(Contactor_Switch);
+   output_high(Electric_Controller_Switch);
    while(TRUE) {
 
       //GET INPUTS
@@ -236,7 +242,11 @@ void main()
       //CONTROL BOX
 
       
-      current_servo_position=left_position+((Athrottle-Athrottle_Min)/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
+      //current_servo_position=left_position+((Athrottle-Athrottle_Min)/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
+      if (Athrottle<Athrottle_Min){
+         Athrottle=Athrottle_Min;
+      }
+      current_servo_position=right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor;//(Athrottle/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
       //printf("Analog Cap %d Analog Throttle %d\n",(int) Acaps, (int) Athrottle);
       
    
@@ -244,7 +254,7 @@ void main()
       //The writing of the ICEThrottle happens in interupts and all that is
       //required is updating ICEthrottle
       
-      write_dac(current_servo_position*4);
+      write_dac((right_position-current_servo_position)*4);
    }
    
 

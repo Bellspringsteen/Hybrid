@@ -1,12 +1,19 @@
 ÀÄHondaHybrid
-   ÃÄMAIN  0/218  Ram=6
+   ÃÄMAIN  0/282  Ram=4
    ³  ÃÄ??0??
    ³  ÃÄinit_dac  0/24  Ram=0
-   ³  ÃÄpid_Init  0/204  Ram=15
-   ³  ³  ÃÄ@DIV1616  0/37  Ram=5
+   ³  ÃÄwrite_dac  0/92  Ram=6
+   ³  ÃÄpid_Init  0/239  Ram=15
+   ³  ³  ÃÄ@DIV1616  (Inline)  Ram=5
    ³  ³  ÀÄ@DIV3232  (Inline)  Ram=13
-   ³  ÃÄ@DIV1616  0/37  Ram=5
-   ³  ÀÄ@MUL1616  0/22  Ram=5
+   ³  ÃÄ@delay_ms1  0/19  Ram=1
+   ³  ÃÄwrite_dac  0/92  Ram=6
+   ³  ÃÄ@delay_ms1  0/19  Ram=1
+   ³  ÃÄ@ITOF  0/30  Ram=2
+   ³  ÃÄ@MULFF  0/118  Ram=13
+   ³  ÃÄ@ADDFF  0/319  Ram=16
+   ³  ÃÄ@SFTOI  0/32  Ram=4
+   ³  ÀÄwrite_dac  0/92  Ram=6
    ÃÄtimer0_isr  0/12  Ram=0
-   ÃÄisr  0/72  Ram=2
+   ÃÄisr  0/3  Ram=0
    ÀÄisr2  0/11  Ram=0

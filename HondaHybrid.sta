@@ -1,54 +1,59 @@
 
-ROM used: 669 (17%)
-          669 (17%) including unused fragments
+ROM used: 1250 (33%)
+          1250 (33%) including unused fragments
 
-          1 Average locations per line
-          6 Average locations per statement
+          2 Average locations per line
+          12 Average locations per statement
 
-RAM used: 58 (32%) at main() level
-          80 (45%) worst case
+RAM used: 56 (31%) at main() level
+          78 (44%) worst case
 
-Stack used: 3 worst case (out of 7 total available)
+Stack used: 2 worst case (out of 7 total available)
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-  347    92  81  HondaHybrid.c
+  357    86  80  HondaHybrid.c
    12     0   0  HondaHybrid.h
   274     0   0  16F873A.h
-   68    22  19  C:\Program Files\PICC\drivers\mcp4921.c
+   68    22  20  C:\Program Files\PICC\drivers\mcp4921.c
    67     0   0  pid.h
 ----- -----
-  768   114 Total
+  778   108 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
-0     24   4   0    67  1.2  init_dac
-0     12   2   0    86  3.1  timer0_isr
-0     72  11   2   305  4.6  isr
-0     11   2   0    61  2.3  isr2
-0    218  33   6   946  5.8  MAIN
-0     37   6   5   409  4.5  @DIV1616
-0     22   3   5   409  4.5  @MUL1616
-0    204  30  15   409  4.5  pid_Init
+0     19   2   1             @delay_ms1
+0     24   2   0    67  1.2  init_dac
+0     92   7   6   739  7.3  write_dac
+0     12   1   0    86  3.1  timer0_isr
+0      3   0   0     3  0.0  isr
+0     11   1   0    61  2.3  isr2
+0    282  23   4  1193  5.8  MAIN
+0     30   2   2   409  4.5  @ITOF
+0    118   9  13   409  4.5  @MULFF
+0    319  26  16  1361  7.6  @ADDFF
+0     32   3   4   409  4.5  @SFTOI
+0    239  19  15   409  4.5  pid_Init
+ Inline        5    41  2.1  @DIV1616
  Inline       13  1361  7.6  @DIV3232
 
 Program metrics:
-    Functions               9
-    Statements              114
-    Comments                272
-    Volume (V)              5957
-    Difficilty (D)          39.2
-    Effort to implement (E) 233783
-    Time to implement (T)   3 hours, 36 minutes
-    Est Delivered Bugs (B)  1
-    Cyclomatic Complexity   11
-    Maintainability (MI)    135
+    Functions               13
+    Statements              108
+    Comments                288
+    Volume (V)              9938
+    Difficilty (D)          57.6
+    Effort to implement (E) 572605
+    Time to implement (T)   8 hours, 50 minutes
+    Est Delivered Bugs (B)  2
+    Cyclomatic Complexity   17
+    Maintainability (MI)    144
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00003     4  0  
 00004-00044    65  0  
-00045-007FF   600  1379  
+00045-007FF  1181  798  
 00800-00EFB     0  1788  
 
 
