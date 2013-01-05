@@ -1,105 +1,62 @@
 
-<<<<<<< HEAD
-ROM used: 1104 (29%)
-          1104 (29%) including unused fragments
+ROM used: 2025 (53%)
+          2025 (53%) including unused fragments
 
-          1 Average locations per line
-          9 Average locations per statement
+          3 Average locations per line
+          17 Average locations per statement
 
-RAM used: 61 (34%) at main() level
-          74 (41%) worst case
-=======
-ROM used: 708 (18%)
-          708 (18%) including unused fragments
+RAM used: 63 (35%) at main() level
+          102 (57%) worst case
 
-          1 Average locations per line
-          6 Average locations per statement
-
-RAM used: 60 (34%) at main() level
-          86 (48%) worst case
->>>>>>> Addng brake switch
-
-Stack used: 2 worst case (out of 7 total available)
+Stack used: 3 worst case (out of 7 total available)
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-<<<<<<< HEAD
-  362    98  82  HondaHybrid.c
+  364   100  82  HondaHybrid.c
    12     0   0  HondaHybrid.h
   274     0   0  16F873A.h
-   68    22  18  C:\Program Files\PICC\drivers\mcp4921.c
+   68    22  18  mcp4921.c
    67     0   0  pid.h
 ----- -----
-  783   120 Total
+  785   122 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
-0     20   2   1             @delay_ms1
-0     24   2   0    67  1.2  init_dac
-0     92   8   6   739  7.3  write_dac
+0     20   1   1             @delay_ms1
+0     24   1   0    67  1.2  init_dac
+0     92   5   6   739  7.3  write_dac
 0     14   1   0    92  2.9  timer0_isr
-0     72   7   2   305  4.6  isr
-0     20   2   0   100  2.9  isr2
-0    296  27   8  1034  5.8  MAIN
-0     30   3   2             @ITOF
-0    117  11  13             @MULFF
-0    318  29  16             @ADDFF
-0     32   3   4             @SFTOI
+0     88   4   2   305  4.6  isr
+0     20   1   0   100  2.9  isr2
+0    323  16   8  1257  6.3  MAIN
+0     30   1   2             @ITOF
+0    117   6  13             @MULFF
+0    318  16  16  1361  7.6  @ADDFF
+0     32   2   4             @SFTOI
+0    239  12  15   409  4.5  pid_Init
+ Inline        5    41  2.1  @DIV1616
+ Inline       13     3  0.0  @DIV3232
+0    618  31  31  1361  7.6  pid_Controller
+0     21   1   5             @MUL1616
+ Inline       13             @MUL3232
 
 Program metrics:
-    Functions               6
-    Statements              120
-    Comments                280
-    Volume (V)              3206
-    Difficilty (D)          24.8
-    Effort to implement (E) 79342
-    Time to implement (T)   1 hours, 13 minutes
-    Est Delivered Bugs (B)  1
-    Cyclomatic Complexity   8
-    Maintainability (MI)    44
-=======
-  345    93  81  HondaHybrid.c
-   12     0   0  HondaHybrid.h
-  274     0   0  16F873A.h
-   68    22  19  mcp4921.c
-   67     0   0  pid.h
------ -----
-  766   115 Total
-
-Page ROM  %  RAM   Vol Diff  Functions:
----- --- --- ---   --- ----  ----------
-0     24   3   0    67  1.2  init_dac
-0     93  13   6   739  7.3  write_dac
-0     16   2   0   119  3.8  timer0_isr
-0     71  10   2   292  4.6  isr
-0     11   2   0    61  2.3  isr2
-0    185  26   2   850  4.3  MAIN
-0    239  34  15   409  4.5  pid_Init
- Inline        5  1361  7.6  @DIV1616
- Inline       13             @DIV3232
-
-Program metrics:
-    Functions               8
-    Statements              115
-    Comments                270
-    Volume (V)              5583
-    Difficilty (D)          36.5
-    Effort to implement (E) 203767
-    Time to implement (T)   3 hours, 9 minutes
-    Est Delivered Bugs (B)  1
-    Cyclomatic Complexity   13
-    Maintainability (MI)    114
->>>>>>> Addng brake switch
+    Functions               11
+    Statements              122
+    Comments                279
+    Volume (V)              8380
+    Difficilty (D)          48.8
+    Effort to implement (E) 408677
+    Time to implement (T)   6 hours, 18 minutes
+    Est Delivered Bugs (B)  2
+    Cyclomatic Complexity   20
+    Maintainability (MI)    147
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00003     4  0  
 00004-00044    65  0  
-<<<<<<< HEAD
-00045-007FF  1035  944  
-=======
-00045-007FF   639  1340  
->>>>>>> Addng brake switch
+00045-007FF  1956  23  
 00800-00EFB     0  1788  
 
 
