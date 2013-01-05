@@ -76,14 +76,11 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 
 */
 #define servo_pin PIN_B1  //Setting servo out pin to be hardware pin b1
-#define brake_pin PIN_B4
+#define brake_pin PIN_B4 // SET LOW to enable
 #define ADC_DELAY delay_us(20)
 #define Acaps_pin PIN_A1
 #define Acaps_channel 1
-#define Athrottle_pin PIN_A0  //Voltage goes from 1.5 (306)to 4.1(836)
-#define Athrottle_Min 306
-#define Athrottle_Max 836
-#define Athrottle_Full Athrottle_Max-Athrottle_Min
+#define Athrottle_pin PIN_A0
 #define Athrottle_channel 0
 #define Electric_Controller_Switch PIN_B0
 #define Contactor_Switch PIN_B2
@@ -97,12 +94,10 @@ int1 pid_Timer = 0;
 struct PID_DATA pidData;
 #define TIME_INTERVAL 157 //TODO replace
 
-#define left_position 3950
-#define right_position 4800
-#define servo_difference  right_position-left_position
-const float Athrottle_servo_factor = ((float) servo_difference)/((float) Athrottle_FULL);
-#define servo_period   65356-50000
-unsigned int16 current_servo_position=right_position;
+static int16 left_position = 2500;
+static int16 right_position = 5000;
+static int16 servo_period   = 65356-50000;
+unsigned int16 current_servo_position=2500;
 int1 SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0;
 int1 test_boolean = 0;
 
@@ -126,6 +121,7 @@ NUMBER OF OPERATIONS =
 */
 #int_timer0
 void timer0_isr(){
+
    
       number_of_timer0_interupts_since_reset=number_of_timer0_interupts_since_reset+256;
       //current_servo_position=current_servo_position+1;
@@ -135,6 +131,7 @@ void timer0_isr(){
       vSpeed = 1024;
       number_of_timer0_interupts_since_reset=1024;
       
+
       
    }
 }
@@ -158,7 +155,9 @@ void isr()
       current_servo_position = left_position;
    }
    else if (current_servo_position > right_position){
+
       current_servo_position = right_position;
+
    }
 
    if(SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER)
@@ -230,8 +229,9 @@ void main()
    //output_high(Contactor_Switch);
    //output_high(brake_pin);
    //output_high(Electric_Controller_Switch);
-   while(TRUE) {
 
+   while(TRUE) {
+      
       //GET INPUTS
       //Vspeedhappens in interrupts
       
@@ -246,11 +246,13 @@ void main()
       //CONTROL BOX
 
       
+
       //current_servo_position=left_position+((Athrottle-Athrottle_Min)/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
       if (Athrottle<Athrottle_Min){
          Athrottle=Athrottle_Min;
       }
       //current_servo_position=right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor;//(Athrottle/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
+
       //printf("Analog Cap %d Analog Throttle %d\n",(int) Acaps, (int) Athrottle);
       current_servo_position =right_position-vSpeed+200;
    
@@ -258,8 +260,10 @@ void main()
       //The writing of the ICEThrottle happens in interupts and all that is
       //required is updating ICEthrottle
       
+
       write_dac((right_position-(right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor))*4);
       //write_dac((right_position-current_servo_position)*4);
+
    }
    
 
@@ -357,5 +361,6 @@ void pid_Reset_Integrator(pidData_t *pid_st)
 }
 
 
-
+void pid_element_controller(){
+}
 

@@ -1,11 +1,11 @@
 004-005 @READ_PROGRAM_MEMORY8.P1
 004     @WRITE_PROGRAM_MEMORY8.P2
-015     CCP_1_HIGH
-015     CCP_1_LOW
 015     CCP_1
+015     CCP_1_LOW
+015     CCP_1_HIGH
+01B     CCP_2
 01B     CCP_2_LOW
 01B     CCP_2_HIGH
-01B     CCP_2
 020     @SCRATCH
 021     @SCRATCH
 021     _RETURN_
@@ -28,6 +28,7 @@
 02F.3   test_switch
 02F.4   CURRENTLY_CHARGING
 030-041 pidData
+<<<<<<< HEAD
 042-043 current_servo_position
 044-045 test_counter
 046-047 number_of_timer0_interupts_since_reset
@@ -70,12 +71,56 @@
 066     @MULFF.@SCRATCH5
 067     isr.@SCRATCH1
 068     isr.@SCRATCH2
+=======
+042-043 left_position
+044-045 right_position
+046-047 servo_period
+048-049 current_servo_position
+04A-04B test_counter
+04C     number_of_timer0_interupts_since_reset
+04D-04E timer0_since_last_reset
+04F-050 vSpeed
+051-052 ELECthrottle
+053-054 ICEthrottle
+055-056 Athrottle
+057-058 Acaps
+059-05A pid_Init.P_Factor
+059     MAIN.@SCRATCH1
+05A     MAIN.@SCRATCH2
+05B-05C write_dac.data
+05B-05C pid_Init.I_Factor
+05D-05E pid_Init.D_Factor
+05D-05F write_dac.cmd
+05F     pid_Init.pid
+060     write_dac.i
+060     pid_Init.@SCRATCH1
+061     pid_Init.@SCRATCH2
+062     pid_Init.@SCRATCH3
+063     pid_Init.@SCRATCH4
+064     pid_Init.@SCRATCH5
+065-066 @DIV1616.P1
+065     pid_Init.@SCRATCH6
+066-069 @DIV3232.P1
+066     pid_Init.@SCRATCH7
+067-068 @DIV1616.P1
+067     pid_Init.@SCRATCH8
+069     @DIV1616.@SCRATCH1
+06A-06D @DIV3232.P1
+06E     @DIV3232.@SCRATCH1
+06F     @DIV3232.@SCRATCH2
+070     @DIV3232.@SCRATCH3
+071     @DIV3232.@SCRATCH4
+072     @DIV3232.@SCRATCH5
+073     isr.@SCRATCH1
+074     isr.@SCRATCH2
+>>>>>>> Addng brake switch
 09C.6   C1OUT
 09C.7   C2OUT
 10D-10E @READ_PROGRAM_MEMORY8.P1
 10D-10E @WRITE_PROGRAM_MEMORY8.P2
 
 ROM Allocation:
+<<<<<<< HEAD
 0123  @delay_ms1
 00AF  init_dac
 00C7  write_dac
@@ -88,18 +133,30 @@ ROM Allocation:
 01CA  @ADDFF
 0308  @SFTOI
 0328  @cinit
+=======
+00A7  init_dac
+01AE  write_dac
+0045  timer0_isr
+0055  isr
+009C  isr2
+020B  MAIN
+00BF  pid_Init
+010C  @DIV1616
+015D  @DIV3232
+020B  @cinit
+>>>>>>> Addng brake switch
 
 
 User Memory space: 
 
 Project Directory:
-    e:\hybrid-v2\
+    C:\Users\alex\Documents\GitHub\Hybrid-v2\
 
 Project Files:
     HondaHybrid.c
     HondaHybrid.h
     16F873A.h
-    C:\Program Files\PICC\drivers\mcp4921.c
+    mcp4921.c
     pid.h
 
 Units:
@@ -115,7 +172,7 @@ Compiler Settings:
     ICD Provisions: Yes
 
 Output Files:
-    Errors:      hondahybrid.err
+    Errors:      HondaHybrid.err
     Ext Symbols: HondaHybrid.esym
     INHX8:       HondaHybrid.hex
     Symbols:     HondaHybrid.sym

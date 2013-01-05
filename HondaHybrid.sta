@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 ROM used: 1104 (29%)
           1104 (29%) including unused fragments
 
@@ -7,11 +8,22 @@ ROM used: 1104 (29%)
 
 RAM used: 61 (34%) at main() level
           74 (41%) worst case
+=======
+ROM used: 708 (18%)
+          708 (18%) including unused fragments
+
+          1 Average locations per line
+          6 Average locations per statement
+
+RAM used: 60 (34%) at main() level
+          86 (48%) worst case
+>>>>>>> Addng brake switch
 
 Stack used: 2 worst case (out of 7 total available)
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
+<<<<<<< HEAD
   362    98  82  HondaHybrid.c
    12     0   0  HondaHybrid.h
   274     0   0  16F873A.h
@@ -45,12 +57,49 @@ Program metrics:
     Est Delivered Bugs (B)  1
     Cyclomatic Complexity   8
     Maintainability (MI)    44
+=======
+  345    93  81  HondaHybrid.c
+   12     0   0  HondaHybrid.h
+  274     0   0  16F873A.h
+   68    22  19  mcp4921.c
+   67     0   0  pid.h
+----- -----
+  766   115 Total
+
+Page ROM  %  RAM   Vol Diff  Functions:
+---- --- --- ---   --- ----  ----------
+0     24   3   0    67  1.2  init_dac
+0     93  13   6   739  7.3  write_dac
+0     16   2   0   119  3.8  timer0_isr
+0     71  10   2   292  4.6  isr
+0     11   2   0    61  2.3  isr2
+0    185  26   2   850  4.3  MAIN
+0    239  34  15   409  4.5  pid_Init
+ Inline        5  1361  7.6  @DIV1616
+ Inline       13             @DIV3232
+
+Program metrics:
+    Functions               8
+    Statements              115
+    Comments                270
+    Volume (V)              5583
+    Difficilty (D)          36.5
+    Effort to implement (E) 203767
+    Time to implement (T)   3 hours, 9 minutes
+    Est Delivered Bugs (B)  1
+    Cyclomatic Complexity   13
+    Maintainability (MI)    114
+>>>>>>> Addng brake switch
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00003     4  0  
 00004-00044    65  0  
+<<<<<<< HEAD
 00045-007FF  1035  944  
+=======
+00045-007FF   639  1340  
+>>>>>>> Addng brake switch
 00800-00EFB     0  1788  
 
 
