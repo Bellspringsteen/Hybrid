@@ -219,14 +219,14 @@ void main()
    output_low(Electric_Controller_Switch);
    write_dac(0);
    output_high(Contactor_Switch);
-   output_high(brake_pin);
-   pid_Init(K_P * SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
+   output_low(brake_pin);
+   //pid_Init(K_P * SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
    
    delay_ms(1000);
    write_dac(1000);
    delay_ms(10000);
    //output_high(Contactor_Switch);
-   output_low(brake_pin);
+   output_high(brake_pin);
    output_high(Electric_Controller_Switch);
    while(TRUE) {
 
@@ -256,7 +256,7 @@ void main()
       //The writing of the ICEThrottle happens in interupts and all that is
       //required is updating ICEthrottle
       
-      write_dac(3000);
+      write_dac((right_position-current_servo_position)*4);
       //write_dac((right_position-current_servo_position)*4);
    }
    

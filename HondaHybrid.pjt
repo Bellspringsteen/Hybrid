@@ -22,7 +22,8 @@ AdditionalOptionString=
 4=mcp4921.c
 5=pid.c
 6=pid.h
-7=
+7=C:\Program Files\PICC\drivers\mcp4921.c
+8=
 [Target Data]
 OptionString=-p +FM
 FileList=HondaHybrid.c

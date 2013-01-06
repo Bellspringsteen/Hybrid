@@ -1,11 +1,8 @@
 ÀÄHondaHybrid
-   ÃÄMAIN  0/273  Ram=2
+   ÃÄMAIN  0/280  Ram=4
    ³  ÃÄ??0??
    ³  ÃÄinit_dac  0/24  Ram=0
    ³  ÃÄwrite_dac  0/92  Ram=6
-   ³  ÃÄpid_Init  0/239  Ram=15
-   ³  ³  ÃÄ@DIV1616  (Inline)  Ram=5
-   ³  ³  ÀÄ@DIV3232  (Inline)  Ram=13
    ³  ÃÄ@delay_ms1  0/19  Ram=1
    ³  ÃÄwrite_dac  0/92  Ram=6
    ³  ÃÄ@delay_ms1  0/19  Ram=1
