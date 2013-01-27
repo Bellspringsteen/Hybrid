@@ -154,26 +154,26 @@ void isr()
 {
 
 //Make sure that the position is within the left and right positions of the servo
-//!   if (current_servo_position<left_position){
-//!      current_servo_position = left_position;
-//!   }
-//!   else if (current_servo_position > right_position){
-//!      current_servo_position = right_position;
-//!   }
-//!
-//!   if(SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER)
-//!      { 
-//!         output_high(servo_pin);        //Set the servo control pin to high 
-//!         SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0; 
-//!         set_timer1(65356-current_servo_position); //Set timer for the position high pulse
-//!      } 
-//!   else 
-//!      { 
-//!         output_low(servo_pin);                      // Set the servo control pin to low  
-//!         SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 1; 
-//!         set_timer1(servo_period+current_servo_position);          //Set timer for the low position the length is the difference between 
-//!                                                     //the total int16 lenght - high pulse length
-//!      }  
+   if (current_servo_position<left_position){
+      current_servo_position = left_position;
+   }
+   else if (current_servo_position > right_position){
+      current_servo_position = right_position;
+   }
+
+   if(SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER)
+      { 
+         output_high(servo_pin);        //Set the servo control pin to high 
+         SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0; 
+         set_timer1(65356-current_servo_position); //Set timer for the position high pulse
+      } 
+   else 
+      { 
+         output_low(servo_pin);                      // Set the servo control pin to low  
+         SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 1; 
+         set_timer1(servo_period+current_servo_position);          //Set timer for the low position the length is the difference between 
+                                                     //the total int16 lenght - high pulse length
+      }  
 }
 
 
@@ -185,7 +185,7 @@ TODO will have to put some kind of smoothing mechanism
 #int_ccp2
 void isr2()
 {
-if (number_of_timer0_interupts_since_reset>20){
+if (number_of_timer0_interupts_since_reset>0){
 vSpeed  = number_of_timer0_interupts_since_reset;
 number_of_timer0_interupts_since_reset = 0;
 }
@@ -222,16 +222,16 @@ void main()
    output_low(brake_pin);
    //pid_Init(K_P * SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
    
-   delay_ms(1000);
-   write_dac(1000);
-   delay_ms(10000);
+   //delay_ms(1000);
+   //write_dac(1000);
+   //delay_ms(10000);
    //output_high(Contactor_Switch);
-   output_high(brake_pin);
-   output_high(Electric_Controller_Switch);
+   //output_high(brake_pin);
+   //output_high(Electric_Controller_Switch);
    while(TRUE) {
 
       //GET INPUTS
-      //Vspeed happens in interrupts
+      //Vspeedhappens in interrupts
       
       set_adc_channel(Acaps_channel);
       ADC_DELAY;
@@ -248,15 +248,15 @@ void main()
       if (Athrottle<Athrottle_Min){
          Athrottle=Athrottle_Min;
       }
-      current_servo_position=right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor;//(Athrottle/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
+      //current_servo_position=right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor;//(Athrottle/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
       //printf("Analog Cap %d Analog Throttle %d\n",(int) Acaps, (int) Athrottle);
-      
+      current_servo_position =right_position-(vSpeed*30);
    
       //SET OUTPUTS 
       //The writing of the ICEThrottle happens in interupts and all that is
       //required is updating ICEthrottle
       
-      write_dac((right_position-current_servo_position)*4);
+      write_dac((right_position-(right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor))*4);
       //write_dac((right_position-current_servo_position)*4);
    }
    
