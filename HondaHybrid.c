@@ -109,9 +109,9 @@ int1 test_boolean = 0;
 int1 test_switch = 0;
 unsigned int16 test_counter = 0;
 
-unsigned int8 number_of_timer0_interupts_since_reset =0;
+unsigned int16 number_of_timer0_interupts_since_reset =0;
 unsigned int16 timer0_since_last_reset= 0;
-unsigned int16 vSpeed= 255;
+unsigned int16 vSpeed= 0;
 unsigned int16 ELECthrottle = 0;
 unsigned int16 ICEthrottle = 0;
 unsigned int16 Athrottle = 0;
@@ -126,14 +126,14 @@ NUMBER OF OPERATIONS =
 */
 #int_timer0
 void timer0_isr(){
-   if (number_of_timer0_interupts_since_reset!=255){
-      number_of_timer0_interupts_since_reset++;
+   
+      number_of_timer0_interupts_since_reset=number_of_timer0_interupts_since_reset+256;
       //current_servo_position=current_servo_position+1;
       
-   }
-   else {
-      vSpeed = 255;
-      number_of_timer0_interupts_since_reset=0;
+   
+   if (number_of_timer0_interupts_since_reset>=1024){
+      vSpeed = 1024;
+      number_of_timer0_interupts_since_reset=1024;
       
       
    }
@@ -185,8 +185,10 @@ TODO will have to put some kind of smoothing mechanism
 #int_ccp2
 void isr2()
 {
-if (number_of_timer0_interupts_since_reset>0){
-vSpeed  = number_of_timer0_interupts_since_reset;
+if (number_of_timer0_interupts_since_reset>10){
+vSpeed  = (number_of_timer0_interupts_since_reset+get_timer0());
+//vSpeed  = -(get_timer0());
+set_timer0(0);
 number_of_timer0_interupts_since_reset = 0;
 }
 }
@@ -222,7 +224,7 @@ void main()
    output_low(brake_pin);
    //pid_Init(K_P * SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
    
-   //delay_ms(1000);
+   delay_ms(3000);
    //write_dac(1000);
    //delay_ms(10000);
    //output_high(Contactor_Switch);
@@ -250,7 +252,7 @@ void main()
       }
       //current_servo_position=right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor;//(Athrottle/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
       //printf("Analog Cap %d Analog Throttle %d\n",(int) Acaps, (int) Athrottle);
-      current_servo_position =right_position-(vSpeed*30);
+      current_servo_position =right_position-vSpeed+200;
    
       //SET OUTPUTS 
       //The writing of the ICEThrottle happens in interupts and all that is
