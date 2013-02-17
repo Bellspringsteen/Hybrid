@@ -56,8 +56,8 @@ typedef struct PID_DATA{
 #define MAX_I_TERM      (MAX_LONG / 2)
 
 // Boolean values
-#define FALSE           0
-#define TRUE            1
+//#define FALSE           0
+//#define TRUE            1
 
 void pid_Init(int16 p_factor, int16 i_factor, int16 d_factor, struct PID_DATA *pid);
 int16 pid_Controller(int16 setPoint, int16 processValue, struct PID_DATA *pid_st);
