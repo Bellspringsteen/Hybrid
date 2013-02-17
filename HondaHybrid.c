@@ -108,6 +108,7 @@ int1 test_boolean = 0;
 
 int1 test_switch = 0;
 unsigned int16 test_counter = 0;
+int16 returnedValue = 0;
 
 unsigned int16 number_of_timer0_interupts_since_reset =0;
 unsigned int16 timer0_since_last_reset= 0;
@@ -271,6 +272,7 @@ void main()
       write_dac((unsigned int16)ELECthrottle);
       //write_dac((right_position-(right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor))*4);
       //write_dac(((Athrottle-AThrottle_Min)*2)+950);
+
       //write_dac((right_position-current_servo_position)*4);
    }
    

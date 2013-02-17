@@ -30,6 +30,7 @@
 030-041 pidData
 042-043 current_servo_position
 044-045 test_counter
+<<<<<<< HEAD
 046-047 number_of_timer0_interupts_since_reset
 048-049 timer0_since_last_reset
 04A-04B vSpeed
@@ -129,18 +130,134 @@ ROM Allocation:
 03A3  @MUL1616
 03C2  @DIVS1616
 044B  @cinit
+=======
+046-047 returnedValue
+048-049 number_of_timer0_interupts_since_reset
+04A-04B timer0_since_last_reset
+04C-04D vSpeed
+04E-04F ELECthrottle
+050-051 ICEthrottle
+052-053 Athrottle
+054-055 Acaps
+056-057 pid_Init.P_Factor
+056-057 pid_Controller.setPoint
+056     MAIN.@SCRATCH1
+057     @delay_ms1.P1
+057     MAIN.@SCRATCH2
+058-059 pid_Init.I_Factor
+058-05B @ADDFF.P1
+058-059 pid_Controller.processValue
+058-059 @ITOF.P1
+058     MAIN.@SCRATCH3
+059     MAIN.@SCRATCH4
+05A     pid_Controller.pid_st
+05A-05B pid_Init.D_Factor
+05A     MAIN.@SCRATCH5
+05B-05C pid_Controller.error
+05B     MAIN.@SCRATCH6
+05C     pid_Init.pid
+05C-05F @SFTOI.P1
+05C-05F @ADDFF.P2
+05C-05F @MULFF.P3
+05C     MAIN.@SCRATCH7
+05D-05E pid_Controller.p_term
+05D     MAIN.@SCRATCH8
+05D     pid_Init.@SCRATCH1
+05E-05F write_dac.data
+05E     pid_Init.@SCRATCH2
+05F-060 pid_Controller.d_term
+05F     pid_Init.@SCRATCH3
+060-062 write_dac.cmd
+060-063 @MULFF.P1
+060     @ADDFF.@SCRATCH1
+060     pid_Init.@SCRATCH4
+061-064 pid_Controller.i_term
+061     @ADDFF.@SCRATCH2
+061     pid_Init.@SCRATCH5
+062-063 @DIV1616.P1
+062     @ADDFF.@SCRATCH3
+062     pid_Init.@SCRATCH6
+063-066 @DIV3232.P1
+063     write_dac.i
+063     @ADDFF.@SCRATCH4
+063     pid_Init.@SCRATCH7
+064-065 @DIV1616.P1
+064     @MULFF.@SCRATCH1
+064     @ADDFF.@SCRATCH5
+064     pid_Init.@SCRATCH8
+065-068 pid_Controller.ret
+065     @MULFF.@SCRATCH2
+065     @ADDFF.@SCRATCH6
+066     @MULFF.@SCRATCH3
+066     @ADDFF.@SCRATCH7
+066     @DIV1616.@SCRATCH1
+067-06A @DIV3232.P1
+067     @MULFF.@SCRATCH4
+067     @ADDFF.@SCRATCH8
+068     @MULFF.@SCRATCH5
+069-06C pid_Controller.temp
+06B     @DIV3232.@SCRATCH1
+06C     @DIV3232.@SCRATCH2
+06D     @DIV3232.@SCRATCH3
+06D     pid_Controller.@SCRATCH1
+06E     @DIV3232.@SCRATCH4
+06E     pid_Controller.@SCRATCH2
+06F     @DIV3232.@SCRATCH5
+06F     pid_Controller.@SCRATCH3
+070     pid_Controller.@SCRATCH4
+071     pid_Controller.@SCRATCH5
+072     pid_Controller.@SCRATCH6
+073-074 @MUL1616.P1
+073     pid_Controller.@SCRATCH7
+074-077 @MUL3232.P1
+074     pid_Controller.@SCRATCH8
+075-076 @MUL1616.P1
+077     @MUL1616.@SCRATCH1
+078-07B @MUL3232.P1
+09C.6   C1OUT
+09C.7   C2OUT
+0A0     @MUL3232.@SCRATCH1
+0A1     @MUL3232.@SCRATCH2
+0A2     @MUL3232.@SCRATCH3
+0A3     @MUL3232.@SCRATCH4
+0A4     @MUL3232.@SCRATCH5
+0A5     isr.@SCRATCH1
+0A6     isr.@SCRATCH2
+10D-10E @WRITE_PROGRAM_MEMORY8.P1
+10D-10E @READ_PROGRAM_MEMORY8.P2
+
+ROM Allocation:
+0222  @delay_ms1
+00BF  init_dac
+00D7  write_dac
+0045  timer0_isr
+0053  isr
+00AB  isr2
+06A6  MAIN
+04B5  @ITOF
+04D3  @MULFF
+0548  @ADDFF
+0686  @SFTOI
+0133  pid_Init
+0180  @DIV1616
+01D1  @DIV3232
+024B  pid_Controller
+0236  @MUL1616
+03D5  @MUL3232
+06A6  @cinit
+>>>>>>> c3b8e56ca4afb031060d4e36e288e08742690935
 
 
 User Memory space: 
 
 Project Directory:
-    e:\hybrid-v2\
+    C:\Users\alex\Documents\GitHub\Hybrid-v2\
 
 Project Files:
     HondaHybrid.c
     HondaHybrid.h
     16F873A.h
-    C:\Program Files\PICC\drivers\mcp4921.c
+    mcp4921.c
     pid.h
 
 Units:
@@ -156,7 +273,7 @@ Compiler Settings:
     ICD Provisions: Yes
 
 Output Files:
-    Errors:      hondahybrid.err
+    Errors:      HondaHybrid.err
     Ext Symbols: HondaHybrid.esym
     INHX8:       HondaHybrid.hex
     Symbols:     HondaHybrid.sym

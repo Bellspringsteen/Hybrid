@@ -1,5 +1,9 @@
 ÀÄHondaHybrid
+<<<<<<< HEAD
    ÃÄMAIN  0/319  Ram=4
+=======
+   ÃÄMAIN  0/323  Ram=8
+>>>>>>> c3b8e56ca4afb031060d4e36e288e08742690935
    ³  ÃÄ??0??
    ³  ÃÄinit_dac  0/24  Ram=0
    ³  ÃÄwrite_dac  0/92  Ram=6
@@ -7,6 +11,7 @@
    ³  ³  ÃÄ@DIV1616  (Inline)  Ram=5
    ³  ³  ÀÄ@DIV3232  (Inline)  Ram=13
    ³  ÃÄ@delay_ms1  0/20  Ram=1
+<<<<<<< HEAD
    ³  ÃÄ@const112  0/16  Ram=0
    ³  ÃÄ@PUTCHAR_1_  0/42  Ram=1
    ³  ÃÄ@PRINTF_LU_55  0/88  Ram=8
@@ -32,5 +37,19 @@
    ³  ÃÄ@PUTCHAR_1_  0/42  Ram=1
    ³  ÀÄwrite_dac  0/92  Ram=6
    ÃÄtimer0_isr  0/15  Ram=0
+=======
+   ³  ÃÄpid_Controller  0/618  Ram=31
+   ³  ³  ÃÄ@MUL1616  0/21  Ram=5
+   ³  ³  ÃÄ@MUL3232  (Inline)  Ram=13
+   ³  ³  ÀÄ@MUL1616  0/21  Ram=5
+   ³  ÃÄ@ITOF  0/30  Ram=2
+   ³  ÃÄ@MULFF  0/117  Ram=13
+   ³  ÃÄ@ADDFF  0/318  Ram=16
+   ³  ÃÄ@ADDFF  0/318  Ram=16
+   ³  ÃÄ@MULFF  0/117  Ram=13
+   ³  ÃÄ@SFTOI  0/32  Ram=4
+   ³  ÀÄwrite_dac  0/92  Ram=6
+   ÃÄtimer0_isr  0/14  Ram=0
+>>>>>>> c3b8e56ca4afb031060d4e36e288e08742690935
    ÃÄisr  0/88  Ram=2
    ÀÄisr2  0/20  Ram=0

@@ -108,6 +108,7 @@ int1 test_boolean = 0;
 
 int1 test_switch = 0;
 unsigned int16 test_counter = 0;
+int16 returnedValue = 0;
 
 unsigned int16 number_of_timer0_interupts_since_reset =0;
 unsigned int16 timer0_since_last_reset= 0;
@@ -254,6 +255,7 @@ void main()
       //current_servo_position=right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor;//(Athrottle/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
       //printf("Analog Cap %d Analog Throttle %d\n",(int) Acaps, (int) Athrottle);
       current_servo_position =right_position-vSpeed+200;
+<<<<<<< HEAD
       speeder = vSpeed;
       printf("Speed %lu \n",speeder);
       //SET OUTPUTS 
@@ -271,6 +273,15 @@ void main()
       write_dac((unsigned int16)ELECthrottle);
       //write_dac((right_position-(right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor))*4);
       //write_dac(((Athrottle-AThrottle_Min)*2)+950);
+=======
+   
+      //SET OUTPUTS 
+      //The writing of the ICEThrottle happens in interupts and all that is
+      //required is updating ICEthrottle
+      returnedValue = pid_Controller(Athrottle,vSpeed, pidData);
+      
+      write_dac((right_position-(right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor))*4);
+>>>>>>> c3b8e56ca4afb031060d4e36e288e08742690935
       //write_dac((right_position-current_servo_position)*4);
    }
    
