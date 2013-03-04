@@ -91,7 +91,7 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 //PID Values
 #define K_P 1.00
 #define K_I 0.00
-#define K_D 0.00
+#define K_D 0.25
 
 int1 pid_Timer = 0;
 struct PID_DATA pidData;
@@ -108,7 +108,7 @@ int1 test_boolean = 0;
 
 int1 test_switch = 0;
 unsigned int16 test_counter = 0;
-int16 returnedValue = 0;
+//int16 returnedValue = 0;
 
 unsigned int16 number_of_timer0_interupts_since_reset =0;
 unsigned int16 timer0_since_last_reset= 0;
@@ -224,7 +224,7 @@ void main()
    write_dac(0);
    output_high(Contactor_Switch);
    output_low(brake_pin);
-   pid_Init(K_P * SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
+   pid_Init(K_P*SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
    
    delay_ms(3000);
    //write_dac(1000);
@@ -300,6 +300,7 @@ void pid_Init(int16 p_factor, int16 i_factor, int16 d_factor, struct PID_DATA *p
   pid->D_Factor = d_factor;
   // Limits to avoid overflow
   pid->maxError = MAX_INT / (pid->P_Factor + 1);
+  printf("Max %ld factor %ld and pid %ld",MAX_INT,pid->P_Factor,pid->maxError);
   pid->maxSumError = MAX_I_TERM / (pid->I_Factor + 1);
 }
 
@@ -317,14 +318,14 @@ int16 pid_Controller(int16 setPoint, int16 processValue, struct PID_DATA *pid_st
   signed int16 error, p_term, d_term;
   signed int32 i_term, ret, temp;
     processValue=processValue/4;
-  printf("input %ld speed %ld ",setPoint,processValue);
+  //printf("input %ld speed %ld ",setPoint,processValue);
   error = setPoint - processValue;
   
   // Calculate Pterm and limit error overflow
-  /*
+  
   if (error > (signed int16) pid_st->maxError){
     p_term = MAX_INT;
-       printf(" greater error %ld a %ld p %ld",error,pid_st->maxError,p_term);
+    printf(" greater error %ld a %ld p %ld",error,pid_st->maxError,p_term);
 
   }
   else if (error < (signed int16) -pid_st->maxError){
@@ -332,34 +333,39 @@ int16 pid_Controller(int16 setPoint, int16 processValue, struct PID_DATA *pid_st
     printf("less error %ld a %ld p %ld",error,-pid_st->maxError,p_term);
 
   }
-  else{*/
+  else{
     p_term = pid_st->P_Factor * error;
-   //printf("error %ld a %ld p %ld",error,pid_st->maxError,p_term);
-  //}
+   printf("error %ld a %ld p %ld",error,pid_st->maxError,p_term);
+  }
   
-/*
   // Calculate Iterm and limit integral runaway
   temp = pid_st->sumError + error;
-  if(temp > pid_st->maxSumError){
+  if(temp > (signed int32)pid_st->maxSumError){
     i_term = MAX_I_TERM;
     pid_st->sumError = pid_st->maxSumError;
-  }
-  else if(temp < -pid_st->maxSumError){
+    printf("\n greater temp %ld a %ld sum %ld",temp,pid_st->maxSumError,pid_st->sumError);
+
+ }
+  else if(temp < (signed int32)-pid_st->maxSumError){
     i_term = -MAX_I_TERM;
     pid_st->sumError = -pid_st->maxSumError;
+    printf("\n less temp %ld a %ld sum %ld",temp,pid_st->maxSumError,pid_st->sumError);
+
   }
   else{
     pid_st->sumError = temp;
     i_term = pid_st->I_Factor * pid_st->sumError;
+    printf("\n eror temp %ld a %ld sum %ld",temp,pid_st->maxSumError,pid_st->sumError);
+
   }
 
   // Calculate Dterm
   d_term = pid_st->D_Factor * (pid_st->lastProcessValue - processValue);
 
   pid_st->lastProcessValue = processValue;
-*/
+
   //ret = (p_term + i_term + d_term) / SCALING_FACTOR;
-   ret = (p_term) / SCALING_FACTOR;
+   ret = (p_term+d_term+i_term) / SCALING_FACTOR;
   if(ret > MAX_INT){
     ret = MAX_INT;
   }

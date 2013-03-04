@@ -1,30 +1,10 @@
-<<<<<<< HEAD
 >>> Warning 202 "HondaHybrid.c" Line 96(16,25): Variable never used:   pid_Timer
 >>> Warning 202 "HondaHybrid.c" Line 103(36,58): Variable never used:   Athrottle_servo_factor
 >>> Warning 202 "HondaHybrid.c" Line 107(19,31): Variable never used:   test_boolean
 >>> Warning 202 "HondaHybrid.c" Line 109(18,29): Variable never used:   test_switch
 >>> Warning 202 "HondaHybrid.c" Line 110(29,41): Variable never used:   test_counter
->>> Warning 202 "HondaHybrid.c" Line 113(16,39): Variable never used:   timer0_since_last_reset
->>> Warning 202 "HondaHybrid.c" Line 116(28,39): Variable never used:   ICEthrottle
->>> Warning 202 "HondaHybrid.c" Line 119(25,43): Variable never used:   CURRENTLY_CHARGING
->>> Warning 202 "HondaHybrid.c" Line 315(31,37): Variable never used:   d_term
->>> Warning 202 "HondaHybrid.c" Line 316(16,22): Variable never used:   i_term
->>> Warning 202 "HondaHybrid.c" Line 316(29,33): Variable never used:   temp
-      Memory usage:   ROM=37%      RAM=34% - 54%
-      0 Errors,  11 Warnings.
-=======
->>> Warning 225 "C:\Users\alex\Documents\GitHub\Hybrid-v2\pid.h" Line 59(14,26): Duplicate #define
->>> Warning 225 "C:\Users\alex\Documents\GitHub\Hybrid-v2\pid.h" Line 60(13,26): Duplicate #define
->>> Warning 205 "HondaHybrid.c" Line 345(1,1): Unsigned variable is never less than zero
->>> Warning 204 "HondaHybrid.c" Line 345(1,1): Condition always FALSE
->>> Warning 202 "HondaHybrid.c" Line 96(16,25): Variable never used:   pid_Timer
->>> Warning 202 "HondaHybrid.c" Line 107(19,31): Variable never used:   test_boolean
->>> Warning 202 "HondaHybrid.c" Line 109(18,29): Variable never used:   test_switch
->>> Warning 202 "HondaHybrid.c" Line 110(29,41): Variable never used:   test_counter
 >>> Warning 202 "HondaHybrid.c" Line 114(16,39): Variable never used:   timer0_since_last_reset
->>> Warning 202 "HondaHybrid.c" Line 116(29,41): Variable never used:   ELECthrottle
 >>> Warning 202 "HondaHybrid.c" Line 117(28,39): Variable never used:   ICEthrottle
 >>> Warning 202 "HondaHybrid.c" Line 120(25,43): Variable never used:   CURRENTLY_CHARGING
-      Memory usage:   ROM=53%      RAM=35% - 57%
-      0 Errors,  12 Warnings.
->>>>>>> c3b8e56ca4afb031060d4e36e288e08742690935
+      Memory usage:   ROM=80%      RAM=34% - 67%
+      0 Errors,  8 Warnings.

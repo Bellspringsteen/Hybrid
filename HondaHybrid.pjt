@@ -20,9 +20,9 @@ AdditionalOptionString=
 2=HondaHybrid.h
 3=16F873A.h
 4=mcp4921.c
-5=pid.h
-6=
-7=
+5=pid.c
+6=pid.h
+7=C:\Program Files\PICC\drivers\mcp4921.c
 8=
 [Target Data]
 OptionString=-p +FM
