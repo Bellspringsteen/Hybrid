@@ -23,7 +23,7 @@
 //#include "stdint.h"
 #define INT16_MAX 32767
 #define INT32_MAX 2147483647
-#define SCALING_FACTOR  1
+#define SCALING_FACTOR  128
 
 /*! \brief PID Status
  *
