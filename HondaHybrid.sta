@@ -1,76 +1,63 @@
 
-ROM used: 3377 (88%)
-          3675 (96%) including unused fragments
+ROM used: 1534 (37%)
+          1534 (37%) including unused fragments
 
-          4 Average locations per line
-          24 Average locations per statement
+          2 Average locations per line
+          12 Average locations per statement
 
-RAM used: 64 (36%) at main() level
-          121 (68%) worst case
+RAM used: 59 (31%) at main() level
+          85 (45%) worst case
 
-Stack used: 4 worst case (out of 6 total available)
+Stack used: 4 worst case (out of 8 total available)
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-  395   118  84  HondaHybrid.c
+  396   106  83  HondaHybrid.c
    12     0   0  HondaHybrid.h
   274     0   0  16F873A.h
-   68    22  16  C:\Program Files\PICC\drivers\mcp4921.c
+   68    22  17  C:\Program Files\PICC\drivers\mcp4921.c
    67     0   0  pid.h
 ----- -----
-  816   140 Total
+  817   128 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
 0     20   1   1             @delay_ms1
-0     44   1   1             @PUTCHAR_1_
-0     24   1   0    67  1.2  init_dac
-0     92   3   6   739  7.3  write_dac
-0     15   0   0    92  2.9  timer0_isr
-0     88   3   2   305  4.6  isr
+0      2   0   1    67  1.2  @PUTCHAR_1_
+0     24   2   0    67  1.2  init_dac
+0     93   6   6   739  7.3  write_dac
+0     15   1   0    92  2.9  timer0_isr
+0     72   5   2   305  4.6  isr
 0     20   1   0   100  2.9  isr2
-0    395  12   7  1718  7.0  MAIN
-0     16   0   0             @const112
-0     43   1   0             @const113
-0    119   4   8             @PRINTF_LD_55
-0     90   3   8   506  4.4  @PRINTF_LU_55
-0    262   8  15   506  4.4  pid_Init
- Inline        5             @DIV1616
-0     35   1   0             @const121
-0     69   2  13  2107  8.3  @DIV3232
-1   1627  48  33  2114  8.3  pid_Controller
-0     36   1   0             @const131
-0     33   1   0             @const132
- Inline        2             @SITOF
- Inline        2             @ITOF
- Inline       13             @MULFF
- Inline        4             @SFTOI
-0     40   1   0    41  2.1  @const142
-0    167   5  10    41  2.1  @PRINTF_L32D_55
-0     34   1   0             @const145
- Inline       13             @MUL3232
- Inline        5             @MUL1616
-0     39   1   0    41  2.1  @const152
- Inline        6    41  2.1  @DIVS1616
+0    255  17   2  1092  5.8  MAIN
+0     30   2   2             @ITOF
+0    118   8  13             @MULFF
+0    319  21  16   506  4.4  @ADDFF
+0     32   2   4   506  4.4  @SFTOI
+0    313  20  15   506  4.4  pid_Init
+ Inline        5   506  4.4  @DIV1616
+0     35   2   0  2114  8.3  @const125
+0    117   8   8  2114  8.3  @PRINTF_LD_55
+ Inline       13   506  4.4  @DIV3232
 
 Program metrics:
     Functions               14
-    Statements              140
-    Comments                290
-    Volume (V)              12394
-    Difficilty (D)          63.2
-    Effort to implement (E) 783833
-    Time to implement (T)   12 hours, 6 minutes
+    Statements              128
+    Comments                308
+    Volume (V)              14129
+    Difficilty (D)          66.7
+    Effort to implement (E) 942349
+    Time to implement (T)   14 hours, 33 minutes
     Est Delivered Bugs (B)  3
-    Cyclomatic Complexity   21
-    Maintainability (MI)    133
+    Cyclomatic Complexity   20
+    Maintainability (MI)    140
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00003     4  0  
 00004-00044    65  0  
-00045-007FF  1681  298  
-00800-00EFB  1627  161  
+00045-007FF  1465  514  
+00800-00FFF     0  2048  
 
 
 
