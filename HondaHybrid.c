@@ -91,7 +91,7 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 //PID Values
 #define K_P 1.00
 #define K_I 0.00
-#define K_D 0.85
+#define K_D 0.00
 
 int1 pid_Timer = 0;
 struct PID_DATA pidData;
@@ -155,7 +155,7 @@ servo_period which is 65356-50000 so that the total time is 20ms.
 #int_timer1
 void isr()
 {
-
+/*
 //Make sure that the position is within the left and right positions of the servo
    if (current_servo_position<left_position){
       current_servo_position = left_position;
@@ -177,6 +177,7 @@ void isr()
          set_timer1(servo_period+current_servo_position);          //Set timer for the low position the length is the difference between 
                                                      //the total int16 lenght - high pulse length
       }  
+*/
 }
 
 
@@ -196,8 +197,10 @@ number_of_timer0_interupts_since_reset = 0;
 }
 }
 
-
-
+void trickBreaking(){
+write_dac((unsigned int16) 400+ELEC_CONTROLLER_OFFSET);
+delay_ms(1000);      
+}
 
 void main()
 {  
@@ -253,7 +256,7 @@ void main()
          Athrottle=Athrottle_Min;
       }
       //Servo to mirror Athrottle -> 
-      current_servo_position=right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor;//(Athrottle/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
+//      current_servo_position=right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor;//(Athrottle/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
       //printf("Analog Cap %d Analog Throttle %Lu\n",(int) Acaps,Athrottle);
       //current_servo_position =right_position-vSpeed+200;
       speeder = vSpeed;
@@ -263,31 +266,44 @@ void main()
       //required is updating ICEthrottle
       //printf("speed before %ld \n",vSpeed);
       
-      /*
+      
       returnedValue = pid_Controller((Athrottle-AThrottle_Min),(1280-speeder),& pidData);
       ELECthrottle = ELECthrottle+returnedValue;
+      if (ELECthrottle>2500){
+         ELECthrottle=2500;
+      }
+      else if (ELECthrottle<-300){
+         ELECthrottle = -300;
+      }
       if (ELECthrottle<0){
+         if (CURRENTLY_CHARGING==1){
+            trickBreaking();
+         }
+         CURRENTLY_CHARGING=0;
          output_high(brake_pin);
          output_high(Electric_Controller_Switch);
-         printf("BREAKING /n");
+         printf("BREAKING \n");
       }
       else {
+         CURRENTLY_CHARGING=1;
          output_low(brake_pin);
          output_low(Electric_Controller_Switch);
+         printf("ACCELERATING \n");
       }
-      printf("input %ld r %lu speed %ld throttle %lu",Athrottle-Athrottle_Min,((unsigned int16) returnedValue),1280-speeder,(unsigned int16)ELECthrottle);
+      printf("input %ld r %lu speed %ld throttle %ld \n",Athrottle-Athrottle_Min,((unsigned int16) returnedValue),1280-speeder,ELECthrottle);
+      
       write_dac((unsigned int16) abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET);
       //Next we want to set the ICE throttle. Which should be as high as possible unless
-      a)It is charging (throttle <0) and the voltage of the cap pack is at Full
-      b)Throttle is at max braking and speed still increasing (delta increasing??)
+      //a)It is charging (throttle <0) and the voltage of the cap pack is at Full
+      //b)Throttle is at max braking and speed still increasing (delta increasing??)
       
-      If a) then switch to electric only mode
-      if b) then decrease the ICE throttle by a factor of the increasing delta
+      //If a) then switch to electric only mode
+      //if b) then decrease the ICE throttle by a factor of the increasing delta
       
       
       //write_dac((right_position-(right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor))*4);
       //write_dac(((Athrottle-AThrottle_Min)*2)+950);
-*/
+
       //write_dac((right_position-current_servo_position)*4);
    }
    
@@ -340,7 +356,7 @@ int16 pid_Controller(int16 setPoint, int16 processValue, struct PID_DATA *pid_st
   
   if (error > (signed int16) pid_st->maxError){
     p_term = MAX_INT;
-    printf("p greater error %ld a %ld p %ld",error,pid_st->maxError,p_term);
+    //printf("p greater error %ld a %ld p %ld",error,pid_st->maxError,p_term);
 
   }
   else if (error < (signed int16) -pid_st->maxError){
