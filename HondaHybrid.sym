@@ -40,6 +40,7 @@
 054-055 returnedValue
 056-057 speeder
 058-059 pid_Init.P_Factor
+058     trickBreaking.@SCRATCH1
 058     MAIN.@SCRATCH1
 059     @delay_ms1.P1
 059     MAIN.@SCRATCH2
@@ -158,13 +159,14 @@ ROM Allocation:
 015A  timer0_isr
 0169  isr
 016C  isr2
-051D  MAIN
+049C  trickBreaking
+052A  MAIN
 0045  @const113
 0054  @const114
 0067  @const115
 0220  @PRINTF_LD_55
-049D  @PRINTF_LU_55
-04F8  @PRINTF_X_55
+04AA  @PRINTF_LU_55
+0505  @PRINTF_X_55
 02DC  pid_Init
 0329  @DIV1616
 00A5  @const126
@@ -176,13 +178,13 @@ ROM Allocation:
 0931  @MULFF
 09DF  @SFTOI
 00E9  @const146
-03F6  @PRINTF_L32D_55
+03F5  @PRINTF_L32D_55
 0111  @const149
 0C7B  @MUL3232
 0CDE  @MUL1616
 0133  @const156
 0D73  @DIVS1616
-051D  @cinit
+052A  @cinit
 
 
 User Memory space: 

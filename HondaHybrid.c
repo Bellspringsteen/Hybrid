@@ -277,10 +277,10 @@ void main()
          ELECthrottle = -200;
       }
       if (ELECthrottle<0){
-         //if (CURRENTLY_CHARGING==1){
-         //   trickBreaking();
-         //}
-         ELECthrottle = 200;
+         if (CURRENTLY_CHARGING==1){
+            trickBreaking();
+         }
+         //ELECthrottle = 300;
          CURRENTLY_CHARGING=0;
          output_high(brake_pin);
          output_high(Electric_Controller_Switch);
@@ -293,7 +293,7 @@ void main()
          printf("ACCELERATING \n");
       }
       printf("input %ld r %lu speed %ld throttle %ld acaps %ld and %Lx\n",Athrottle-Athrottle_Min,((unsigned int16) returnedValue),1280-speeder,ELECthrottle,Acaps,(unsigned int16) (abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
-      write_dac((unsigned int16) (abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
+      write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
       //Next we want to set the ICE throttle. Which should be as high as possible unless
       //a)It is charging (throttle <0) and the voltage of the cap pack is at Full
       //b)Throttle is at max braking and speed still increasing (delta increasing??)

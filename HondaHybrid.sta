@@ -1,5 +1,5 @@
 
-ROM used: 3378 (88%)
+ROM used: 3388 (88%)
           3580 (93%) including unused fragments
 
           4 Average locations per line
@@ -12,24 +12,25 @@ Stack used: 4 worst case (out of 6 total available)
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-  423   113  84  HondaHybrid.c
+  423   115  84  HondaHybrid.c
    12     0   0  HondaHybrid.h
   274     0   0  16F873A.h
    68    22  16  C:\Program Files\PICC\drivers\mcp4921.c
    67     0   0  pid.h
 ----- -----
-  844   135 Total
+  844   137 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
-0     20   1   1             @delay_ms1
+0     19   1   1             @delay_ms1
 0     44   1   1             @PUTCHAR_1_
 0     24   1   0    67  1.2  init_dac
 0     92   3   6   739  7.3  write_dac
 0     15   0   0    92  2.9  timer0_isr
 0      3   0   0     3  0.0  isr
 0     20   1   0   100  2.9  isr2
-0    537  16  13  2091  7.5  MAIN
+0     14   0   1    56  1.6  trickBreaking
+0    534  16  13  2111  7.9  MAIN
 0     15   0   0             @const113
 0     19   1   0   506  4.4  @const114
 0     62   2   0             @const115
@@ -55,22 +56,22 @@ Page ROM  %  RAM   Vol Diff  Functions:
  Inline        6    41  2.1  @DIVS1616
 
 Program metrics:
-    Functions               13
-    Statements              135
-    Comments                319
-    Volume (V)              12700
-    Difficilty (D)          58.6
-    Effort to implement (E) 744851
-    Time to implement (T)   11 hours, 30 minutes
+    Functions               14
+    Statements              137
+    Comments                317
+    Volume (V)              12901
+    Difficilty (D)          60.7
+    Effort to implement (E) 783602
+    Time to implement (T)   12 hours, 6 minutes
     Est Delivered Bugs (B)  3
-    Cyclomatic Complexity   20
-    Maintainability (MI)    146
+    Cyclomatic Complexity   21
+    Maintainability (MI)    143
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00003     4  0  
 00004-00044    65  0  
-00045-007FF  1777  202  
+00045-007FF  1787  192  
 00800-00EFB  1532  256  
 
 

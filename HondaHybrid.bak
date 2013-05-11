@@ -201,7 +201,7 @@ number_of_timer0_interupts_since_reset = 0;
 
 void trickBreaking(){
 write_dac((unsigned int16) 400+ELEC_CONTROLLER_OFFSET);
-delay_ms(1000);      
+delay_ms(100);      
 }
 
 void main()
@@ -268,19 +268,19 @@ void main()
       //required is updating ICEthrottle
       //printf("speed before %ld \n",vSpeed);
       
-      returnedValue = -660;//pid_Controller((Athrottle-AThrottle_Min),(1280-speeder),& pidData);
+      returnedValue = pid_Controller((Athrottle-AThrottle_Min),(1280-speeder),& pidData);
       ELECthrottle = ELECthrottle+returnedValue;
       if (ELECthrottle>2500){
          ELECthrottle=2500;
       }
-      else if (ELECthrottle<-10){
-         ELECthrottle = -10;
+      else if (ELECthrottle<-200){
+         ELECthrottle = -200;
       }
       if (ELECthrottle<0){
-         //if (CURRENTLY_CHARGING==1){
-         //   trickBreaking();
-         //}
-         ELECthrottle = 200;
+         if (CURRENTLY_CHARGING==1){
+            trickBreaking();
+         }
+         //ELECthrottle = 300;
          CURRENTLY_CHARGING=0;
          output_high(brake_pin);
          output_high(Electric_Controller_Switch);
