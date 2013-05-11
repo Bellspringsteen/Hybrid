@@ -7,6 +7,8 @@ CONTROL BOX INPUTS
 Athrottle- A0 - analog input representing the users input for speed, 10 bit
 Vspeed - CCp2-a 16 bit representation of the speed of the vehicle
 Acaps- A1 - analog input representing the current voltage of the supercapacitors, 10 bit
+There are 18 Supercaps with a maximum voltage of 2.7 (2.85 is breakdown) volts for a total of 48.6 V
+The circuit has a 10/110 voltage divider into the ADC. So minimum voltage of 18 Volts is 335 and 48 Volts is 893. Measured 38.2V equal to 726
 
 CONTROL BOX OUTPUT
 ICEthrottle- B1 - a 16 bit number sent to the internal combustion engine(ICE) throttle 
@@ -236,7 +238,6 @@ void main()
    //output_high(Contactor_Switch);
    //output_high(brake_pin);
    //output_high(Electric_Controller_Switch);
-   trickBreaking();
    while(TRUE) {
 
       //GET INPUTS
@@ -267,19 +268,19 @@ void main()
       //required is updating ICEthrottle
       //printf("speed before %ld \n",vSpeed);
       
-      /*
-      returnedValue = pid_Controller((Athrottle-AThrottle_Min),(1280-speeder),& pidData);
+      returnedValue = -660;//pid_Controller((Athrottle-AThrottle_Min),(1280-speeder),& pidData);
       ELECthrottle = ELECthrottle+returnedValue;
       if (ELECthrottle>2500){
          ELECthrottle=2500;
       }
-      else if (ELECthrottle<-300){
-         ELECthrottle = -50;
+      else if (ELECthrottle<-10){
+         ELECthrottle = -10;
       }
       if (ELECthrottle<0){
          //if (CURRENTLY_CHARGING==1){
          //   trickBreaking();
          //}
+         ELECthrottle = 200;
          CURRENTLY_CHARGING=0;
          output_high(brake_pin);
          output_high(Electric_Controller_Switch);
@@ -291,14 +292,8 @@ void main()
          output_low(Electric_Controller_Switch);
          printf("ACCELERATING \n");
       }
-      printf("input %ld r %lu speed %ld throttle %ld \n",Athrottle-Athrottle_Min,((unsigned int16) returnedValue),1280-speeder,ELECthrottle);
-      */
-      
-      output_high(brake_pin);
-      output_high(Electric_Controller_Switch);
-      printf("BREAKING \n");
-      ELECthrottle =200;
-      write_dac((unsigned int16) abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET);
+      printf("input %ld r %lu speed %ld throttle %ld acaps %ld and %Lx\n",Athrottle-Athrottle_Min,((unsigned int16) returnedValue),1280-speeder,ELECthrottle,Acaps,(unsigned int16) (abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
+      write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
       //Next we want to set the ICE throttle. Which should be as high as possible unless
       //a)It is charging (throttle <0) and the voltage of the cap pack is at Full
       //b)Throttle is at max braking and speed still increasing (delta increasing??)
