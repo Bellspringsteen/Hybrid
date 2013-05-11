@@ -236,6 +236,7 @@ void main()
    //output_high(Contactor_Switch);
    //output_high(brake_pin);
    //output_high(Electric_Controller_Switch);
+   trickBreaking();
    while(TRUE) {
 
       //GET INPUTS
@@ -266,19 +267,19 @@ void main()
       //required is updating ICEthrottle
       //printf("speed before %ld \n",vSpeed);
       
-      
+      /*
       returnedValue = pid_Controller((Athrottle-AThrottle_Min),(1280-speeder),& pidData);
       ELECthrottle = ELECthrottle+returnedValue;
       if (ELECthrottle>2500){
          ELECthrottle=2500;
       }
       else if (ELECthrottle<-300){
-         ELECthrottle = -00;
+         ELECthrottle = -50;
       }
       if (ELECthrottle<0){
-         if (CURRENTLY_CHARGING==1){
-            trickBreaking();
-         }
+         //if (CURRENTLY_CHARGING==1){
+         //   trickBreaking();
+         //}
          CURRENTLY_CHARGING=0;
          output_high(brake_pin);
          output_high(Electric_Controller_Switch);
@@ -291,7 +292,12 @@ void main()
          printf("ACCELERATING \n");
       }
       printf("input %ld r %lu speed %ld throttle %ld \n",Athrottle-Athrottle_Min,((unsigned int16) returnedValue),1280-speeder,ELECthrottle);
+      */
       
+      output_high(brake_pin);
+      output_high(Electric_Controller_Switch);
+      printf("BREAKING \n");
+      ELECthrottle =100;
       write_dac((unsigned int16) abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET);
       //Next we want to set the ICE throttle. Which should be as high as possible unless
       //a)It is charging (throttle <0) and the voltage of the cap pack is at Full

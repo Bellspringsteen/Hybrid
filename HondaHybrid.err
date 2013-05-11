@@ -7,5 +7,7 @@
 >>> Warning 202 "HondaHybrid.c" Line 111(29,41): Variable never used:   test_counter
 >>> Warning 202 "HondaHybrid.c" Line 115(16,39): Variable never used:   timer0_since_last_reset
 >>> Warning 202 "HondaHybrid.c" Line 118(28,39): Variable never used:   ICEthrottle
-      Memory usage:   ROM=85%      RAM=36% - 66%
-      0 Errors,  9 Warnings.
+>>> Warning 202 "HondaHybrid.c" Line 121(25,43): Variable never used:   CURRENTLY_CHARGING
+>>> Warning 202 "HondaHybrid.c" Line 122(28,41): Variable never used:   returnedValue
+      Memory usage:   ROM=27%      RAM=34% - 46%
+      0 Errors,  11 Warnings.
