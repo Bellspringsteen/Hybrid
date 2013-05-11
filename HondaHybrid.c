@@ -12,7 +12,7 @@ CONTROL BOX OUTPUT
 ICEthrottle- B1 - a 16 bit number sent to the internal combustion engine(ICE) throttle 
 ELECthrottle-  - a 16 bit number sent as analog value representing the demanded electric power
 
-SPECIFICS OF I/O
+SPECIFICS OF I/ O
 
 Athrottle - the electric throttle is a 3 wire unit with a 5 volt,ground, and analog out
    representing how far throttle is turned. Pin AN0 is the input.

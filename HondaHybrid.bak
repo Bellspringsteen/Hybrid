@@ -297,7 +297,7 @@ void main()
       output_high(brake_pin);
       output_high(Electric_Controller_Switch);
       printf("BREAKING \n");
-      ELECthrottle =100;
+      ELECthrottle =200;
       write_dac((unsigned int16) abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET);
       //Next we want to set the ICE throttle. Which should be as high as possible unless
       //a)It is charging (throttle <0) and the voltage of the cap pack is at Full
