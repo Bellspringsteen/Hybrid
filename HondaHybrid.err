@@ -1,11 +1,11 @@
->>> Warning 202 "HondaHybrid.c" Line 98(16,25): Variable never used:   pid_Timer
->>> Warning 202 "HondaHybrid.c" Line 106(36,58): Variable never used:   Athrottle_servo_factor
->>> Warning 202 "HondaHybrid.c" Line 108(16,38): Variable never used:   current_servo_position
->>> Warning 202 "HondaHybrid.c" Line 109(45,83): Variable never used:   SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER
->>> Warning 202 "HondaHybrid.c" Line 110(19,31): Variable never used:   test_boolean
->>> Warning 202 "HondaHybrid.c" Line 112(18,29): Variable never used:   test_switch
->>> Warning 202 "HondaHybrid.c" Line 113(29,41): Variable never used:   test_counter
->>> Warning 202 "HondaHybrid.c" Line 117(16,39): Variable never used:   timer0_since_last_reset
->>> Warning 202 "HondaHybrid.c" Line 120(28,39): Variable never used:   ICEthrottle
-      Memory usage:   ROM=88%      RAM=39% - 66%
+>>> Warning 202 "HondaHybrid.c" Line 101(16,25): Variable never used:   pid_Timer
+>>> Warning 202 "HondaHybrid.c" Line 109(36,58): Variable never used:   Athrottle_servo_factor
+>>> Warning 202 "HondaHybrid.c" Line 111(16,38): Variable never used:   current_servo_position
+>>> Warning 202 "HondaHybrid.c" Line 112(45,83): Variable never used:   SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER
+>>> Warning 202 "HondaHybrid.c" Line 113(19,31): Variable never used:   test_boolean
+>>> Warning 202 "HondaHybrid.c" Line 115(18,29): Variable never used:   test_switch
+>>> Warning 202 "HondaHybrid.c" Line 116(29,41): Variable never used:   test_counter
+>>> Warning 202 "HondaHybrid.c" Line 120(16,39): Variable never used:   timer0_since_last_reset
+>>> Warning 202 "HondaHybrid.c" Line 123(28,39): Variable never used:   ICEthrottle
+      Memory usage:   ROM=90%      RAM=39% - 66%
       0 Errors,  9 Warnings.

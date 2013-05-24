@@ -89,6 +89,11 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define Athrottle_channel 0
 #define Electric_Controller_Switch PIN_B0
 #define Contactor_Switch PIN_B2
+#define A_CAPS_MAX 893
+#define A_CAPS_MIN 335
+#define A_CAPS_MID_LOW (A_CAPS_MIN + 100) //This is the low end of the middle ACaps range. The range in which discharge and charge are allowed. 
+#define A_CAPS_MID_HIGH (A_CAPS_MAX - 100) //This is the low end of the middle ACaps range. The range in which discharge and charge are allowed. 
+#define V_SPEED_REGEN_MIN 100 //Why is there a minimum speed? Because below this no regenerative action is possible with electric motor
 
 //PID Values
 #define K_P 1.00
@@ -120,9 +125,18 @@ signed int16 ELECthrottle = 0;
 unsigned int16 ICEthrottle = 0;
 unsigned int16 Athrottle = 0;
 unsigned int16 Acaps = 0;
+int1 ICE_ON = 0;
 int1 CURRENTLY_CHARGING = 0;
 signed int16 returnedValue =0;
 int16 speeder = 0; 
+
+typedef enum{ 
+	EVERYTHING_OFF,
+	CHARGING_ALLOWED, 
+	DISCHARGING_ALLOWED, 
+	CHARGING_AND_DISCHARING_ALLOWED 
+} CHARGING_STATE; 
+
 /*
 The #int_timer0 interupt is triggered on each timer0 8bit interupt
 the function simply increments a overflow counter to be used by the ccp2
@@ -226,12 +240,15 @@ void main()
    enable_interrupts(INT_TIMER0);
    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
    enable_interrupts(GLOBAL);
+   
+   CHARGING_STATE state;
+   state = EVERYTHING_OFF;
    output_low(Electric_Controller_Switch);
    write_dac(0);
    output_high(Contactor_Switch);
    output_low(brake_pin);
    pid_Init(K_P*SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
-   
+   CHARGING_ALLOWED = 1;
    delay_ms(3000);
    //write_dac(1000);
    //delay_ms(10000);
@@ -250,13 +267,32 @@ void main()
       set_adc_channel(Athrottle_channel);
       ADC_DELAY;
       Athrottle = read_adc();
-
-      //CONTROL BOX
-
-      
       if (Athrottle<Athrottle_Min){
          Athrottle=Athrottle_Min;
       }
+
+      //CONTROL BOX
+      if (Acaps> (A_CAPS_MAX +5)){
+         //FREAK OUT
+	      output_low(Electric_Controller_Switch);
+	      write_dac(0);
+	      output_high(Contactor_Switch);
+		  return;
+		  break;
+      }
+      if ((Acaps > A_CAPS_MAX)&CHARGING_ALLOWED){
+         //Stop Charging they are full
+		  state=DISCHARGING_ALLOWED;
+      }
+      else if ((Acaps < A_CAPS_MIN)&!CHARGING_ALLOWED){
+         //Stop running electric, the caps are almost empty
+		  state=CHARGING_ALLOWED;
+      }
+	  else if (A_CAPS_MID_LOW < Acaps < A_CAPS_MID_HIGH){
+		  state=CHARGING_AND_DISCHARING_ALLOWED;
+	  }
+	  
+      
       //Servo to mirror Athrottle -> 
 //      current_servo_position=right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor;//(Athrottle/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
       //printf("Analog Cap %d Analog Throttle %Lu\n",(int) Acaps,Athrottle);
@@ -270,6 +306,8 @@ void main()
       
       returnedValue = pid_Controller((Athrottle-AThrottle_Min),(1280-speeder),& pidData);
       ELECthrottle = ELECthrottle+returnedValue;
+	  
+	  
       if (ELECthrottle>2500){
          ELECthrottle=2500;
       }
@@ -277,21 +315,34 @@ void main()
          ELECthrottle = -200;
       }
       if (ELECthrottle<0){
-         if (CURRENTLY_CHARGING==1){
-            trickBreaking();
-         }
-         //ELECthrottle = 300;
-         CURRENTLY_CHARGING=0;
-         output_high(brake_pin);
-         output_high(Electric_Controller_Switch);
-         printf("BREAKING \n");
+		  if (state==CHARGING_ALLOWED || state ==CHARGING_AND_DISCHARING_ALLOWED){
+	          if (CURRENTLY_CHARGING==1){
+	             trickBreaking();
+	          }
+	          //ELECthrottle = 300;
+	          CURRENTLY_CHARGING=0;
+	          output_high(brake_pin);
+	          output_high(Electric_Controller_Switch);
+	          printf("BREAKING \n");
+		  }
+		  else{
+		  	
+		  }
       }
       else {
-         CURRENTLY_CHARGING=1;
-         output_low(brake_pin);
-         output_low(Electric_Controller_Switch);
-         printf("ACCELERATING \n");
+		  if (state==DISCHARGING_ALLOWED || state ==CHARGING_AND_DISCHARING_ALLOWED){
+	          CURRENTLY_CHARGING=1;
+	          output_low(brake_pin);
+	          output_low(Electric_Controller_Switch);
+	          printf("ACCELERATING \n");
+		  }
+		  else{
+		  	
+		  }
+         
       }
+	  
+	  //SET OUTPUT
       printf("input %ld r %lu speed %ld throttle %ld acaps %ld and %Lx\n",Athrottle-Athrottle_Min,((unsigned int16) returnedValue),1280-speeder,ELECthrottle,Acaps,(unsigned int16) (abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
       write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
       //Next we want to set the ICE throttle. Which should be as high as possible unless

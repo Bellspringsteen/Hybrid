@@ -26,7 +26,7 @@ AdditionalOptionString=
 8=
 [Target Data]
 OptionString=-p +FM
-FileList=HondaHybrid.c
+FileList=e:\hybrid-v2\HondaHybrid.c
 [debugperif]
 selected=Analog/Digital Conv
 [debugram]

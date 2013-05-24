@@ -100,11 +100,11 @@
 077     pid_Controller.@SCRATCH5
 078     @PRINTF_LD_55.@SCRATCH1
 078     pid_Controller.@SCRATCH6
-079-07A @MUL1616.P1
-079-07C @MULFF.P2
-079-07C @SFTOI.P3
-079-07A @ITOF.P4
-079-07A @DIVS1616.P5
+079-07C @MULFF.P1
+079-07C @SFTOI.P2
+079-07A @ITOF.P3
+079-07A @DIVS1616.P4
+079-07A @MUL1616.P5
 079     @PRINTF_LD_55.@SCRATCH2
 079     pid_Controller.@SCRATCH7
 07A-07D @MUL3232.P1
@@ -148,8 +148,8 @@
 0B4     @DIV3232.@SCRATCH3
 0B5     @DIV3232.@SCRATCH4
 0B6     @DIV3232.@SCRATCH5
-10D-10E @WRITE_PROGRAM_MEMORY8.P1
-10D-10E @READ_PROGRAM_MEMORY8.P2
+10D-10E @READ_PROGRAM_MEMORY8.P1
+10D-10E @WRITE_PROGRAM_MEMORY8.P2
 
 ROM Allocation:
 03E2  @delay_ms1
@@ -200,7 +200,7 @@ Project Files:
     pid.h
 
 Units:
-    HondaHybrid.c (main)
+    e:\hybrid-v2\HondaHybrid.c (main)
 
 Compiler Settings:
     Processor:      PIC16F873A
@@ -212,7 +212,7 @@ Compiler Settings:
     ICD Provisions: Yes
 
 Output Files:
-    Errors:      hondahybrid.err
+    Errors:      HondaHybrid.err
     Ext Symbols: HondaHybrid.esym
     INHX8:       HondaHybrid.hex
     Symbols:     HondaHybrid.sym
