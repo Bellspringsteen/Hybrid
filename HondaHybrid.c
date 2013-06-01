@@ -77,6 +77,7 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 
 
 */
+#define TEST
 #define servo_pin PIN_B1  //Setting servo out pin to be hardware pin b1
 #define brake_pin PIN_B4
 #define ADC_DELAY delay_us(20)
@@ -89,6 +90,7 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define Athrottle_channel 0
 #define Electric_Controller_Switch PIN_B0  //TODO misnomer should be something like ACCELERATION_BREAKING_SELECTOR_SWITCH
 #define Contactor_Switch PIN_B2
+#define Contactor_Switch2 PIN_B5
 
 //PID Values
 #define K_P 1.00
@@ -205,6 +207,68 @@ delay_ms(1000);
 }
 
 #ifdef TEST
+
+/*
+TEST SUITE
+*/
+
+void createHeartbeat(){
+  //This creates a heartbeat on pin B1
+  while (1){
+           output_high(servo_pin);        //Set the servo control pin to high
+           delay_ms(1000);
+           output_low(servo_pin);
+           delay_ms(1000);
+    }
+}
+
+void wiperAnalogVoltage(){
+ 
+ //signed int16 test =0;
+ unsigned int16 wiperValue = 0;
+    while (1){
+printf("Wiper Value is now %ld",wiperValue);
+  
+  if (wiperValue>(4095)){
+     wiperValue = 0;
+    printf("Wiper Value is now %ld",wiperValue);
+  }
+  wiperValue=wiperValue+10;
+  write_dac(wiperValue);
+  delay_ms(10);
+    }
+}
+
+void heartbeatElectricControllerPower(){
+    while (1){
+
+  output_high(Contactor_Switch);        //Set the servo control pin to high
+           delay_ms(1000);
+           output_low(Contactor_Switch);
+           delay_ms(1000);
+    }
+}
+
+void wiperServo(){
+    while (1){
+
+  unsigned int16 wiperValue = servo_difference;
+  current_servo_position =right_position-wiperValue;
+  wiperValue--;
+  if (wiperValue<0){
+    wiperValue = servo_difference;
+  }
+  delay_ms(10);
+    }
+}
+
+void printAnalogThrottleInput(){
+    set_adc_channel(Athrottle_channel);
+      ADC_DELAY;
+      Athrottle = read_adc();
+  printf("Analog Throttle is %ld",Athrottle );
+}
+
 void main()
 {
 
@@ -238,7 +302,7 @@ void main()
         //output_low(brake_pin);
         //output_low(Electric_Controller_Switch);
         //wiperAnalogVoltage();
-
+        
         //Test Short Circuit from Pin 11 to pin 8 with 1 second heartbeat. This tests V+ Controller. Also pin 9 should be heartbeating between 0 and 12V
         //heartbeatElectricControllerPower();
 
@@ -246,11 +310,18 @@ void main()
         //wiperServo();
 
        //printAnalogThrottleInput();
+       
+       //Test Electric Controller Out
+       output_high(Contactor_Switch);
+       output_high(Contactor_Switch2);
 
    }
 
 
 }
+
+
+
 #else
 void main()
 {
@@ -358,6 +429,8 @@ void main()
 
 
 }
+
+
 #endif
 
 /*! \brief Initialisation of PID controller parameters.
@@ -464,63 +537,6 @@ printf("\n p_term %ld d_term %ld i_term %ld",p_term,d_term,i_term);
 void pid_Reset_Integrator(pidData_t *pid_st)
 {
   pid_st->sumError = 0;
-}
-
-/*
-TEST SUITE
-*/
-
-void createHeartbeat(){
-  //This creates a heartbeat on pin B1
-  while (1){
-           output_high(servo_pin);        //Set the servo control pin to high
-           delay_ms(1000);
-           output_low(servo_pin);
-           delay_ms(1000);
-    }
-}
-
-void wiperAnalogVoltage(){
-    while (1){
-
-  unsigned int16 wiperValue = 0;
-  if (wiperValue>(2095)){
-     wiperValue = 0;
-    printf("Wiper Value is now 0");
-  }
-  write_dac(wiperValue);
-  delay_ms(10);
-    }
-}
-
-void heartbeatElectricControllerPower(){
-    while (1){
-
-  output_high(Contactor_Switch);        //Set the servo control pin to high
-           delay_ms(1000);
-           output_low(Contactor_Switch);
-           delay_ms(1000);
-    }
-}
-
-void wiperServo(){
-    while (1){
-
-  unsigned int16 wiperValue = servo_difference;
-  current_servo_position =right_position-wiperValue;
-  wiperValue--;
-  if (wiperValue<0){
-    wiperValue = servo_difference;
-  }
-  delay_ms(10);
-    }
-}
-
-void printAnalogThrottleInput(){
-    set_adc_channel(Athrottle_channel);
-      ADC_DELAY;
-      Athrottle = read_adc();
-  printf("Analog Throttle is %ld",Athrottle );
 }
 
 
