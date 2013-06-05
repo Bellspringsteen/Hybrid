@@ -59,6 +59,7 @@ typedef struct PID_DATA{
 //#define FALSE           0
 //#define TRUE            1
 
+boolean checkRunnaway(struct PID_DATA *pid);
 void pid_Init(int16 p_factor, int16 i_factor, int16 d_factor, struct PID_DATA *pid);
 int16 pid_Controller(int16 setPoint, int16 processValue, struct PID_DATA *pid_st);
 void pid_Reset_Integrator(pidData_t *pid_st);

@@ -91,7 +91,10 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define Contactor_Switch PIN_B2
 #define A_CAPS_MAX 893
 #define A_CAPS_MIN 335
-#define V_SPEED_REGEN_MIN 100 //Why is there a minimum speed? Because below this no regenerative action is possible with electric motor
+#define A_CAPS_MID_LOW (A_CAPS_MIN + 100) //This is the low end of the middle ACaps range. The range in which discharge and charge are allowed. 
+#define A_CAPS_MID_HIGH (A_CAPS_MAX - 100) //This is the low end of the middle ACaps range. The range in which discharge and charge are allowed. 
+#define V_SPEED_REGEN_MIN 50 //Why is there a minimum speed? Because below this no regenerative action is possible with electric motor
+#define INSUFFICIENT_BRAKING_RUNNAWAY_ERROR 10000
 
 //PID Values
 #define K_P 1.00
@@ -105,6 +108,7 @@ struct PID_DATA pidData;
 #define left_position 4450
 #define right_position 5300
 #define servo_difference  right_position-left_position
+#define servo_difference_div 5100
 #define ELEC_CONTROLLER_OFFSET 900
 const float Athrottle_servo_factor = ((float) servo_difference)/((float) Athrottle_FULL);
 #define servo_period   65356-50000
@@ -123,9 +127,20 @@ signed int16 ELECthrottle = 0;
 unsigned int16 ICEthrottle = 0;
 unsigned int16 Athrottle = 0;
 unsigned int16 Acaps = 0;
+int1 ICE_ON = 0;
 int1 CURRENTLY_CHARGING = 0;
-signed int16 returnedValue =0;
-int16 speeder = 0; 
+int1 RUNNAWAY_CHECK = 0;
+signed int16 returnedValue =0; 
+
+enum{ 
+   EVERYTHING_OFF,
+   SPEED_TO_LOW_ICE_DIRECT,
+   CHARGING_ALLOWED, 
+   DISCHARGING_ALLOWED, 
+   CHARGING_AND_DISCHARING_ALLOWED,
+   INSUFFICIENT_BRAKING_RUNAWAY
+} CHARGING_STATE; 
+
 /*
 The #int_timer0 interupt is triggered on each timer0 8bit interupt
 the function simply increments a overflow counter to be used by the ccp2
@@ -140,7 +155,7 @@ void timer0_isr(){
       
    
    if (number_of_timer0_interupts_since_reset>=1024){
-      vSpeed = 1280;
+      vSpeed = 0;
       number_of_timer0_interupts_since_reset=1024;
       
       
@@ -160,7 +175,7 @@ servo_period which is 65356-50000 so that the total time is 20ms.
 #int_timer1
 void isr()
 {
-/*
+
 //Make sure that the position is within the left and right positions of the servo
    if (current_servo_position<left_position){
       current_servo_position = left_position;
@@ -182,7 +197,7 @@ void isr()
          set_timer1(servo_period+current_servo_position);          //Set timer for the low position the length is the difference between 
                                                      //the total int16 lenght - high pulse length
       }  
-*/
+
 }
 
 
@@ -195,7 +210,7 @@ TODO will have to put some kind of smoothing mechanism
 void isr2()
 {
 if (number_of_timer0_interupts_since_reset>10){
-vSpeed  = (number_of_timer0_interupts_since_reset+get_timer0());
+vSpeed  = 1280 - (number_of_timer0_interupts_since_reset+get_timer0());
 //vSpeed  = -(get_timer0());
 set_timer0(0);
 number_of_timer0_interupts_since_reset = 0;
@@ -204,7 +219,7 @@ number_of_timer0_interupts_since_reset = 0;
 
 void trickBreaking(){
 write_dac((unsigned int16) 400+ELEC_CONTROLLER_OFFSET);
-delay_ms(1000);      
+delay_ms(500);      
 }
 
 void main()
@@ -229,12 +244,14 @@ void main()
    enable_interrupts(INT_TIMER0);
    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
    enable_interrupts(GLOBAL);
+   
+   CHARGING_STATE = EVERYTHING_OFF;
    output_low(Electric_Controller_Switch);
    write_dac(0);
+   ICE_ON=TRUE;
    output_high(Contactor_Switch);
    output_low(brake_pin);
    pid_Init(K_P*SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
-   
    delay_ms(3000);
    //write_dac(1000);
    //delay_ms(10000);
@@ -253,73 +270,131 @@ void main()
       set_adc_channel(Athrottle_channel);
       ADC_DELAY;
       Athrottle = read_adc();
-
-
-      //CONTROL BOX
-      if (Acaps> A_CAPS_MAX +5){
-         //FREAK OUT
-      }
-      if ((Acaps > A_CAPS_MAX)&CURRENTLY_CHARGING){
-         //Stop Charging they are full
-      }
-      else if ((Acaps < A_CAPS_MIN)&!CURRENTLY_CHARGING){
-         //Stop running electric, the caps are almost empty
-      }
       if (Athrottle<Athrottle_Min){
          Athrottle=Athrottle_Min;
       }
+
+      //SET THE STATE
+      if (Acaps> (A_CAPS_MAX +5)){
+         //FREAK OUT
+         printf("State: Freak Out \n");
+         output_low(Electric_Controller_Switch);
+         write_dac(0);
+         output_high(Contactor_Switch);
+         CHARGING_STATE =EVERYTHING_OFF;
+        return;
+        break;
+      }
+      else if (ICE_ON&&(vSpeed<V_SPEED_REGEN_MIN)){
+         printf("State: Speed To Low \n");
+         CHARGING_STATE=SPEED_TO_LOW_ICE_DIRECT;
+      }
+      else if (checkRunnaway(& pidData)){// INSUFFICIENT_BRAKING_RUNNAWAY_ERROR){
+         printf("State: RUNNAWAY \n");
+         ICE_ON=TRUE;
+         CHARGING_STATE=INSUFFICIENT_BRAKING_RUNAWAY;
+      }
+      else if ((Acaps > A_CAPS_MAX)&&CHARGING_STATE==CHARGING_ALLOWED){
+         //Stop Charging they are full
+         printf("State: Caps Full \n");
+        ICE_ON=FALSE;
+        CHARGING_STATE=DISCHARGING_ALLOWED;
+      }
+      else if ((Acaps < A_CAPS_MIN)&& CHARGING_STATE!=CHARGING_ALLOWED){
+         //Stop running electric, the caps are almost empty
+        printf("State: Caps Empty \n");
+        ICE_ON=TRUE;
+        CHARGING_STATE=CHARGING_ALLOWED;
+      }
+     else if (A_CAPS_MID_LOW < Acaps < A_CAPS_MID_HIGH){
+        printf("State: Normal \n");
+        CHARGING_STATE=CHARGING_AND_DISCHARING_ALLOWED;
+     }
+     
+     
+//PID CONTROLLER
       //Servo to mirror Athrottle -> 
 //      current_servo_position=right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor;//(Athrottle/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
       //printf("Analog Cap %d Analog Throttle %Lu\n",(int) Acaps,Athrottle);
       //current_servo_position =right_position-vSpeed+200;
-      speeder = vSpeed;
       //printf("Speed %lu \n",speeder);
       //SET OUTPUTS 
       //The writing of the ICEThrottle happens in interupts and all that is
       //required is updating ICEthrottle
       //printf("speed before %ld \n",vSpeed);
       
-      returnedValue = pid_Controller((Athrottle-AThrottle_Min),(1280-speeder),& pidData);
+      returnedValue = pid_Controller((Athrottle-AThrottle_Min),vSpeed,& pidData);
       ELECthrottle = ELECthrottle+returnedValue;
+     
+     
       if (ELECthrottle>2500){
          ELECthrottle=2500;
       }
       else if (ELECthrottle<-200){
          ELECthrottle = -200;
       }
+      
+      
+      //SET OUTPUTS
+      if (CHARGING_STATE==EVERYTHING_OFF){
+         
+      }
+      else if (CHARGING_STATE==SPEED_TO_LOW_ICE_DIRECT || CHARGING_STATE==INSUFFICIENT_BRAKING_RUNAWAY){
+         current_servo_position =right_position-ELECthrottle;
+         write_dac(0);
+      }
+      else{
       if (ELECthrottle<0){
-         if (CURRENTLY_CHARGING==1){
-            trickBreaking();
-         }
-         //ELECthrottle = 300;
-         CURRENTLY_CHARGING=0;
-         output_high(brake_pin);
-         output_high(Electric_Controller_Switch);
-         printf("BREAKING \n");
+        if (CHARGING_STATE==CHARGING_ALLOWED || CHARGING_STATE ==CHARGING_AND_DISCHARING_ALLOWED){
+             if (CURRENTLY_CHARGING==1){
+                trickBreaking();
+             }
+             //ELECthrottle = 300;
+             CURRENTLY_CHARGING=0;
+             output_high(brake_pin);
+             output_high(Electric_Controller_Switch);
+             printf("BREAKING \n");
+             write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
+        }
+        else{
+           //Decrease ICE throttle
+           write_dac(0);
+      
+        }
       }
       else {
-         CURRENTLY_CHARGING=1;
-         output_low(brake_pin);
-         output_low(Electric_Controller_Switch);
-         printf("ACCELERATING \n");
+        if (CHARGING_STATE==DISCHARGING_ALLOWED || CHARGING_STATE ==CHARGING_AND_DISCHARING_ALLOWED){
+             CURRENTLY_CHARGING=1;
+             output_low(brake_pin);
+             output_low(Electric_Controller_Switch);
+             printf("ACCELERATING \n");
+             write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
+        }
+        else{
+           //Increase ICE throttle
+           write_dac(0);
+      
+        }
+         
       }
-      printf("input %ld r %lu speed %ld throttle %ld acaps %ld and %Lx\n",Athrottle-Athrottle_Min,((unsigned int16) returnedValue),1280-speeder,ELECthrottle,Acaps,(unsigned int16) (abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
-      write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
-      //Next we want to set the ICE throttle. Which should be as high as possible unless
-      //a)It is charging (throttle <0) and the voltage of the cap pack is at Full
-      //b)Throttle is at max braking and speed still increasing (delta increasing??)
-      
-      //If a) then switch to electric only mode
-      //if b) then decrease the ICE throttle by a factor of the increasing delta
-      
-      
-      //write_dac((right_position-(right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor))*4);
-      //write_dac(((Athrottle-AThrottle_Min)*2)+950);
-
-      //write_dac((right_position-current_servo_position)*4);
+      if (ICE_ON){
+         printf("ICE NORMAL");
+         current_servo_position =right_position-servo_difference_div;
+      }
+      else{
+         current_servo_position =right_position;
+         printf("ICE OFF");
+      }
+      }
+     
    }
    
 
+}
+
+boolean checkRunnaway(struct PID_DATA *pid)
+{
+return (pid->sumError > INSUFFICIENT_BRAKING_RUNNAWAY_ERROR);
 }
 
 /*! \brief Initialisation of PID controller parameters.
@@ -343,7 +418,7 @@ void pid_Init(int16 p_factor, int16 i_factor, int16 d_factor, struct PID_DATA *p
   pid->D_Factor = d_factor;
   // Limits to avoid overflow
   pid->maxError = MAX_INT / (pid->P_Factor + 1);
-  printf("Max %ld factor %ld and pid %ld",MAX_INT,pid->I_Factor,pid->maxError);
+  //printf("Max %ld factor %ld and pid %ld",MAX_INT,pid->I_Factor,pid->maxError);
   pid->maxSumError = MAX_I_TERM / (pid->I_Factor + 1);
 }
 
@@ -373,7 +448,7 @@ int16 pid_Controller(int16 setPoint, int16 processValue, struct PID_DATA *pid_st
   }
   else if (error < (signed int16) -pid_st->maxError){
     p_term = -MAX_INT;
-    printf("p less error %ld a %ld p %ld",error,-pid_st->maxError,p_term);
+    //printf("p less error %ld a %ld p %ld",error,-pid_st->maxError,p_term);
 
   }
   else{
@@ -386,13 +461,13 @@ int16 pid_Controller(int16 setPoint, int16 processValue, struct PID_DATA *pid_st
   if(temp > (signed int32)pid_st->maxSumError){
     i_term = MAX_I_TERM;
     pid_st->sumError = pid_st->maxSumError;
-    printf("\n greater temp %ld a %ld sum %ld",temp,pid_st->maxSumError,pid_st->sumError);
+    //printf("\n greater temp %ld a %ld sum %ld",temp,pid_st->maxSumError,pid_st->sumError);
 
  }
   else if(temp < (signed int32)-pid_st->maxSumError){
     i_term = -MAX_I_TERM;
     pid_st->sumError = -pid_st->maxSumError;
-    printf("\n less temp %ld a %ld sum %ld",temp,pid_st->maxSumError,pid_st->sumError);
+    //printf("\n less temp %ld a %ld sum %ld",temp,pid_st->maxSumError,pid_st->sumError);
 
   }
   else{
@@ -404,7 +479,7 @@ int16 pid_Controller(int16 setPoint, int16 processValue, struct PID_DATA *pid_st
 
   // Calculate Dterm
   d_term = pid_st->D_Factor * (pid_st->lastProcessValue - processValue);
-printf("\n p_term %ld d_term %ld i_term %ld",p_term,d_term,i_term);
+//printf("\n p_term %ld d_term %ld i_term %ld",p_term,d_term,i_term);
   pid_st->lastProcessValue = processValue;
 
   //ret = (p_term + i_term + d_term) / SCALING_FACTOR;
