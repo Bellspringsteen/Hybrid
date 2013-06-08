@@ -89,12 +89,12 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define Athrottle_channel 0
 #define Electric_Controller_Switch PIN_B0
 #define Contactor_Switch PIN_B2
-#define A_CAPS_MAX 793//893
+#define A_CAPS_MAX 725//893
 #define A_CAPS_MIN 335
 #define A_CAPS_MID_LOW (A_CAPS_MIN + 100) //This is the low end of the middle ACaps range. The range in which discharge and charge are allowed. 
 #define A_CAPS_MID_HIGH (A_CAPS_MAX - 100) //This is the low end of the middle ACaps range. The range in which discharge and charge are allowed. 
 #define V_SPEED_REGEN_MIN 50 //Why is there a minimum speed? Because below this no regenerative action is possible with electric motor
-#define INSUFFICIENT_BRAKING_RUNNAWAY_ERROR 10000
+#define INSUFFICIENT_BRAKING_RUNNAWAY_ERROR 50000
 
 //PID Values
 #define K_P 1.00
@@ -105,10 +105,10 @@ int1 pid_Timer = 0;
 struct PID_DATA pidData;
 #define TIME_INTERVAL 157 //TODO replace
 
-#define left_position 4450
+#define left_position 3500//4450
 #define right_position 5300
 #define servo_difference  right_position-left_position
-#define servo_difference_div 5100
+#define servo_difference_div 5200
 #define ELEC_CONTROLLER_OFFSET 900
 const float Athrottle_servo_factor = ((float) servo_difference)/((float) Athrottle_FULL);
 #define servo_period   65356-50000
@@ -138,7 +138,8 @@ enum{
    CHARGING_ALLOWED, 
    DISCHARGING_ALLOWED, 
    CHARGING_AND_DISCHARING_ALLOWED,
-   INSUFFICIENT_BRAKING_RUNAWAY
+   INSUFFICIENT_BRAKING_RUNAWAY,
+   USER_INPUT_OFF
 } CHARGING_STATE; 
 
 /*
@@ -183,7 +184,7 @@ void isr()
    else if (current_servo_position > right_position){
       current_servo_position = right_position;
    }
-
+//printf("Current servo position %ld",current_servo_position);
    if(SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER)
       { 
          output_high(servo_pin);        //Set the servo control pin to high 
@@ -275,15 +276,21 @@ void main()
       }
 
       //SET THE STATE
-      if (Acaps> (A_CAPS_MAX +5)){
+      if (Acaps> (A_CAPS_MAX +10)){
          //FREAK OUT
          printf("State: Freak Out \n");
          output_low(Electric_Controller_Switch);
          write_dac(0);
-         output_high(Contactor_Switch);
+         //ICE_ON = FALSE;
+         ICEthrottle = 0;
+         //output_high(Contactor_Switch);
          CHARGING_STATE =EVERYTHING_OFF;
-        return;
-        break;
+        //return;
+        //break;
+      }
+      else if (Athrottle<(Athrottle_Min+5)){
+         CHARGING_STATE = USER_INPUT_OFF;
+         printf("State: Throttle Off \n");
       }
       else if (ICE_ON&&(vSpeed<V_SPEED_REGEN_MIN)){
          printf("State: Speed To Low \n");
@@ -314,7 +321,7 @@ void main()
      
 //PID CONTROLLER
       //Servo to mirror Athrottle -> 
-//      current_servo_position=right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor;//(Athrottle/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
+      //current_servo_position=right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor;//(Athrottle/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
       //printf("Analog Cap %d Analog Throttle %Lu\n",(int) Acaps,Athrottle);
       //current_servo_position =right_position-vSpeed+200;
       //printf("Speed %lu \n",speeder);
@@ -330,17 +337,26 @@ void main()
       if (ELECthrottle>2500){
          ELECthrottle=2500;
       }
-      else if (ELECthrottle<-200){
-         ELECthrottle = -200;
+      else if (ELECthrottle<-500){
+         ELECthrottle = -500;
       }
       
       
       //SET OUTPUTS
-      if (CHARGING_STATE==EVERYTHING_OFF){
-         
+      if (CHARGING_STATE==EVERYTHING_OFF||CHARGING_STATE==USER_INPUT_OFF){
+         ICEthrottle = 0;
+         ICE_ON = FALSE;
+         current_servo_position =right_position;
+         write_dac(0);
       }
       else if (CHARGING_STATE==SPEED_TO_LOW_ICE_DIRECT || CHARGING_STATE==INSUFFICIENT_BRAKING_RUNAWAY){
-         current_servo_position =right_position-ELECthrottle;
+         if (ELECthrottle>0){
+            current_servo_position =right_position- (ELECthrottle);
+         }
+         else{
+            current_servo_position =right_position;
+         }
+         ICE_ON = TRUE;
          write_dac(0);
       }
       else{
@@ -378,15 +394,15 @@ void main()
          
       }
       if (ICE_ON){
-         printf("ICE NORMAL");
-         current_servo_position =right_position-servo_difference_div;
+         printf("ICE NORMAL \n");
+         current_servo_position =right_position-800;
       }
       else{
          current_servo_position =right_position;
-         printf("ICE OFF");
+         printf("ICE OFF \n");
       }
       }
-     
+           
    }
    
 
@@ -394,7 +410,8 @@ void main()
 
 boolean checkRunnaway(struct PID_DATA *pid)
 {
-return (pid->sumError > INSUFFICIENT_BRAKING_RUNNAWAY_ERROR);
+//return (pid->sumError > INSUFFICIENT_BRAKING_RUNNAWAY_ERROR);
+return FALSE;
 }
 
 /*! \brief Initialisation of PID controller parameters.
