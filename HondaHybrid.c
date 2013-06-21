@@ -260,10 +260,10 @@ void main()
    //output_high(brake_pin);
    //output_high(Electric_Controller_Switch);
    while(TRUE) {
-
+      printf("Check");
       //GET INPUTS
       //Vspeedhappens in interrupts
-      
+      delay_ms(150);
       set_adc_channel(Acaps_channel);
       ADC_DELAY;
       Acaps = read_adc();
@@ -322,13 +322,13 @@ void main()
 //PID CONTROLLER
       //Servo to mirror Athrottle -> 
       //current_servo_position=right_position-(Athrottle-Athrottle_Min)*Athrottle_servo_factor;//(Athrottle/Athrottle_Full)*servo_difference;//(vSpeed/65536.0)*(2500);
-      //printf("Analog Cap %d Analog Throttle %Lu\n",(int) Acaps,Athrottle);
+      ////printf("Analog Cap %d Analog Throttle %Lu\n",(int) Acaps,Athrottle);
       //current_servo_position =right_position-vSpeed+200;
-      //printf("Speed %lu \n",speeder);
+      ////printf("Speed %lu \n",speeder);
       //SET OUTPUTS 
       //The writing of the ICEThrottle happens in interupts and all that is
       //required is updating ICEthrottle
-      //printf("speed before %ld \n",vSpeed);
+      ////printf("speed before %ld \n",vSpeed);
       
       returnedValue = pid_Controller((Athrottle-AThrottle_Min),vSpeed,& pidData);
       ELECthrottle = ELECthrottle+returnedValue;
@@ -369,7 +369,7 @@ void main()
              CURRENTLY_CHARGING=0;
              output_high(brake_pin);
              output_high(Electric_Controller_Switch);
-             printf("BREAKING \n");
+             //printf("BREAKING \n");
              write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
         }
         else{
@@ -383,7 +383,7 @@ void main()
              CURRENTLY_CHARGING=1;
              output_low(brake_pin);
              output_low(Electric_Controller_Switch);
-             printf("ACCELERATING \n");
+             //printf("ACCELERATING \n");
              write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
         }
         else{
@@ -394,12 +394,12 @@ void main()
          
       }
       if (ICE_ON){
-         printf("ICE NORMAL \n");
+         //printf("ICE NORMAL \n");
          current_servo_position =right_position-800;
       }
       else{
          current_servo_position =right_position;
-         printf("ICE OFF \n");
+         //printf("ICE OFF \n");
       }
       }
            
@@ -435,7 +435,7 @@ void pid_Init(int16 p_factor, int16 i_factor, int16 d_factor, struct PID_DATA *p
   pid->D_Factor = d_factor;
   // Limits to avoid overflow
   pid->maxError = MAX_INT / (pid->P_Factor + 1);
-  //printf("Max %ld factor %ld and pid %ld",MAX_INT,pid->I_Factor,pid->maxError);
+  ////printf("Max %ld factor %ld and pid %ld",MAX_INT,pid->I_Factor,pid->maxError);
   pid->maxSumError = MAX_I_TERM / (pid->I_Factor + 1);
 }
 
@@ -453,24 +453,24 @@ int16 pid_Controller(int16 setPoint, int16 processValue, struct PID_DATA *pid_st
   signed int16 error, p_term, d_term;
   signed int32 i_term, ret, temp;
     processValue=processValue/4;
-  //printf("input %ld speed %ld ",setPoint,processValue);
+  ////printf("input %ld speed %ld ",setPoint,processValue);
   error = setPoint - processValue;
   
   // Calculate Pterm and limit error overflow
   
   if (error > (signed int16) pid_st->maxError){
     p_term = MAX_INT;
-    //printf("p greater error %ld a %ld p %ld",error,pid_st->maxError,p_term);
+    ////printf("p greater error %ld a %ld p %ld",error,pid_st->maxError,p_term);
 
   }
   else if (error < (signed int16) -pid_st->maxError){
     p_term = -MAX_INT;
-    //printf("p less error %ld a %ld p %ld",error,-pid_st->maxError,p_term);
+    ////printf("p less error %ld a %ld p %ld",error,-pid_st->maxError,p_term);
 
   }
   else{
     p_term = (signed int16) (pid_st->P_Factor * (float) error);
-    //printf("error %ld a %ld p %ld",error,pid_st->maxError,p_term);
+    ////printf("error %ld a %ld p %ld",error,pid_st->maxError,p_term);
   }
   
   // Calculate Iterm and limit integral runaway
@@ -478,25 +478,25 @@ int16 pid_Controller(int16 setPoint, int16 processValue, struct PID_DATA *pid_st
   if(temp > (signed int32)pid_st->maxSumError){
     i_term = MAX_I_TERM;
     pid_st->sumError = pid_st->maxSumError;
-    //printf("\n greater temp %ld a %ld sum %ld",temp,pid_st->maxSumError,pid_st->sumError);
+    ////printf("\n greater temp %ld a %ld sum %ld",temp,pid_st->maxSumError,pid_st->sumError);
 
  }
   else if(temp < (signed int32)-pid_st->maxSumError){
     i_term = -MAX_I_TERM;
     pid_st->sumError = -pid_st->maxSumError;
-    //printf("\n less temp %ld a %ld sum %ld",temp,pid_st->maxSumError,pid_st->sumError);
+    ////printf("\n less temp %ld a %ld sum %ld",temp,pid_st->maxSumError,pid_st->sumError);
 
   }
   else{
     pid_st->sumError = temp;
     i_term = pid_st->I_Factor * pid_st->sumError;
-    //printf("\n eror temp %ld i_term %ld sum %ld error %ld ",temp,i_term,pid_st->sumError,error);
+    ////printf("\n eror temp %ld i_term %ld sum %ld error %ld ",temp,i_term,pid_st->sumError,error);
 
   }
 
   // Calculate Dterm
   d_term = pid_st->D_Factor * (pid_st->lastProcessValue - processValue);
-//printf("\n p_term %ld d_term %ld i_term %ld",p_term,d_term,i_term);
+////printf("\n p_term %ld d_term %ld i_term %ld",p_term,d_term,i_term);
   pid_st->lastProcessValue = processValue;
 
   //ret = (p_term + i_term + d_term) / SCALING_FACTOR;
