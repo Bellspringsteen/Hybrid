@@ -223,6 +223,14 @@ write_dac((unsigned int16) 400+ELEC_CONTROLLER_OFFSET);
 delay_ms(500);      
 }
 
+void printfLog(char string){
+   #ifdef DEBUG
+      printf(string);
+   #else
+  
+   #endif
+}
+
 void main()
 {  
    
@@ -254,16 +262,20 @@ void main()
    output_low(brake_pin);
    pid_Init(K_P*SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
    delay_ms(3000);
+   current_servo_position =right_position-800;
+   delay_ms(2000);
+   current_servo_position =right_position;
    //write_dac(1000);
    //delay_ms(10000);
    //output_high(Contactor_Switch);
    //output_high(brake_pin);
    //output_high(Electric_Controller_Switch);
    while(TRUE) {
-      printf("Check");
+      
+      printfLog("Check");
       //GET INPUTS
       //Vspeedhappens in interrupts
-      delay_ms(150);
+      delay_ms(250);
       set_adc_channel(Acaps_channel);
       ADC_DELAY;
       Acaps = read_adc();
@@ -278,7 +290,7 @@ void main()
       //SET THE STATE
       if (Acaps> (A_CAPS_MAX +10)){
          //FREAK OUT
-         printf("State: Freak Out \n");
+         //printf("State: Freak Out \n");
          output_low(Electric_Controller_Switch);
          write_dac(0);
          //ICE_ON = FALSE;
@@ -290,31 +302,31 @@ void main()
       }
       else if (Athrottle<(Athrottle_Min+5)){
          CHARGING_STATE = USER_INPUT_OFF;
-         printf("State: Throttle Off \n");
+         printfLog("State: Throttle Off \n");
       }
       else if (ICE_ON&&(vSpeed<V_SPEED_REGEN_MIN)){
-         printf("State: Speed To Low \n");
+         printfLog("State: Speed To Low \n");
          CHARGING_STATE=SPEED_TO_LOW_ICE_DIRECT;
       }
       else if (checkRunnaway(& pidData)){// INSUFFICIENT_BRAKING_RUNNAWAY_ERROR){
-         printf("State: RUNNAWAY \n");
+         printfLog("State: RUNNAWAY \n");
          ICE_ON=TRUE;
          CHARGING_STATE=INSUFFICIENT_BRAKING_RUNAWAY;
       }
       else if ((Acaps > A_CAPS_MAX)&&(CHARGING_STATE==CHARGING_ALLOWED||CHARGING_STATE==CHARGING_AND_DISCHARING_ALLOWED)){
          //Stop Charging they are full
-         printf("State: Caps Full \n");
+         printfLog("State: Caps Full \n");
         ICE_ON=FALSE;
         CHARGING_STATE=DISCHARGING_ALLOWED;
       }
       else if ((Acaps < A_CAPS_MIN)&& CHARGING_STATE!=CHARGING_ALLOWED){
          //Stop running electric, the caps are almost empty
-        printf("State: Caps Empty \n");
+        printfLog("State: Caps Empty \n");
         ICE_ON=TRUE;
         CHARGING_STATE=CHARGING_ALLOWED;
       }
      else if (A_CAPS_MID_LOW < Acaps < A_CAPS_MID_HIGH){
-        printf("State: Normal \n");
+        printfLog("State: Normal \n");
         CHARGING_STATE=CHARGING_AND_DISCHARING_ALLOWED;
      }
      
