@@ -231,6 +231,123 @@ void printfLog(char string){
    #endif
 }
 
+#ifdef TEST
+
+/*
+TEST SUITE
+*/
+
+void createHeartbeat(){
+  //This creates a heartbeat on pin B1
+  while (1){
+           output_high(servo_pin);        //Set the servo control pin to high
+           delay_ms(1000);
+           output_low(servo_pin);
+           delay_ms(1000);
+    }
+}
+
+void wiperAnalogVoltage(){
+ 
+ //signed int16 test =0;
+ unsigned int16 wiperValue = 0;
+    while (1){
+printf("Wiper Value is now %ld",wiperValue);
+  
+  if (wiperValue>(4095)){
+     wiperValue = 0;
+    printf("Wiper Value is now %ld",wiperValue);
+  }
+  wiperValue=wiperValue+10;
+  write_dac(wiperValue);
+  delay_ms(10);
+    }
+}
+
+void heartbeatElectricControllerPower(){
+    while (1){
+
+  output_high(Contactor_Switch);        //Set the servo control pin to high
+           delay_ms(1000);
+           output_low(Contactor_Switch);
+           delay_ms(1000);
+    }
+}
+
+void wiperServo(){
+    while (1){
+
+  unsigned int16 wiperValue = servo_difference;
+  current_servo_position =right_position-wiperValue;
+  wiperValue--;
+  if (wiperValue<0){
+    wiperValue = servo_difference;
+  }
+  delay_ms(10);
+    }
+}
+
+void printAnalogThrottleInput(){
+    set_adc_channel(Athrottle_channel);
+      ADC_DELAY;
+      Athrottle = read_adc();
+  printf("Analog Throttle is %ld",Athrottle );
+}
+
+void main()
+{
+
+   setup_adc_ports(NO_ANALOGS);
+   setup_adc(ADC_OFF);
+   setup_spi(FALSE);
+
+   setup_counters(RTCC_INTERNAL,RTCC_DIV_2);
+   setup_timer_1(T1_DISABLED);
+   setup_timer_2(T2_DISABLED,0,1);
+   setup_port_a(ALL_ANALOG);
+   setup_adc(ADC_CLOCK_INTERNAL);
+
+   init_dac();
+
+   setup_timer_1(T1_DIV_BY_2| T1_INTERNAL);
+   setup_timer_0(RTCC_INTERNAL|RTCC_DIV_128);
+   setup_ccp2(CCP_CAPTURE_RE);    // Configure CCP2 to capture fall
+   enable_interrupts(INT_CCP2);   // Setup interrupt on falling edge
+   enable_interrupts(INT_TIMER0);
+   enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
+   enable_interrupts(GLOBAL);
+
+   while(TRUE) {
+        //Test Breaking Analog Voltage. Should produce analog voltage  on pin 13 as well as drive pin 12 LOW
+        //output_high(brake_pin);
+        //output_high(Electric_Controller_Switch);
+        //wiperAnalogVoltage();
+
+        //Test Accelerating Analog Voltage. Should produce analog voltage on pin 15 and let pin 12 float.
+        //output_low(brake_pin);
+        //output_low(Electric_Controller_Switch);
+        //wiperAnalogVoltage();
+        
+        //Test Short Circuit from Pin 11 to pin 8 with 1 second heartbeat. This tests V+ Controller. Also pin 9 should be heartbeating between 0 and 12V
+        //heartbeatElectricControllerPower();
+
+        //Test Wiper of Servo
+        //wiperServo();
+
+       //printAnalogThrottleInput();
+       
+       //Test Electric Controller Out
+       output_high(Contactor_Switch);
+       output_high(Contactor_Switch2);
+
+   }
+
+
+}
+
+
+
+#else
 void main()
 {  
    
@@ -419,6 +536,8 @@ void main()
    
 
 }
+
+#endif
 
 boolean checkRunnaway(struct PID_DATA *pid)
 {
