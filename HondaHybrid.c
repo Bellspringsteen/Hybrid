@@ -1,3 +1,4 @@
+//#define DEBUG
 #include "HondaHybrid.h"
 #include "pid.h"
 /*
@@ -97,11 +98,10 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define INSUFFICIENT_BRAKING_RUNNAWAY_ERROR 50000
 
 //PID Values
-#define K_P 1.00
+#define K_P 0.80
 #define K_I 0.00
 #define K_D 0.00
 
-int1 pid_Timer = 0;
 struct PID_DATA pidData;
 #define TIME_INTERVAL 157 //TODO replace
 
@@ -110,18 +110,12 @@ struct PID_DATA pidData;
 #define servo_difference  right_position-left_position
 #define servo_difference_div 5200
 #define ELEC_CONTROLLER_OFFSET 900
-const float Athrottle_servo_factor = ((float) servo_difference)/((float) Athrottle_FULL);
+//const float Athrottle_servo_factor = ((float) servo_difference)/((float) Athrottle_FULL);
 #define servo_period   65356-50000
 unsigned int16 current_servo_position=right_position;
 int1 SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0;
-int1 test_boolean = 0;
-
-int1 test_switch = 0;
-unsigned int16 test_counter = 0;
-//int16 returnedValue = 0;
 
 unsigned int16 number_of_timer0_interupts_since_reset =0;
-unsigned int16 timer0_since_last_reset= 0;
 unsigned int16 vSpeed= 0;
 signed int16 ELECthrottle = 0;
 unsigned int16 ICEthrottle = 0;
@@ -223,11 +217,12 @@ write_dac((unsigned int16) 400+ELEC_CONTROLLER_OFFSET);
 delay_ms(500);      
 }
 
-void printfLog(char string){
+void printfLogf(char string){
    #ifdef DEBUG
-      printf(string);
+      printf("IN PrintfLog");
+      printf("%c",string);
    #else
-  
+      delay_ms(250);
    #endif
 }
 
@@ -389,10 +384,9 @@ void main()
    //output_high(Electric_Controller_Switch);
    while(TRUE) {
       
-      printfLog("Check");
       //GET INPUTS
       //Vspeedhappens in interrupts
-      delay_ms(250);
+      
       set_adc_channel(Acaps_channel);
       ADC_DELAY;
       Acaps = read_adc();
@@ -419,32 +413,61 @@ void main()
       }
       else if (Athrottle<(Athrottle_Min+5)){
          CHARGING_STATE = USER_INPUT_OFF;
-         printfLog("State: Throttle Off \n");
-      }
+         #ifdef DEBUG
+            printf("State: Throttle Off \n");  
+         #else
+            delay_ms(250);
+         #endif
+         
+         }
       else if (ICE_ON&&(vSpeed<V_SPEED_REGEN_MIN)){
-         printfLog("State: Speed To Low \n");
+         #ifdef DEBUG
+            printf("State: Speed To Low %ld \n",vSpeed);  
+         #else
+            delay_ms(250);
+         #endif
          CHARGING_STATE=SPEED_TO_LOW_ICE_DIRECT;
       }
       else if (checkRunnaway(& pidData)){// INSUFFICIENT_BRAKING_RUNNAWAY_ERROR){
-         printfLog("State: RUNNAWAY \n");
+         #ifdef DEBUG
+            printf("State: RUNNAWAY \n");  
+         #else
+            delay_ms(250);
+         #endif
          ICE_ON=TRUE;
          CHARGING_STATE=INSUFFICIENT_BRAKING_RUNAWAY;
       }
       else if ((Acaps > A_CAPS_MAX)&&(CHARGING_STATE==CHARGING_ALLOWED||CHARGING_STATE==CHARGING_AND_DISCHARING_ALLOWED)){
          //Stop Charging they are full
-         printfLog("State: Caps Full \n");
+         
+         #ifdef DEBUG
+            printf("State: Caps Full \n");  
+         #else
+            delay_ms(250);
+         #endif
+         
         ICE_ON=FALSE;
         CHARGING_STATE=DISCHARGING_ALLOWED;
       }
       else if ((Acaps < A_CAPS_MIN)&& CHARGING_STATE!=CHARGING_ALLOWED){
          //Stop running electric, the caps are almost empty
-        printfLog("State: Caps Empty \n");
+        
+        #ifdef DEBUG
+            printf("State: Caps Empty \n");  
+         #else
+            delay_ms(250);
+         #endif
+
         ICE_ON=TRUE;
         CHARGING_STATE=CHARGING_ALLOWED;
       }
      else if (A_CAPS_MID_LOW < Acaps < A_CAPS_MID_HIGH){
-        printfLog("State: Normal \n");
-        CHARGING_STATE=CHARGING_AND_DISCHARING_ALLOWED;
+        #ifdef DEBUG
+            printf("State: Normal \n");  
+         #else
+            delay_ms(250);
+         #endif
+         CHARGING_STATE=CHARGING_AND_DISCHARING_ALLOWED;
      }
      
      

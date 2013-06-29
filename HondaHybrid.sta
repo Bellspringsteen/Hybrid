@@ -1,24 +1,24 @@
 
-ROM used: 2470 (60%)
-          2739 (67%) including unused fragments
+ROM used: 2191 (53%)
+          2659 (65%) including unused fragments
 
-          3 Average locations per line
-          12 Average locations per statement
+          2 Average locations per line
+          10 Average locations per statement
 
-RAM used: 60 (31%) at main() level
-          104 (54%) worst case
+RAM used: 56 (29%) at main() level
+          103 (54%) worst case
 
 Stack used: 3 worst case (out of 8 total available)
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-  538   192  90  HondaHybrid.c
-   12     0   0  HondaHybrid.h
+  680   191  90  HondaHybrid.c
+   15     0   0  HondaHybrid.h
   274     0   0  16F873A.h
    68    22  10  C:\Program Files\PICC\drivers\mcp4921.c
    68     0   0  pid.h
 ----- -----
-  960   214 Total
+ 1105   213 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
@@ -29,46 +29,38 @@ Page ROM  %  RAM   Vol Diff  Functions:
 0     88   4   2   305  4.6  isr
 0     29   1   0   112  3.3  isr2
 0     14   1   1    56  1.6  trickBreaking
-0      1   0   1     9  0.7  printfLog
-1    691  28   4  4452  9.3  MAIN
-0     10   0   0  4357  9.3  @const121
-0     26   1   0             @const122
-0     26   1   0             @const123
-0     22   1   0             @const124
-0     23   1   0             @const125
-0     24   1   0    31  1.7  @const126
-0     20   1   0    31  1.7  @const127
+1    611  28   4  4373  9.4  MAIN
 0      4   0   1    31  1.7  checkRunnaway
-0    239  10  15   409  4.5  pid_Init
- Inline        5  1578  8.7  @DIV1616
- Inline       13  1578  8.7  @DIV3232
-0   1035  42  30  1578  8.7  pid_Controller
- Inline        2             @SITOF
- Inline        2  1578  8.7  @ITOF
- Inline       13             @MULFF
- Inline        4             @SFTOI
- Inline       13             @MUL3232
- Inline        5    41  2.1  @MUL1616
- Inline        6    41  2.1  @DIVS1616
+0    239  11  15   409  4.5  pid_Init
+ Inline        5   409  4.5  @DIV1616
+ Inline       13  4413  9.1  @DIV3232
+0    988  45  30  1578  8.7  pid_Controller
+ Inline        2  1578  8.7  @SITOF
+ Inline        2             @ITOF
+ Inline       13    31  1.7  @MULFF
+ Inline        4   409  4.5  @SFTOI
+ Inline       13    31  1.7  @MUL3232
+ Inline        5    31  1.7  @MUL1616
+ Inline        6    31  1.7  @DIVS1616
 
 Program metrics:
-    Functions               19
-    Statements              214
-    Comments                320
-    Volume (V)              24876
-    Difficilty (D)          93.5
-    Effort to implement (E) 2325440
-    Time to implement (T)   35 hours, 53 minutes
-    Est Delivered Bugs (B)  6
-    Cyclomatic Complexity   67
-    Maintainability (MI)    97
+    Functions               18
+    Statements              213
+    Comments                317
+    Volume (V)              21117
+    Difficilty (D)          83.1
+    Effort to implement (E) 1754853
+    Time to implement (T)   27 hours, 5 minutes
+    Est Delivered Bugs (B)  5
+    Cyclomatic Complexity   55
+    Maintainability (MI)    104
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00003     4  0  
 00004-00044    65  0  
-00045-007FF  1710  269  
-00800-00FFF   691  1357  
+00045-007FF  1511  468  
+00800-00FFF   611  1437  
 
 
 

@@ -1,5 +1,5 @@
 ÀÄHondaHybrid
-   ÃÄMAIN  1/691  Ram=4
+   ÃÄMAIN  1/611  Ram=4
    ³  ÃÄ??0??
    ³  ÃÄinit_dac  0/24  Ram=0
    ³  ÃÄwrite_dac  0/92  Ram=6
@@ -8,24 +8,15 @@
    ³  ³  ÀÄ@DIV3232  (Inline)  Ram=13
    ³  ÃÄ@delay_ms1  0/19  Ram=1
    ³  ÃÄ@delay_ms1  0/19  Ram=1
-   ³  ÃÄ@const121  0/10  Ram=0
-   ³  ÃÄprintfLog  0/1  Ram=1
-   ³  ÃÄ@delay_ms1  0/19  Ram=1
    ³  ÃÄwrite_dac  0/92  Ram=6
-   ³  ÃÄ@const122  0/26  Ram=0
-   ³  ÃÄprintfLog  0/1  Ram=1
-   ³  ÃÄ@const123  0/26  Ram=0
-   ³  ÃÄprintfLog  0/1  Ram=1
+   ³  ÃÄ@delay_ms1  0/19  Ram=1
+   ³  ÃÄ@delay_ms1  0/19  Ram=1
    ³  ÃÄcheckRunnaway  0/4  Ram=1
-   ³  ÃÄ@const124  0/22  Ram=0
-   ³  ÃÄprintfLog  0/1  Ram=1
-   ³  ÃÄ@const125  0/23  Ram=0
-   ³  ÃÄprintfLog  0/1  Ram=1
-   ³  ÃÄ@const126  0/24  Ram=0
-   ³  ÃÄprintfLog  0/1  Ram=1
-   ³  ÃÄ@const127  0/20  Ram=0
-   ³  ÃÄprintfLog  0/1  Ram=1
-   ³  ÃÄpid_Controller  0/1035  Ram=30
+   ³  ÃÄ@delay_ms1  0/19  Ram=1
+   ³  ÃÄ@delay_ms1  0/19  Ram=1
+   ³  ÃÄ@delay_ms1  0/19  Ram=1
+   ³  ÃÄ@delay_ms1  0/19  Ram=1
+   ³  ÃÄpid_Controller  0/988  Ram=30
    ³  ³  ÃÄ@SITOF  (Inline)  Ram=2
    ³  ³  ÃÄ@ITOF  (Inline)  Ram=2
    ³  ³  ÃÄ@MULFF  (Inline)  Ram=13

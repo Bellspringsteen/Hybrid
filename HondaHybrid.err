@@ -1,9 +1,3 @@
->>> Warning 202 "HondaHybrid.c" Line 104(16,25): Variable never used:   pid_Timer
->>> Warning 202 "HondaHybrid.c" Line 113(36,58): Variable never used:   Athrottle_servo_factor
->>> Warning 202 "HondaHybrid.c" Line 117(19,31): Variable never used:   test_boolean
->>> Warning 202 "HondaHybrid.c" Line 119(18,29): Variable never used:   test_switch
->>> Warning 202 "HondaHybrid.c" Line 120(29,41): Variable never used:   test_counter
->>> Warning 202 "HondaHybrid.c" Line 124(16,39): Variable never used:   timer0_since_last_reset
->>> Warning 202 "HondaHybrid.c" Line 132(21,35): Variable never used:   RUNNAWAY_CHECK
-      Memory usage:   ROM=60%      RAM=31% - 54%
-      0 Errors,  7 Warnings.
+>>> Warning 202 "HondaHybrid.c" Line 126(21,35): Variable never used:   RUNNAWAY_CHECK
+      Memory usage:   ROM=53%      RAM=29% - 54%
+      0 Errors,  1 Warnings.
