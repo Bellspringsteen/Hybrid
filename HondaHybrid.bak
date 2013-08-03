@@ -98,15 +98,15 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define INSUFFICIENT_BRAKING_RUNNAWAY_ERROR 50000
 
 //PID Values
-#define K_P 0.10
+#define K_P 1.50
 #define K_I 0.00
-#define K_D 0.00
+#define K_D 0.20
 
 struct PID_DATA pidData;
 #define TIME_INTERVAL 157 //TODO replace
 
-#define left_position 3500//4450
-#define right_position 5300
+#define left_position 3900//4450
+#define right_position 6100
 #define servo_difference  right_position-left_position
 #define servo_difference_div 5200
 #define ELEC_CONTROLLER_OFFSET 900
@@ -386,7 +386,6 @@ void main()
       
       //GET INPUTS
       //Vspeedhappens in interrupts
-      
       set_adc_channel(Acaps_channel);
       ADC_DELAY;
       Acaps = read_adc();
@@ -397,7 +396,6 @@ void main()
       if (Athrottle<Athrottle_Min){
          Athrottle=Athrottle_Min;
       }
-
       //SET THE STATE
       if (Acaps> (A_CAPS_MAX +10)){
          //FREAK OUT
@@ -480,17 +478,17 @@ void main()
       //SET OUTPUTS 
       //The writing of the ICEThrottle happens in interupts and all that is
       //required is updating ICEthrottle
-      ////printf("speed before %ld \n",vSpeed);
       
       returnedValue = pid_Controller((Athrottle-AThrottle_Min),vSpeed,& pidData);
       ELECthrottle = ELECthrottle+returnedValue;
-     
+      printf("Throttle %ld and electhrottle %ld \n",Athrottle,ELECthrottle);
+      
      
       if (ELECthrottle>2500){
          ELECthrottle=2500;
       }
-      else if (ELECthrottle<-500){
-         ELECthrottle = -500;
+      else if (ELECthrottle<-1500){
+         ELECthrottle = -1500;
       }
       
       
@@ -547,7 +545,7 @@ void main()
       }
       if (ICE_ON){
          //printf("ICE NORMAL \n");
-         current_servo_position =right_position-800;
+         current_servo_position =right_position-1000;
       }
       else{
          current_servo_position =right_position;
