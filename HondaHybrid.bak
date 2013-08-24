@@ -91,7 +91,7 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define Electric_Controller_Switch PIN_B0
 #define Contactor_Switch PIN_B2
 #define A_CAPS_MAX 725//893
-#define A_CAPS_MIN 335
+#define A_CAPS_MIN 400//335
 #define A_CAPS_MID_LOW (A_CAPS_MIN + 100) //This is the low end of the middle ACaps range. The range in which discharge and charge are allowed. 
 #define A_CAPS_MID_HIGH (A_CAPS_MAX - 100) //This is the low end of the middle ACaps range. The range in which discharge and charge are allowed. 
 #define V_SPEED_REGEN_MIN 50 //Why is there a minimum speed? Because below this no regenerative action is possible with electric motor
@@ -106,7 +106,7 @@ struct PID_DATA pidData;
 #define TIME_INTERVAL 157 //TODO replace
 
 #define left_position 3900//4450
-#define right_position 6100
+#define right_position 6500
 #define servo_difference  right_position-left_position
 #define servo_difference_div 5200
 #define ELEC_CONTROLLER_OFFSET 900
@@ -481,14 +481,14 @@ void main()
       
       returnedValue = pid_Controller((Athrottle-AThrottle_Min),vSpeed,& pidData);
       ELECthrottle = ELECthrottle+returnedValue;
-      printf("Throttle %ld and electhrottle %ld \n",Athrottle,ELECthrottle);
+      //printf("Throttle %ld and electhrottle %ld \n",Athrottle,ELECthrottle);
       
      
       if (ELECthrottle>2500){
          ELECthrottle=2500;
       }
-      else if (ELECthrottle<-1500){
-         ELECthrottle = -1500;
+      else if (ELECthrottle<-2500){
+         ELECthrottle = -2500;
       }
       
       
@@ -545,7 +545,7 @@ void main()
       }
       if (ICE_ON){
          //printf("ICE NORMAL \n");
-         current_servo_position =right_position-1000;
+         current_servo_position = left_position +1000;
       }
       else{
          current_servo_position =right_position;

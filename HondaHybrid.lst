@@ -1,4 +1,4 @@
-CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
+CCS PCM C Compiler, Version 4.084, 46530               24-Aug-13 15:30
 
                Filename: HondaHybrid.lst
 
@@ -463,7 +463,7 @@ CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
 .................... #define Electric_Controller_Switch PIN_B0 
 .................... #define Contactor_Switch PIN_B2 
 .................... #define A_CAPS_MAX 725//893 
-.................... #define A_CAPS_MIN 335 
+.................... #define A_CAPS_MIN 400//335 
 .................... #define A_CAPS_MID_LOW (A_CAPS_MIN + 100) //This is the low end of the middle ACaps range. The range in which discharge and charge are allowed.  
 .................... #define A_CAPS_MID_HIGH (A_CAPS_MAX - 100) //This is the low end of the middle ACaps range. The range in which discharge and charge are allowed.  
 .................... #define V_SPEED_REGEN_MIN 50 //Why is there a minimum speed? Because below this no regenerative action is possible with electric motor 
@@ -478,7 +478,7 @@ CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
 .................... #define TIME_INTERVAL 157 //TODO replace 
 ....................  
 .................... #define left_position 3900//4450 
-.................... #define right_position 6100 
+.................... #define right_position 6500 
 .................... #define servo_difference  right_position-left_position 
 .................... #define servo_difference_div 5200 
 .................... #define ELEC_CONTROLLER_OFFSET 900 
@@ -486,9 +486,9 @@ CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
 .................... #define servo_period   65356-50000 
 .................... unsigned int16 current_servo_position=right_position; 
 *
-080D:  MOVLW  D4
+080D:  MOVLW  64
 080E:  MOVWF  41
-080F:  MOVLW  17
+080F:  MOVLW  19
 0810:  MOVWF  42
 .................... int1 SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 0; 
 0811:  BCF    43.0
@@ -602,20 +602,20 @@ CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
 ....................    else if (current_servo_position > right_position){ 
 0061:  GOTO   071
 0062:  MOVF   42,W
-0063:  SUBLW  16
+0063:  SUBLW  18
 0064:  BTFSC  03.0
 0065:  GOTO   071
 0066:  XORLW  FF
 0067:  BTFSS  03.2
 0068:  GOTO   06D
 0069:  MOVF   41,W
-006A:  SUBLW  D4
+006A:  SUBLW  64
 006B:  BTFSC  03.0
 006C:  GOTO   071
 ....................       current_servo_position = right_position; 
-006D:  MOVLW  17
+006D:  MOVLW  19
 006E:  MOVWF  42
-006F:  MOVLW  D4
+006F:  MOVLW  64
 0070:  MOVWF  41
 ....................    } 
 .................... //printf("Current servo position %ld",current_servo_position); 
@@ -1031,10 +1031,10 @@ CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
 0887:  BSF    0A.3
 0888:  DECFSZ 53,F
 0889:  GOTO   083
-....................    current_servo_position =right_position-800; 
-088A:  MOVLW  14
+....................    current_servo_position =right_position-1800; 
+088A:  MOVLW  12
 088B:  MOVWF  42
-088C:  MOVLW  B4
+088C:  MOVLW  5C
 088D:  MOVWF  41
 ....................    delay_ms(2000); 
 088E:  MOVLW  08
@@ -1047,9 +1047,9 @@ CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
 0895:  DECFSZ 53,F
 0896:  GOTO   090
 ....................    current_servo_position =right_position; 
-0897:  MOVLW  17
+0897:  MOVLW  19
 0898:  MOVWF  42
-0899:  MOVLW  D4
+0899:  MOVLW  64
 089A:  MOVWF  41
 ....................    //write_dac(1000); 
 ....................    //delay_ms(10000); 
@@ -1285,7 +1285,7 @@ CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
 093B:  BTFSS  03.2
 093C:  GOTO   141
 093D:  MOVF   4E,W
-093E:  SUBLW  4E
+093E:  SUBLW  8F
 093F:  BTFSS  03.0
 0940:  GOTO   14E
 0941:  MOVF   52,W
@@ -1321,7 +1321,7 @@ CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
 0953:  BTFSS  03.2
 0954:  GOTO   159
 0955:  MOVF   4E,W
-0956:  SUBLW  B3
+0956:  SUBLW  F4
 0957:  BTFSC  03.0
 0958:  MOVLW  00
 ....................         #ifdef DEBUG 
@@ -1407,24 +1407,24 @@ CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
 098F:  MOVLW  C4
 0990:  MOVWF  48
 ....................       } 
-....................       else if (ELECthrottle<-1500){ 
+....................       else if (ELECthrottle<-2500){ 
 0991:  GOTO   1A2
 0992:  BTFSS  49.7
 0993:  GOTO   1A2
 0994:  MOVF   49,W
-0995:  SUBLW  FA
+0995:  SUBLW  F6
 0996:  BTFSS  03.0
 0997:  GOTO   1A2
 0998:  BTFSS  03.2
 0999:  GOTO   19E
 099A:  MOVF   48,W
-099B:  SUBLW  23
+099B:  SUBLW  3B
 099C:  BTFSS  03.0
 099D:  GOTO   1A2
-....................          ELECthrottle = -1500; 
-099E:  MOVLW  FA
+....................          ELECthrottle = -2500; 
+099E:  MOVLW  F6
 099F:  MOVWF  49
-09A0:  MOVLW  24
+09A0:  MOVLW  3C
 09A1:  MOVWF  48
 ....................       } 
 ....................        
@@ -1444,9 +1444,9 @@ CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
 ....................          ICE_ON = FALSE; 
 09AB:  BCF    43.1
 ....................          current_servo_position =right_position; 
-09AC:  MOVLW  17
+09AC:  MOVLW  19
 09AD:  MOVWF  42
-09AE:  MOVLW  D4
+09AE:  MOVLW  64
 09AF:  MOVWF  41
 ....................          write_dac(0); 
 09B0:  CLRF   58
@@ -1476,9 +1476,9 @@ CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
 09C5:  GOTO   1D4
 ....................             current_servo_position =right_position- (ELECthrottle); 
 09C6:  MOVF   48,W
-09C7:  SUBLW  D4
+09C7:  SUBLW  64
 09C8:  MOVWF  20
-09C9:  MOVLW  17
+09C9:  MOVLW  19
 09CA:  MOVWF  23
 09CB:  MOVF   49,W
 09CC:  BTFSS  03.0
@@ -1492,9 +1492,9 @@ CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
 ....................          else{ 
 09D3:  GOTO   1D8
 ....................             current_servo_position =right_position; 
-09D4:  MOVLW  17
+09D4:  MOVLW  19
 09D5:  MOVWF  42
-09D6:  MOVLW  D4
+09D6:  MOVLW  64
 09D7:  MOVWF  41
 ....................          } 
 ....................          ICE_ON = TRUE; 
@@ -1665,18 +1665,18 @@ CCS PCM C Compiler, Version 4.084, 46530               03-Aug-13 14:26
 0A57:  BTFSS  43.1
 0A58:  GOTO   25E
 ....................          //printf("ICE NORMAL \n"); 
-....................          current_servo_position =right_position-1000; 
+....................          current_servo_position = left_position +1000; 
 0A59:  MOVLW  13
 0A5A:  MOVWF  42
-0A5B:  MOVLW  EC
+0A5B:  MOVLW  24
 0A5C:  MOVWF  41
 ....................       } 
 ....................       else{ 
 0A5D:  GOTO   262
 ....................          current_servo_position =right_position; 
-0A5E:  MOVLW  17
+0A5E:  MOVLW  19
 0A5F:  MOVWF  42
-0A60:  MOVLW  D4
+0A60:  MOVLW  64
 0A61:  MOVWF  41
 ....................          //printf("ICE OFF \n"); 
 ....................       } 

@@ -32,10 +32,10 @@ Page ROM  %  RAM   Vol Diff  Functions:
 1    612  28   4  4373  9.4  MAIN
 0      4   0   1    31  1.7  checkRunnaway
 0    239  11  15   409  4.5  pid_Init
- Inline        5   409  4.5  @DIV1616
- Inline       13  4490  9.1  @DIV3232
+ Inline        5             @DIV1616
+ Inline       13             @DIV3232
 0    988  45  30  1578  8.7  pid_Controller
- Inline        2  1578  8.7  @SITOF
+ Inline        2             @SITOF
  Inline        2             @ITOF
  Inline       13             @MULFF
  Inline        4             @SFTOI
@@ -44,16 +44,16 @@ Page ROM  %  RAM   Vol Diff  Functions:
  Inline        6             @DIVS1616
 
 Program metrics:
-    Functions               13
+    Functions               10
     Statements              213
     Comments                317
-    Volume (V)              19867
-    Difficilty (D)          68.9
-    Effort to implement (E) 1369837
-    Time to implement (T)   21 hours, 8 minutes
-    Est Delivered Bugs (B)  4
-    Cyclomatic Complexity   55
-    Maintainability (MI)    136
+    Volume (V)              10371
+    Difficilty (D)          46.6
+    Effort to implement (E) 483159
+    Time to implement (T)   7 hours, 27 minutes
+    Est Delivered Bugs (B)  2
+    Cyclomatic Complexity   31
+    Maintainability (MI)    117
 
  Segment     Used  Free
 -----------  ----  ----
