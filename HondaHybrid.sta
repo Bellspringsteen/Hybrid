@@ -1,6 +1,6 @@
 
-ROM used: 2192 (54%)
-          2660 (65%) including unused fragments
+ROM used: 2208 (54%)
+          2674 (65%) including unused fragments
 
           2 Average locations per line
           10 Average locations per statement
@@ -29,28 +29,28 @@ Page ROM  %  RAM   Vol Diff  Functions:
 0     88   4   2   305  4.6  isr
 0     29   1   0   112  3.3  isr2
 0     14   1   1    56  1.6  trickBreaking
-1    612  28   4  4373  9.4  MAIN
+1    626  28   4  4392  9.4  MAIN
+0     21   1   5             @MUL1616
 0      4   0   1    31  1.7  checkRunnaway
 0    239  11  15   409  4.5  pid_Init
  Inline        5             @DIV1616
  Inline       13             @DIV3232
-0    988  45  30  1578  8.7  pid_Controller
+0    969  44  30  1578  8.7  pid_Controller
  Inline        2             @SITOF
  Inline        2             @ITOF
  Inline       13             @MULFF
  Inline        4             @SFTOI
  Inline       13             @MUL3232
- Inline        5             @MUL1616
  Inline        6             @DIVS1616
 
 Program metrics:
     Functions               10
     Statements              213
     Comments                317
-    Volume (V)              10371
+    Volume (V)              10392
     Difficilty (D)          46.6
-    Effort to implement (E) 483159
-    Time to implement (T)   7 hours, 27 minutes
+    Effort to implement (E) 484174
+    Time to implement (T)   7 hours, 28 minutes
     Est Delivered Bugs (B)  2
     Cyclomatic Complexity   31
     Maintainability (MI)    117
@@ -59,8 +59,8 @@ Program metrics:
 -----------  ----  ----
 00000-00003     4  0  
 00004-00044    65  0  
-00045-007FF  1511  468  
-00800-00FFF   612  1436  
+00045-007FF  1513  466  
+00800-00FFF   626  1422  
 
 
 

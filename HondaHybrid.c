@@ -501,7 +501,7 @@ void main()
       }
       else if (CHARGING_STATE==SPEED_TO_LOW_ICE_DIRECT || CHARGING_STATE==INSUFFICIENT_BRAKING_RUNAWAY){
          if (ELECthrottle>0){
-            current_servo_position =right_position- (ELECthrottle);
+            current_servo_position =right_position- (3*ELECthrottle);
          }
          else{
             current_servo_position =right_position;
@@ -545,7 +545,7 @@ void main()
       }
       if (ICE_ON){
          //printf("ICE NORMAL \n");
-         current_servo_position = left_position +1000;
+         current_servo_position = left_position +500;
       }
       else{
          current_servo_position =right_position;
