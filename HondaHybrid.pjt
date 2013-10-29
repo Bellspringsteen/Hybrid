@@ -22,7 +22,7 @@ AdditionalOptionString=
 4=mcp4921.c
 5=pid.c
 6=pid.h
-7=C:\Program Files\PICC\drivers\mcp4921.c
+7=
 8=
 [Target Data]
 OptionString=-p +FM

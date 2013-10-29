@@ -1,4 +1,5 @@
 //#define DEBUG
+//#define BOARDV1
 //#define TESt
 #include "HondaHybrid.h"
 #include "pid.h"
@@ -90,7 +91,11 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define Athrottle_Full Athrottle_Max-Athrottle_Min
 #define Athrottle_channel 0
 #define Electric_Controller_Switch PIN_B0
+#ifdef BOARDV1
 #define Contactor_Switch PIN_B2
+#else
+#define Contactor_Switch PIN_B5
+#endif
 #define A_CAPS_MAX 725//893
 #define A_CAPS_MIN 400//335
 #define A_CAPS_MID_LOW (A_CAPS_MIN + 100) //This is the low end of the middle ACaps range. The range in which discharge and charge are allowed. 
@@ -368,7 +373,7 @@ void main()
    enable_interrupts(GLOBAL);
    
    CHARGING_STATE = EVERYTHING_OFF;
-   output_low(Electric_Controller_Switch);
+   output_high(Electric_Controller_Switch);
    write_dac(0);
    ICE_ON=TRUE;
    output_high(Contactor_Switch);
@@ -384,7 +389,7 @@ void main()
    //output_high(brake_pin);
    //output_high(Electric_Controller_Switch);
    while(TRUE) {
-      
+         
       //GET INPUTS
       //Vspeedhappens in interrupts
       set_adc_channel(Acaps_channel);
