@@ -90,11 +90,12 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define Athrottle_Max 860
 #define Athrottle_Full Athrottle_Max-Athrottle_Min
 #define Athrottle_channel 0
-#define Electric_Controller_Switch PIN_B0
 #ifdef BOARDV1
+#define Electric_Controller_Switch PIN_B0
 #define Contactor_Switch PIN_B2
 #else
 #define Contactor_Switch PIN_B5
+#define Electric_Controller_Switch PIN_B2
 #endif
 #define A_CAPS_MAX 725//893
 #define A_CAPS_MIN 400//335
