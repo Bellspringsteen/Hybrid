@@ -1,4 +1,4 @@
-//#define DEBUG
+#define DEBUG
 //#define BOARDV1
 //#define TESt
 #include "HondaHybrid.h"
@@ -67,7 +67,7 @@ ALGORITHM
    
    If CHARGING_STATE is false then the pin_b2 is set low which opens brake.
    
-   
+  
 
 
 The encoder has 42 on and offs per rotation, i.e. 21 steps
@@ -77,7 +77,7 @@ Number of operations per second is 20,000,000/4/128 = 39062.5
 Each operation takes 1/39062.5 = .256 micro (x10^-6) seconds
 Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 
-
+ 
 
 */
 #define servo_pin PIN_B1  //Setting servo out pin to be hardware pin b1
@@ -96,6 +96,7 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #else
 #define Contactor_Switch PIN_B5
 #define Electric_Controller_Switch PIN_B2
+#define ALGORITHM_INPUT_SWITCH PIN_A2
 #endif
 #define A_CAPS_MAX 725//893
 #define A_CAPS_MIN 400//335
@@ -131,7 +132,7 @@ unsigned int16 Acaps = 0;
 int1 ICE_ON = 0;
 int1 CURRENTLY_CHARGING = 0;
 int1 RUNNAWAY_CHECK = 0;
-signed int16 returnedValue =0; 
+signed int16 returnedValue =0;
 
 enum{ 
    EVERYTHING_OFF,
@@ -141,7 +142,7 @@ enum{
    CHARGING_AND_DISCHARING_ALLOWED,
    INSUFFICIENT_BRAKING_RUNAWAY,
    USER_INPUT_OFF
-} CHARGING_STATE; 
+} CHARGING_STATE;
 
 /*
 The #int_timer0 interupt is triggered on each timer0 8bit interupt
@@ -198,7 +199,7 @@ void isr()
          SERVO_PIN_TO_BE_SET_HIGH_ON_NEXT_TIMER = 1; 
          set_timer1(servo_period+current_servo_position);          //Set timer for the low position the length is the difference between 
                                                      //the total int16 lenght - high pulse length
-      }  
+      } 
 
 }
 
@@ -347,7 +348,7 @@ void main()
 
 }
 
-
+ 
 
 #else
 void main()
@@ -360,7 +361,7 @@ void main()
    setup_counters(RTCC_INTERNAL,RTCC_DIV_2);
    setup_timer_1(T1_DISABLED);
    setup_timer_2(T2_DISABLED,0,1);
-   setup_port_a(ALL_ANALOG);
+   setup_port_a(AN0_AN1_AN3);
    setup_adc(ADC_CLOCK_INTERNAL);
    
    init_dac();
@@ -390,7 +391,7 @@ void main()
    //output_high(brake_pin);
    //output_high(Electric_Controller_Switch);
    while(TRUE) {
-         
+      
       //GET INPUTS
       //Vspeedhappens in interrupts
       set_adc_channel(Acaps_channel);
@@ -400,6 +401,11 @@ void main()
       set_adc_channel(Athrottle_channel);
       ADC_DELAY;
       Athrottle = read_adc();
+      if (input(ALGORITHM_INPUT_SWITCH)){
+      current_servo_position = right_position - (Athrottle-Athrottle_Min)*4;
+      }else {
+      
+      
       if (Athrottle<Athrottle_Min){
          Athrottle=Athrottle_Min;
       }
@@ -561,7 +567,7 @@ void main()
       }
            
    }
-   
+   }
 
 }
 
@@ -678,7 +684,4 @@ void pid_Reset_Integrator(pidData_t *pid_st)
 {
   pid_st->sumError = 0;
 }
-
-
-
 
