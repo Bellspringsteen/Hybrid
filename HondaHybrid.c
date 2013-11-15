@@ -88,6 +88,7 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define Athrottle_pin PIN_A0  //Voltage goes from 1.5 (306)to 4.1(836)
 #define Athrottle_Min 316
 #define Athrottle_Max 860
+#define Athrottle_3quarter 700
 #define Athrottle_Full Athrottle_Max-Athrottle_Min
 #define Athrottle_channel 0
 #ifdef BOARDV1
@@ -401,11 +402,49 @@ void main()
       set_adc_channel(Athrottle_channel);
       ADC_DELAY;
       Athrottle = read_adc();
-      if (input(ALGORITHM_INPUT_SWITCH)){
+      if (!input(ALGORITHM_INPUT_SWITCH)){
       current_servo_position = right_position - (Athrottle-Athrottle_Min)*4;
+      #ifdef DEBUG
+            printf("State: Weak Hybrid \n");  
+         #else
+            delay_ms(250);
+         #endif
+      if ((Athrottle>Athrottle_3quarter)&&(Acaps>A_CAPS_MIN)){
+         //set electric motor to drive
+         #ifdef DEBUG
+            printf("drive \n");  
+         #else
+            delay_ms(250);
+         #endif
+         CURRENTLY_CHARGING=1;
+         output_low(brake_pin);
+         output_low(Electric_Controller_Switch);
+         write_dac(2000+ELEC_CONTROLLER_OFFSET);
+      }else if ((Acaps<A_CAPS_MAX)&&(vSpeed<V_SPEED_REGEN_MIN)){
+         // set electric motor to charge
+         #ifdef DEBUG
+            printf("breaking \n");  
+         #else
+            delay_ms(250);
+         #endif
+         if (CURRENTLY_CHARGING==1){
+                trickBreaking();
+         }
+         CURRENTLY_CHARGING=0;
+         output_high(brake_pin);
+         output_high(Electric_Controller_Switch);
+         write_dac(1200+ELEC_CONTROLLER_OFFSET);
       }else {
-      
-      
+         //set electric motor to zero
+         #ifdef DEBUG
+            printf("turn off motor \n");  
+         #else
+            delay_ms(250);
+         #endif
+         CURRENTLY_CHARGING=1;
+         write_dac(0);
+      }
+      }else{
       if (Athrottle<Athrottle_Min){
          Athrottle=Athrottle_Min;
       }
@@ -413,7 +452,12 @@ void main()
       if (Acaps> (A_CAPS_MAX +10)){
          //FREAK OUT
          //printf("State: Freak Out \n");
-         output_low(Electric_Controller_Switch);
+         //output_low(Electric_Controller_Switch);
+         #ifdef DEBUG
+            printf("State: FREAK OUT \n");  
+         #else
+            delay_ms(250);
+         #endif
          write_dac(0);
          //ICE_ON = FALSE;
          ICEthrottle = 0;
@@ -500,8 +544,8 @@ void main()
       if (ELECthrottle>2500){
          ELECthrottle=2500;
       }
-      else if (ELECthrottle<-2500){
-         ELECthrottle = -2500;
+      else if (ELECthrottle<-1500){
+         ELECthrottle = -1500;
       }
       
       
@@ -531,8 +575,8 @@ void main()
              //ELECthrottle = 300;
              CURRENTLY_CHARGING=0;
              output_high(brake_pin);
-             output_high(Electric_Controller_Switch);
-             //printf("BREAKING \n");
+             //output_high(Electric_Controller_Switch);
+             printf("BREAKING \n");
              write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
         }
         else{
@@ -545,8 +589,8 @@ void main()
         if (CHARGING_STATE==DISCHARGING_ALLOWED || CHARGING_STATE ==CHARGING_AND_DISCHARING_ALLOWED){
              CURRENTLY_CHARGING=1;
              output_low(brake_pin);
-             output_low(Electric_Controller_Switch);
-             //printf("ACCELERATING \n");
+             //output_low(Electric_Controller_Switch);
+             printf("ACCELERATING \n");
              write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
         }
         else{
