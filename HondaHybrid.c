@@ -96,7 +96,8 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define Contactor_Switch PIN_B2
 #else
 #define Contactor_Switch PIN_B5
-#define Electric_Controller_Switch PIN_B2
+#define Controller_Power_Switch PIN_B2
+#define Electric_Controller_Switch PIN_B0 //this is the switch from acceleration/breaking with driving high as breaking
 #define ALGORITHM_INPUT_SWITCH PIN_A2
 #endif
 #define A_CAPS_MAX 725//893
@@ -452,7 +453,7 @@ void main()
       if (Acaps> (A_CAPS_MAX +10)){
          //FREAK OUT
          //printf("State: Freak Out \n");
-         //output_low(Electric_Controller_Switch);
+		  output_low(Electric_Controller_Switch);
          #ifdef DEBUG
             printf("State: FREAK OUT \n");  
          #else
@@ -575,7 +576,7 @@ void main()
              //ELECthrottle = 300;
              CURRENTLY_CHARGING=0;
              output_high(brake_pin);
-             //output_high(Electric_Controller_Switch);
+             output_high(Electric_Controller_Switch);
              printf("BREAKING \n");
              write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
         }
@@ -589,7 +590,7 @@ void main()
         if (CHARGING_STATE==DISCHARGING_ALLOWED || CHARGING_STATE ==CHARGING_AND_DISCHARING_ALLOWED){
              CURRENTLY_CHARGING=1;
              output_low(brake_pin);
-             //output_low(Electric_Controller_Switch);
+             output_low(Electric_Controller_Switch);
              printf("ACCELERATING \n");
              write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
         }
