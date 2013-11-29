@@ -1,3 +1,13 @@
->>> Warning 202 "HondaHybrid.c" Line 135(21,35): Variable never used:   RUNNAWAY_CHECK
-      Memory usage:   ROM=75%      RAM=31% - 59%
-      0 Errors,  1 Warnings.
+>>> Warning 203 "HondaHybrid.c" Line 247(1,1): Condition always TRUE
+>>> Warning 203 "HondaHybrid.c" Line 259(1,1): Condition always TRUE
+>>> Warning 203 "HondaHybrid.c" Line 273(1,1): Condition always TRUE
+>>> Warning 203 "HondaHybrid.c" Line 285(1,1): Condition always TRUE
+>>> Warning 202 "HondaHybrid.c" Line 130(27,39): Variable never used:   ELECthrottle
+>>> Warning 202 "HondaHybrid.c" Line 131(28,39): Variable never used:   ICEthrottle
+>>> Warning 202 "HondaHybrid.c" Line 133(22,27): Variable never used:   Acaps
+>>> Warning 202 "HondaHybrid.c" Line 135(25,43): Variable never used:   CURRENTLY_CHARGING
+>>> Warning 202 "HondaHybrid.c" Line 136(21,35): Variable never used:   RUNNAWAY_CHECK
+>>> Warning 202 "HondaHybrid.c" Line 137(28,41): Variable never used:   returnedValue
+>>> Warning 202 "HondaHybrid.c" Line 283(31,41): Variable never used:   wiperValue
+      Memory usage:   ROM=21%      RAM=30% - 45%
+      0 Errors,  11 Warnings.

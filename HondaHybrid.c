@@ -1,6 +1,6 @@
 #define DEBUG
 //#define BOARDV1
-//#define TESt
+#define TEST
 #include "HondaHybrid.h"
 #include "pid.h"
 /*
@@ -322,6 +322,26 @@ void main()
    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
    enable_interrupts(GLOBAL);
 
+
+   CHARGING_STATE = EVERYTHING_OFF;
+   output_high(Electric_Controller_Switch);
+   write_dac(0);
+   ICE_ON=TRUE;
+   output_high(Contactor_Switch);
+   output_high(Controller_Power_Switch);
+   output_low(brake_pin);
+   pid_Init(K_P*SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
+   delay_ms(3000);
+   current_servo_position =right_position-1000;
+   delay_ms(3000);
+   current_servo_position =right_position;
+   
+   
+   
+
+
+
+
    while(TRUE) {
         //Test Breaking Analog Voltage. Should produce analog voltage  on pin 13 as well as drive pin 12 LOW
         //output_high(brake_pin);
@@ -335,12 +355,14 @@ void main()
         
         //Test Short Circuit from Pin 11 to pin 8 with 1 second heartbeat. This tests V+ Controller. Also pin 9 should be heartbeating between 0 and 12V
         //heartbeatElectricControllerPower();
-         //printf("test loop");
+         printf("test loop");
         //Test Wiper of Servo
-        wiperServo();
+       // wiperServo();
+       output_low(Electric_Controller_Switch);
+       write_dac(2000);
         //current_servo_position = right_position;
        //printAnalogThrottleInput();
-       
+       output_low(brake_pin);
        //Test Electric Controller Out
        //output_high(Contactor_Switch);
        //output_high(Contactor_Switch2);
@@ -453,7 +475,7 @@ void main()
       if (Acaps> (A_CAPS_MAX +10)){
          //FREAK OUT
          //printf("State: Freak Out \n");
-		  output_low(Electric_Controller_Switch);
+        output_low(Electric_Controller_Switch);
          #ifdef DEBUG
             printf("State: FREAK OUT \n");  
          #else
