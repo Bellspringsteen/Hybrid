@@ -1,6 +1,6 @@
-#define DEBUG
+//#define DEBUG
 //#define BOARDV1
-#define TEST
+//#define TEST
 #include "HondaHybrid.h"
 #include "pid.h"
 /*
@@ -88,7 +88,7 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define Athrottle_pin PIN_A0  //Voltage goes from 1.5 (306)to 4.1(836)
 #define Athrottle_Min 316
 #define Athrottle_Max 860
-#define Athrottle_3quarter 700
+#define Athrottle_3quarter 520
 #define Athrottle_Full Athrottle_Max-Athrottle_Min
 #define Athrottle_channel 0
 #ifdef BOARDV1
@@ -104,7 +104,7 @@ Seconds to Overflow timer0 8bit timer = .256x10^-6 * 256 = 6.55ms
 #define A_CAPS_MIN 400//335
 #define A_CAPS_MID_LOW (A_CAPS_MIN + 100) //This is the low end of the middle ACaps range. The range in which discharge and charge are allowed. 
 #define A_CAPS_MID_HIGH (A_CAPS_MAX - 100) //This is the low end of the middle ACaps range. The range in which discharge and charge are allowed. 
-#define V_SPEED_REGEN_MIN 50 //Why is there a minimum speed? Because below this no regenerative action is possible with electric motor
+#define V_SPEED_REGEN_MIN 250 //Why is there a minimum speed? Because below this no regenerative action is possible with electric motor
 #define INSUFFICIENT_BRAKING_RUNNAWAY_ERROR 50000
 
 //PID Values
@@ -211,7 +211,11 @@ void isr()
 between pulses. 
 TODO will have to put some kind of smoothing mechanism
 */
+#ifdef BOARDV1
 #int_ccp2
+#else
+#int_ccp1
+#endif
 void isr2()
 {
 if (number_of_timer0_interupts_since_reset>10){
@@ -232,7 +236,7 @@ void printfLogf(char string){
       printf("IN PrintfLog");
       printf("%c",string);
    #else
-      delay_ms(250);
+      //delay_ms(250);
    #endif
 }
 
@@ -316,8 +320,14 @@ void main()
 
    setup_timer_1(T1_DIV_BY_2| T1_INTERNAL);
    setup_timer_0(RTCC_INTERNAL|RTCC_DIV_128);
-   setup_ccp2(CCP_CAPTURE_RE);    // Configure CCP2 to capture fall
+       // Configure CCP2 to capture fall
+   #ifdef BOARDV1
+   setup_ccp2(CCP_CAPTURE_RE);
    enable_interrupts(INT_CCP2);   // Setup interrupt on falling edge
+   #else
+   setup_ccp1(CCP_CAPTURE_RE);
+   enable_interrupts(INT_CCP1);
+   #endif
    enable_interrupts(INT_TIMER0);
    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
    enable_interrupts(GLOBAL);
@@ -325,50 +335,54 @@ void main()
 
    CHARGING_STATE = EVERYTHING_OFF;
    output_high(Electric_Controller_Switch);
+   output_high(Controller_Power_Switch);
    write_dac(0);
    ICE_ON=TRUE;
    output_high(Contactor_Switch);
-   output_high(Controller_Power_Switch);
-   output_low(brake_pin);
+   output_high(brake_pin);
    pid_Init(K_P*SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
    delay_ms(3000);
    current_servo_position =right_position-1000;
    delay_ms(3000);
    current_servo_position =right_position;
-   
-   
-   
-
-
-
-
+   //write_dac(1000);
+   //delay_ms(10000);
+   //output_high(Contactor_Switch);
+   //output_high(brake_pin);
+   //output_high(Electric_Controller_Switch);
    while(TRUE) {
-        //Test Breaking Analog Voltage. Should produce analog voltage  on pin 13 as well as drive pin 12 LOW
-        //output_high(brake_pin);
-        //output_high(Electric_Controller_Switch);
-        //wiperAnalogVoltage();
-
-        //Test Accelerating Analog Voltage. Should produce analog voltage on pin 15 and let pin 12 float.
-        //output_low(brake_pin);
-        //output_low(Electric_Controller_Switch);
-        //wiperAnalogVoltage();
-        
-        //Test Short Circuit from Pin 11 to pin 8 with 1 second heartbeat. This tests V+ Controller. Also pin 9 should be heartbeating between 0 and 12V
-        //heartbeatElectricControllerPower();
-         printf("test loop");
-        //Test Wiper of Servo
-       // wiperServo();
-       output_low(Electric_Controller_Switch);
-       write_dac(2000);
-        //current_servo_position = right_position;
-       //printAnalogThrottleInput();
-       output_low(brake_pin);
-       //Test Electric Controller Out
-       //output_high(Contactor_Switch);
-       //output_high(Contactor_Switch2);
-
-   }
-
+      
+      //GET INPUTS
+      //Vspeedhappens in interrupts
+      //set_adc_channel(Acaps_channel);
+      //ADC_DELAY;
+      //Acaps = read_adc();
+      
+      //set_adc_channel(Athrottle_channel);
+      //ADC_DELAY;
+      //Athrottle = read_adc();
+      //current_servo_position = right_position - (Athrottle-Athrottle_Min)*4;
+      //#ifdef DEBUG
+            printf("State: Weak HybridTEZT \n");  
+        // #else
+         //   delay_ms(250);
+        /// #endif
+      //if ((Athrottle>Athrottle_3quarter)&&(Acaps>A_CAPS_MIN)){
+         //CURRENTLY_CHARGING=1;
+         
+         output_low(Electric_Controller_Switch);
+         write_dac(0);
+         output_low(brake_pin);
+         //set electric motor to drive
+         //#ifdef DEBUG
+           // printf("drive \n");  
+         //#else
+           // delay_ms(250);
+         //#endif
+         
+         
+      //}
+      }
 
 }
 
@@ -392,18 +406,27 @@ void main()
  
    setup_timer_1(T1_DIV_BY_2| T1_INTERNAL); 
    setup_timer_0(RTCC_INTERNAL|RTCC_DIV_128);
-   setup_ccp2(CCP_CAPTURE_RE);    // Configure CCP2 to capture fall
+   #ifdef BOARDV1
+   setup_ccp2(CCP_CAPTURE_RE);
    enable_interrupts(INT_CCP2);   // Setup interrupt on falling edge
+   #else
+   setup_ccp1(CCP_CAPTURE_RE);
+   enable_interrupts(INT_CCP1);
+   #endif
    enable_interrupts(INT_TIMER0);
    enable_interrupts(INT_TIMER1);   // Setup interrupt on falling edge
    enable_interrupts(GLOBAL);
    
+   
+   
+   
    CHARGING_STATE = EVERYTHING_OFF;
    output_high(Electric_Controller_Switch);
+   output_high(Controller_Power_Switch);
    write_dac(0);
    ICE_ON=TRUE;
    output_high(Contactor_Switch);
-   output_low(brake_pin);
+   output_high(brake_pin);
    pid_Init(K_P*SCALING_FACTOR,K_I*SCALING_FACTOR,K_D*SCALING_FACTOR, & pidData);
    delay_ms(3000);
    current_servo_position =right_position-1000;
@@ -426,48 +449,54 @@ void main()
       ADC_DELAY;
       Athrottle = read_adc();
       if (!input(ALGORITHM_INPUT_SWITCH)){
+      delay_ms(1);
       current_servo_position = right_position - (Athrottle-Athrottle_Min)*4;
       #ifdef DEBUG
-            printf("State: Weak Hybrid \n");  
-         #else
-            delay_ms(250);
+            printf("State: Weak Hybrid %ld\n",vSpeed);  
+         //#else
+           // delay_ms(250);
          #endif
       if ((Athrottle>Athrottle_3quarter)&&(Acaps>A_CAPS_MIN)){
+         //CURRENTLY_CHARGING=1;
+
+         output_low(Electric_Controller_Switch);
+         write_dac(2000);
+         output_low(brake_pin);
          //set electric motor to drive
          #ifdef DEBUG
-            printf("drive \n");  
-         #else
-            delay_ms(250);
+            printf("drivex \n");  
+         //#else
+          //  delay_ms(250);
          #endif
-         CURRENTLY_CHARGING=1;
-         output_low(brake_pin);
-         output_low(Electric_Controller_Switch);
-         write_dac(2000+ELEC_CONTROLLER_OFFSET);
-      }else if ((Acaps<A_CAPS_MAX)&&(vSpeed<V_SPEED_REGEN_MIN)){
+         
+         
+      }else if ((Acaps<A_CAPS_MAX)&&(vSpeed>V_SPEED_REGEN_MIN)){
          // set electric motor to charge
          #ifdef DEBUG
-            printf("breaking \n");  
-         #else
-            delay_ms(250);
+            printf("breakingy \n");  
+         //#else
+           // delay_ms(250);
          #endif
          if (CURRENTLY_CHARGING==1){
-                trickBreaking();
+        //        trickBreaking();
          }
          CURRENTLY_CHARGING=0;
-         output_high(brake_pin);
+         
          output_high(Electric_Controller_Switch);
          write_dac(1200+ELEC_CONTROLLER_OFFSET);
+         output_high(brake_pin);
       }else {
          //set electric motor to zero
          #ifdef DEBUG
             printf("turn off motor \n");  
-         #else
-            delay_ms(250);
+         //#else
+           // delay_ms(250);
          #endif
          CURRENTLY_CHARGING=1;
          write_dac(0);
       }
       }else{
+      delay_ms(1000);
       if (Athrottle<Athrottle_Min){
          Athrottle=Athrottle_Min;
       }
@@ -478,8 +507,8 @@ void main()
         output_low(Electric_Controller_Switch);
          #ifdef DEBUG
             printf("State: FREAK OUT \n");  
-         #else
-            delay_ms(250);
+         //#else
+           // delay_ms(250);
          #endif
          write_dac(0);
          //ICE_ON = FALSE;
@@ -493,24 +522,24 @@ void main()
          CHARGING_STATE = USER_INPUT_OFF;
          #ifdef DEBUG
             printf("State: Throttle Off \n");  
-         #else
-            delay_ms(250);
+         //#else
+           // delay_ms(250);
          #endif
          
          }
       else if (ICE_ON&&(vSpeed<V_SPEED_REGEN_MIN)){
          #ifdef DEBUG
             printf("State: Speed To Low %ld \n",vSpeed);  
-         #else
-            delay_ms(250);
+         //#else
+           // delay_ms(250);
          #endif
          CHARGING_STATE=SPEED_TO_LOW_ICE_DIRECT;
       }
       else if (checkRunnaway(& pidData)){// INSUFFICIENT_BRAKING_RUNNAWAY_ERROR){
          #ifdef DEBUG
             printf("State: RUNNAWAY \n");  
-         #else
-            delay_ms(250);
+         //#else
+           // delay_ms(250);
          #endif
          ICE_ON=TRUE;
          CHARGING_STATE=INSUFFICIENT_BRAKING_RUNAWAY;
@@ -520,8 +549,8 @@ void main()
          
          #ifdef DEBUG
             printf("State: Caps Full \n");  
-         #else
-            delay_ms(250);
+         //#else
+           // delay_ms(250);
          #endif
          
         ICE_ON=FALSE;
@@ -532,8 +561,8 @@ void main()
         
         #ifdef DEBUG
             printf("State: Caps Empty \n");  
-         #else
-            delay_ms(250);
+         //#else
+           // delay_ms(250);
          #endif
 
         ICE_ON=TRUE;
@@ -542,8 +571,8 @@ void main()
      else if (A_CAPS_MID_LOW < Acaps < A_CAPS_MID_HIGH){
         #ifdef DEBUG
             printf("State: Normal \n");  
-         #else
-            delay_ms(250);
+         //#else
+           // delay_ms(250);
          #endif
          CHARGING_STATE=CHARGING_AND_DISCHARING_ALLOWED;
      }
@@ -567,8 +596,8 @@ void main()
       if (ELECthrottle>2500){
          ELECthrottle=2500;
       }
-      else if (ELECthrottle<-1500){
-         ELECthrottle = -1500;
+      else if (ELECthrottle<-1000){
+         ELECthrottle = -1000;
       }
       
       
@@ -593,14 +622,15 @@ void main()
       if (ELECthrottle<0){
         if (CHARGING_STATE==CHARGING_ALLOWED || CHARGING_STATE ==CHARGING_AND_DISCHARING_ALLOWED){
              if (CURRENTLY_CHARGING==1){
-                trickBreaking();
+                //trickBreaking();
              }
              //ELECthrottle = 300;
              CURRENTLY_CHARGING=0;
-             output_high(brake_pin);
              output_high(Electric_Controller_Switch);
-             printf("BREAKING \n");
+             //printf("BREAKING \n");
              write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
+             output_high(brake_pin);
+             
         }
         else{
            //Decrease ICE throttle
@@ -611,10 +641,11 @@ void main()
       else {
         if (CHARGING_STATE==DISCHARGING_ALLOWED || CHARGING_STATE ==CHARGING_AND_DISCHARING_ALLOWED){
              CURRENTLY_CHARGING=1;
-             output_low(brake_pin);
+             
              output_low(Electric_Controller_Switch);
-             printf("ACCELERATING \n");
+             //printf("ACCELERATING \n");
              write_dac((abs(ELECthrottle)+ELEC_CONTROLLER_OFFSET));
+             output_low(brake_pin);
         }
         else{
            //Increase ICE throttle
@@ -626,6 +657,8 @@ void main()
       if (ICE_ON){
          //printf("ICE NORMAL \n");
          current_servo_position = left_position +500;
+         //current_servo_position = right_position - (Athrottle-Athrottle_Min)*4;
+      
       }
       else{
          current_servo_position =right_position;
