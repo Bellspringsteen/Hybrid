@@ -25,3 +25,13 @@
 *.x86_64
 *.hex
 
+#PICC CCS Ignores
+*.cof
+*.err
+*.esym
+*.lst
+*.pjt
+*.sta
+*.sym
+*.tre
+*.ini
