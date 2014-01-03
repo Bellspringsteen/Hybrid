@@ -1,3 +1,0 @@
->>> Warning 202 "HondaHybrid.c" Line 136(21,35): Variable never used:   RUNNAWAY_CHECK
-      Memory usage:   ROM=56%      RAM=29% - 54%
-      0 Errors,  1 Warnings.
