@@ -449,14 +449,24 @@ void main()
       ADC_DELAY;
       Athrottle = read_adc();
       if (!input(ALGORITHM_INPUT_SWITCH)){
-      delay_ms(1);
+      //delay_ms(100);
       current_servo_position = right_position - (Athrottle-Athrottle_Min)*4;
       #ifdef DEBUG
             printf("State: Weak Hybrid %ld\n",vSpeed);  
-         //#else
-           // delay_ms(250);
+         #else
+            delay_ms(250);
          #endif
-      if ((Athrottle>Athrottle_3quarter)&&(Acaps>A_CAPS_MIN)){
+      if (Acaps>A_CAPS_MAX&&(vSpeed>V_SPEED_REGEN_MIN)){
+         output_low(Electric_Controller_Switch);
+         write_dac(0);
+         output_low(brake_pin);
+         //Voltage is high and we are going fast
+         #ifdef DEBUG
+            printf("electric system voltage is getting high \n");  
+         #else
+            delay_ms(250);
+         #endif
+      }else if ((Athrottle>Athrottle_3quarter)&&(Acaps>A_CAPS_MIN)){
          //CURRENTLY_CHARGING=1;
 
          output_low(Electric_Controller_Switch);
@@ -465,8 +475,8 @@ void main()
          //set electric motor to drive
          #ifdef DEBUG
             printf("drivex \n");  
-         //#else
-          //  delay_ms(250);
+         #else
+            delay_ms(250);
          #endif
          
          
@@ -474,8 +484,8 @@ void main()
          // set electric motor to charge
          #ifdef DEBUG
             printf("breakingy \n");  
-         //#else
-           // delay_ms(250);
+         #else
+            delay_ms(250);
          #endif
          if (CURRENTLY_CHARGING==1){
         //        trickBreaking();
@@ -489,8 +499,8 @@ void main()
          //set electric motor to zero
          #ifdef DEBUG
             printf("turn off motor \n");  
-         //#else
-           // delay_ms(250);
+         #else
+            delay_ms(250);
          #endif
          CURRENTLY_CHARGING=1;
          write_dac(0);
