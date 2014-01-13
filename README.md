@@ -13,7 +13,7 @@ The goal of this project is to explore vehicle configurations that will allow sm
 # Versions
 ## Version 1.0 is a Series Hybrid Super Capacitor Motorcycle
 
-![](https://github.com/Bellspringsteen/Hybrid/blob/master/v1/img/V1_On_Street.jpg)
+![Image of V1](https://raw2.github.com/Bellspringsteen/Hybrid/master/v1/img/V1_On_Street.jpg)
 
 This motorcycle features an ICE in series with a 72 Volt Supercap pack fed to a 9KW AC-Induction Motor.
 
