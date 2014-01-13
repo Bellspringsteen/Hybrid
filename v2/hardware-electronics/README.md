@@ -2,19 +2,19 @@
 ## V2 Parrallel Hybrid Supercapacitor Scooter
 
 
-![](/img/hybridv2_controller_2.jpg)
+![](https://raw2.github.com/Bellspringsteen/Hybrid/master/v2/hardware-electronics/img/hybridv2_controller_2.jpg)
 
 ## The Messy Controler and Supercap Setup
 
-![](/img/hybridv2_controller.jpg)
+![](https://raw2.github.com/Bellspringsteen/Hybrid/master/v2/hardware-electronics/img/hybridv2_controller.jpg)
 
 ## Controller Outside
 
-![](/img/hybridv2_controller_topside.jpg)
+![](https://raw2.github.com/Bellspringsteen/Hybrid/master/v2/hardware-electronics/img/hybridv2_controller_topside.jpg)
 
 ## Controller Topside
 
-![](/img/hybridv2_controller_underside.jpg)
+![](https://raw2.github.com/Bellspringsteen/Hybrid/master/v2/hardware-electronics/img/hybridv2_controller_underside.jpg)
 
 ## Controller Underside
 
