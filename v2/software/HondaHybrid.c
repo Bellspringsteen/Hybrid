@@ -224,7 +224,7 @@ void printfLogf(CHAR string)
 {
    #ifdef DEBUG
    printf ("IN PrintfLog") ;
-   printf (" % c", string) ;
+   printf (" %c", string) ;
    #ELSE
    //delay_ms (250) ;
    #endif
@@ -447,7 +447,7 @@ void main()
          //delay_ms (100) ;
          current_servo_position = right_position - (Athrottle - Athrottle_Min) * 4;
          #ifdef DEBUG
-         printf ("State: Weak Hybrid % ld\n", vSpeed);
+         printf ("State: Weak Hybrid %ld\n", vSpeed);
          #ELSE
          delay_ms (250) ;
          #endif
@@ -512,9 +512,13 @@ void main()
 
          
          returnedValue = pid_Controller ( (Athrottle - AThrottle_Min), vSpeed,&pidData);
+        
          ELECthrottle = ELECthrottle + returnedValue;
          //printf ("Throttle % ld and electhrottle % ld \n", Athrottle, ELECthrottle);
-         
+         IF (Athrottle == Athrottle_Min)
+         {
+            ELECthrottle = 0;
+         } 
          
          IF (ELECthrottle > 2500)
          {
@@ -530,7 +534,7 @@ void main()
          //delay_ms (100) ;
          current_servo_position = right_position - (Athrottle - Athrottle_Min) * 4;
          #ifdef DEBUG
-         printf ("Weak Hybrid with PID % ld\n", vSpeed);
+         printf ("Weak Hybrid with PID %ld\n", returnedValue);
          #ELSE
          delay_ms (250) ;
          #endif
