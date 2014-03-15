@@ -1,0 +1,8 @@
+# Mechanical Parts
+
+1.[Hub Motor 60V 3KW](http://kellycontroller.com/hub-motor-60v-3kwdisc-brake-p-151.html)
+2.[Motor Adapter](../img/adapter.jpeg)
+3.[Electric Controller](KellyKEBUserManual.pdf)
+4.Servo to carburetor Adapter plans located in Throttle_Servo_Linkage
+5.Controller Box plans located in Controller_Project_Box
+
