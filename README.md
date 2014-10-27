@@ -4,19 +4,16 @@ This is not meant as a easily reproducable or educational guide/project for buil
 
 ##Hybrid V1
 
-<br>
-<iframe width="854" height="510" src="//www.youtube.com/embed/a_jzR1VXLaA" frameborder="0" allowfullscreen></iframe>
-<br>
+[![ScreenShot](https://raw.githubusercontent.com/Bellspringsteen/Hybrid/master/V1.png)](https://www.youtube.com/watch?v=a_jzR1VXLaA)
+
 ##Hybrid V2
 
 ###On the Road
-<br>
-<iframe width="854" height="510" src="//www.youtube.com/embed/WQtkblyeEQs" frameborder="0" allowfullscreen></iframe>
-<br>
+[![ScreenShot](https://raw.githubusercontent.com/Bellspringsteen/Hybrid/master/V2.png)](https://www.youtube.com/watch?v=WQtkblyeEQs)
+
 ###How it Works
-<br>
-<iframe width="854" height="510" src="//www.youtube.com/embed/OO_IQZ6Yn74" frameborder="0" allowfullscreen></iframe>
-<br>
+[![ScreenShot](https://raw.githubusercontent.com/Bellspringsteen/Hybrid/master/V2Made.png)](https://www.youtube.com/watch?v=OO_IQZ6Yn74)
+
 
 View the Steps to Making It
 
