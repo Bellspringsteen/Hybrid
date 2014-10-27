@@ -2,22 +2,28 @@
 
 This is not meant as a easily reproducable or educational guide/project for building your own system. Maybe one day. It is mostly a collection of information, with large sections missing, of my personal project.
 
-# Goal
+##Hybrid V1
 
-The goal of this project is to explore greater fuel saving in vehicles, not by minimizing fuel usage of a class of vehicles (such as compact cars). But instead work towards world wide reductions in fuel usage by keeping consumers from switching to less fuel effficient vehicles.
+<br>
+<iframe width="854" height="510" src="//www.youtube.com/embed/a_jzR1VXLaA" frameborder="0" allowfullscreen></iframe>
+<br>
+##Hybrid V2
 
-As an example, consider the fuel benefits of a jump in US passenger fleet from an average fuel economy of 23 mpg to 30 mpg. And constract this to fuel usage if billions of the worlds population currently traveling by 50cc scooter upgrades to pasenger cars. 
+###On the Road
+<br>
+<iframe width="854" height="510" src="//www.youtube.com/embed/WQtkblyeEQs" frameborder="0" allowfullscreen></iframe>
+<br>
+###How it Works
+<br>
+<iframe width="854" height="510" src="//www.youtube.com/embed/OO_IQZ6Yn74" frameborder="0" allowfullscreen></iframe>
+<br>
 
-The goal of this project is to explore vehicle configurations that will allow smaller engines to outperform in acceleration larger engines. And thereby allow consumers to upgrade vehicles without upgrading to larger less efficient engines.
+View the Steps to Making It
 
-# Versions
-## Version 1.0 is a Series Hybrid Super Capacitor Motorcycle
-
-![Image of V1](https://raw2.github.com/Bellspringsteen/Hybrid/master/v1/img/V1_On_Street.jpg)
-
-This motorcycle features an ICE in series with a 72 Volt Supercap pack fed to a 9KW AC-Induction Motor.
-
-## Version 2.0 is a Parrallel Hybrid Super Capacitor Scooter
-
-This scooter features a 3kw Hub Motor in parrallel with a 50cc engine.
-
+* [Step 1- The Idea](http://blog.labsbell.com/blog/HybridStep1/)
+* [Step 2- Input and Output](http://blog.labsbell.com/blog/HybridStep2/)
+* [Step 3- Mechanical](http://blog.labsbell.com/blog/HybridStep3/)
+* [Step 4- Electrical](http://blog.labsbell.com/blog/HybridStep4/)
+* [Step 5- Hybrid Control Unit](http://blog.labsbell.com/blog/HybridStep5/)
+* [Step 6- Software](http://blog.labsbell.com/blog/HybridStep6/)
+* [Step 7- Testing](http://blog.labsbell.com/blog/HybridStep7/)
